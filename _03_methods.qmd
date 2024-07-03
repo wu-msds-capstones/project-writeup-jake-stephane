@@ -1,1 +1,22 @@
 # Methods
+
+Methodology & Tool Deployed
+
+Employing NumPy and Pandas for data manipulation, Matplotlib and Seaborn for visualization, time series forecasting algorithms like SARIMAX, Flask or Power BI for interactive dashboards, and Python as the primary programming language will provide practical experience in implementing comprehensive air quality forecasting solutions.
+
+For each data source, Python’s SQLAlchemy package was used to connect to the existing Railway Postgres databases, extract the relevant information, and write it into a centralized capstone database. Raw Data was already curated and pre-processed by the EPA website. 
+
+Data cleaning procedures were not required to handle missing values, or to correct inconsistencies, nevertheless we ensured that all data was in a tidy format. 
+This involved normalizing or standardizing data as necessary and creating new features through aggregation to enhance the model’s performance.
+
+What is SARIMAX algorithm?​​​​​​​​​​​​​​​​
+
+SARIMAX is particularly useful for forecasting time series data that exhibit both trend and seasonality.
+
+SARIMAX stands for Seasonal AutoRegressive Integrated Moving Average with eXogenous factors. It's a statistical model used for time series forecasting. Here's a breakdown of its components:
+
+1. Seasonal: Accounts for recurring patterns or cycles in the data.
+2. AutoRegressive (AR): Uses past values to predict future values.
+3. Integrated (I): Applies differencing to make the time series stationary.
+4. Moving Average (MA): Uses past forecast errors in the prediction.
+5. eXogenous factors (X): Incorporates external variables that may influence the forecast.
