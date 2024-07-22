@@ -1,1 +1,102 @@
 # Data
+---
+title: "AQI Prophet and More JW"
+format: html
+editor: visual
+---
+
+
+```{r}
+library(prophet)
+library(DBI)
+library(dbplyr)
+library(tidyverse)
+library(RPostgres)
+library(viridis)
+library(rpivotTable)
+```
+
+First we want to connect our R instance to the database. We will use dbConnect with RPostgres to accomplish this.
+
+```{r}
+con <- dbConnect(RPostgres::Postgres(),
+                 dbname = 'air',
+                 host = 'localhost',
+                 port = 5432,
+                 user = 'postgres',
+                 password = 'postgres')
+
+```
+
+For this small exploration, we will be taking a look at data for Portland. We will be using Prophet, a forecasting package created by Meta to do some quick analysis on Portland's AQI history and make a forcast for the future.
+```{r}
+#Porland Only
+portland <- tbl(con, sql("SELECT * FROM air.air_quality
+                       LEFT JOIN air.dates USING (date_id)
+                       LEFT JOIN air.locations USING (location_id)
+                       LEFT JOIN air.aqi_categories USING (category_id)
+                       LEFT JOIN air.yearly_transit USING (yearly_transit_id)
+                       WHERE city = 'Portland' AND
+                       state = 'Oregon'
+                       ORDER BY date"))
+```
+
+To use the package, data must be in the format of a two column graph, with the first column being the date data, and the second being the variable being mapped and preddicted. In this case, we will be predicting AQI.
+```{r}
+portland_data <- as.data.frame(portland)
+
+pdx = portland_data %>%
+  select(c(date, aqi)) %>%
+  rename(
+    ds = date,
+    y = aqi
+  )
+
+head(pdx)
+```
+
+We begin the prophet forcast by transforming the dataframe into the prophet object.
+```{r}
+pdxprophet = prophet(pdx) 
+```
+
+The future data is created with the make_future_dataframe function. Here we want one year of additional data to be forcasted.
+```{r}
+future <- make_future_dataframe(pdx2, periods = 365)
+tail(future)
+```
+
+We predict future values based on the existing data and the future period. This will return the actual data and predictions, with an error range shown with the upper and lower bounds.
+```{r}
+forecast <- predict(pdx2, future)
+tail(forecast[c('ds', 'yhat', 'yhat_lower', 'yhat_upper')])
+```
+
+To visualize this we can plot it. The black dots represent the actual values. The dark blue line represents the prediction made by the algorithm. The light blue transparent area represents the upper and lower bounds of the prediction. Right away, we can see the yearly increase in aqi every year during the late summer. The large spike in 2020 will be something to take a closer look at. This corresponds with the large forest fire in the Columbia Gorge. At the end, we can see forcasted data for the year 2023.
+```{r}
+plot(pdx2, forecast)
+```
+
+We can also see specific trends including the total (entire eight years), weekly, and yearly trends. This allows us to see how aqi goes up and down fairly consistantly based on the time of year, though the day of the week tends to have very little impact (it may look significant but it is only moving up and down less than 1.5 aqi between days). This allows us to see the consistant increase during the late summer to mid fall each year. 
+```{r}
+prophet_plot_components(pdxprophet, forecast)
+```
+
+We can cross validate the predictions to see how accurate they turned out to be. This will predict over the period from the cutoff date up to specified date in the ds column date. The forecast is made for each point between cutoff and cutoff + horizon. We have specified only to predict up to a year out as that is the amount of time we forcasted in the initial Portland forcast above. We can then compute the difference between y and yhat to see how accurate the prediction is.
+```{r}
+pdx_cv <- cross_validation(pdxprophet, initial = 730, period = 180, horizon = 365, units = 'days')
+head(pdx_cv)
+```
+
+This chart shows the mean squared error (MSE), root mean squared error (RMSE), mean absolute error (MAE), mean absolute percent error (MAPE), median absolute percent error (MDAPE) and coverage of the yhat_lower and yhat_upper estimates. As the horizon increases, the errors tend to increase, but overall they are not too large.
+```{r}
+pdx_perf <- performance_metrics(pdx_cv)
+head(pdx_perf)
+```
+
+We can plot each of these metrics to see how accurate the predictions are over the estimated period. The light grey datapoints represent the mean absolute percent error. A datapoint with a x value 200 and y value 1 means it was predicted for a period of 200 days after the cutoff date, and was 1% off the actual value. We can see that most predictions are under 1%, making this a pretty decent estimation. The fact that they do not increase over time allows us to have a certain degree of confidence in the prediction even a year out. The blue line shows the mean of these datapoints.
+```{r}
+#mean absolute percent error
+plot_cross_validation_metric(pdx_cv, metric = 'mape')
+```
+
