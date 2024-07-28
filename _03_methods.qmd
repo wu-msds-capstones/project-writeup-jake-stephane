@@ -50,3 +50,90 @@ Together these 3 parameters account for seasonality, trend and noise in datasets
 
 We are trying to find the right `p,d, q hyperparameters` to correctly forecast and predict the aqi values.
 Those values are crucial and have be near idal to have reliable forecasts.
+
+# Common Techniques to Evaluate the Performance of SARIMAX Predictive Model
+
+## 1. Train-Test Split 🔪
+
+- **Description**: Split the dataset into training and testing subsets.
+- **Purpose**: Assess the model's performance on unseen data to detect overfitting and ensure generalizability.
+
+## 2. Cross-Validation 🔄
+
+- **Description**: Divide the data into k subsets and train the model k times, each time using a different subset as the test set and the remaining as the training set.
+- **Purpose**: Provides a more robust estimate of model performance by averaging results over multiple splits.
+
+## 3. Confusion Matrix 🧩
+
+- **Description**: A table used to describe the performance of a classification model by comparing predicted and actual values.
+- **Metrics**: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN).
+
+## 4. Accuracy ✅
+
+- **Description**: The ratio of correctly predicted instances to the total instances.
+- **Formula**: $\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}$
+
+## 5. Precision, Recall, and F1-Score 🎯
+
+### Precision
+- **Description**: The ratio of correctly predicted positive observations to the total predicted positives.
+- **Formula**: $\text{Precision} = \frac{TP}{TP + FP}$
+
+### Recall (Sensitivity)
+- **Description**: The ratio of correctly predicted positive observations to all observations in the actual class.
+- **Formula**: $\text{Recall} = \frac{TP}{TP + FN}$
+
+### F1-Score
+- **Description**: The harmonic mean of Precision and Recall.
+- **Formula**: $\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$
+
+## 6. ROC Curve and AUC (Area Under the Curve) 📈
+
+- **ROC Curve**: A graphical representation of the true positive rate vs. false positive rate at various threshold settings.
+- **AUC**: Measures the entire two-dimensional area underneath the ROC curve. Higher AUC indicates better model performance.
+
+## 7. Mean Absolute Error (MAE) 📏
+
+- **Description**: The average of the absolute differences between predicted and actual values.
+- **Formula**: $\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$
+
+## 8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE) 📊
+
+### MSE
+- **Description**: The average of the squared differences between predicted and actual values.
+- **Formula**: $\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$
+
+### RMSE
+- **Description**: The square root of MSE.
+- **Formula**: $\text{RMSE} = \sqrt{\text{MSE}}$
+
+## 9. R-squared (Coefficient of Determination) 📉
+
+- **Description**: Indicates the proportion of the variance in the dependent variable that is predictable from the independent variables.
+- **Formula**: $R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$
+
+## 10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC) 🧮
+
+### AIC
+- **Description**: Measures the relative quality of a statistical model for a given set of data.
+- **Formula**: $\text{AIC} = 2k - 2\ln(L)$ where $k$ is the number of parameters and $L$ is the likelihood.
+
+### BIC
+- **Description**: Similar to AIC but includes a penalty term for the number of parameters.
+- **Formula**: $\text{BIC} = k\ln(n) - 2\ln(L)$ where $n$ is the number of observations.
+
+# So what can Akaike Information Criteria (AIC) do for us?
+widely used to measure of a statistical model. It basically quantifies
+
+- The goodness of fit
+- The simplicity/parsimony of the model into a single statistic
+
+*When comparing 2 models, the one with the lower AIC is generally "better"*
+
+The Akaike Information Criterion (AIC) is a measure used to compare different statistical models. It helps in model selection by balancing the goodness of fit and the complexity of the model. Here's how to interpret the AIC value:
+
+- *Lower AIC is Better*: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.
+- *Comparative Measure*: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.
+- *Penalty for Complexity*: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.
+- 
+# Machine Learning 

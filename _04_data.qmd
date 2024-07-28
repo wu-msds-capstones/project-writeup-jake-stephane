@@ -43,7 +43,7 @@ Tracking these identifiers independently allows for accurate analysis of changes
 
 
 Figure 1.
-!()[]
+!(ERD diagram)[https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/aqi_erd_final.png]
 
 
 ```{python}
@@ -223,7 +223,6 @@ plt.title('Missing values in the dataset')
 
 # Show the plot
 plt.show()
-
 ```
 
 The EDA is completed, but let's check the statistical summary,data distribution sing Sweetviz Report.
@@ -266,9 +265,12 @@ profile = ProfileReport(
     # title=f"Air Quality profiling - Site Num: {group[0]}"
 )
 
-profile.to_file("your_report2.html")
+#profile.to_file("your_report2.html")
+```
+
+# Save the df for quarto cross-reference
+```{python}
+df.to_pickle('df.pkl')
 ```
 
 We first performed `manual` EDA analysis, and generated automatic EDA packages reports using  the Sweetviz and ydata to further confirm the quality of our data such as unbalance, missing value (NaN).
-
-I have identified the following :

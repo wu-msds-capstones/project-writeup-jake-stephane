@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>methods</title>
+<title>Methods</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -34,6 +34,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="_03_methods_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="_03_methods_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -43,7 +72,23 @@ ul.task-list li input[type="checkbox"] {
 
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Methods</h1>
+</div>
 
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <section id="methodology-tool-deployed" class="level1">
@@ -53,7 +98,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Data cleaning procedures were required to handle missing values, or to correct inconsistencies, nevertheless we ensured that all data was in a tidy format. This involved normalizing or standardizing data as necessary and creating new features through aggregation to enhance the model’s performance.</p>
 <p><code>The most common method used in time series forecasting is known as ARIMA model. We will use an extended version called SARIMAX (*Seasonal Auto Regressive Integrated Moving Averages with exogenous factor*)</code></p>
 <section id="what-is-prophet" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-prophet">What is Prophet</h2>
+<h2 class="anchored" data-anchor-id="what-is-prophet">What is Prophet?</h2>
 <p>Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. <code>We utilized prophet to gain a quick understanding of our AQI patterns</code>, seeking to understand basic trends before conducting a more thorough analysis.</p>
 <p>Key features of Prophet include seasonality detection and holiday incorporation, while providing easy use and understanding for users. We can use this software to get complex understanding from simple application.</p>
 <p>To conduct this analysis, we prepare data into a two column table, date and AQI. Prophet uses the trends of past data to highlight similarities over days of the year, weeks, months, and seasons. From this, prophet is able to generate its predictions, cross validate, and give performance metrics such as mean absolute percentage error to quantify the accuracy of the results.</p>
@@ -78,6 +123,132 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 <p>We are trying to find the right <code>p,d, q hyperparameters</code> to correctly forecast and predict the aqi values. Those values are crucial and have be near idal to have reliable forecasts.</p>
 </section>
+</section>
+<section id="common-techniques-to-evaluate-the-performance-of-sarimax-predictive-model" class="level1">
+<h1>Common Techniques to Evaluate the Performance of SARIMAX Predictive Model</h1>
+<section id="train-test-split" class="level2">
+<h2 class="anchored" data-anchor-id="train-test-split">1. Train-Test Split 🔪</h2>
+<ul>
+<li><strong>Description</strong>: Split the dataset into training and testing subsets.</li>
+<li><strong>Purpose</strong>: Assess the model’s performance on unseen data to detect overfitting and ensure generalizability.</li>
+</ul>
+</section>
+<section id="cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation">2. Cross-Validation 🔄</h2>
+<ul>
+<li><strong>Description</strong>: Divide the data into k subsets and train the model k times, each time using a different subset as the test set and the remaining as the training set.</li>
+<li><strong>Purpose</strong>: Provides a more robust estimate of model performance by averaging results over multiple splits.</li>
+</ul>
+</section>
+<section id="confusion-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="confusion-matrix">3. Confusion Matrix 🧩</h2>
+<ul>
+<li><strong>Description</strong>: A table used to describe the performance of a classification model by comparing predicted and actual values.</li>
+<li><strong>Metrics</strong>: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN).</li>
+</ul>
+</section>
+<section id="accuracy" class="level2">
+<h2 class="anchored" data-anchor-id="accuracy">4. Accuracy ✅</h2>
+<ul>
+<li><strong>Description</strong>: The ratio of correctly predicted instances to the total instances.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}\)</span></li>
+</ul>
+</section>
+<section id="precision-recall-and-f1-score" class="level2">
+<h2 class="anchored" data-anchor-id="precision-recall-and-f1-score">5. Precision, Recall, and F1-Score 🎯</h2>
+<section id="precision" class="level3">
+<h3 class="anchored" data-anchor-id="precision">Precision</h3>
+<ul>
+<li><strong>Description</strong>: The ratio of correctly predicted positive observations to the total predicted positives.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Precision} = \frac{TP}{TP + FP}\)</span></li>
+</ul>
+</section>
+<section id="recall-sensitivity" class="level3">
+<h3 class="anchored" data-anchor-id="recall-sensitivity">Recall (Sensitivity)</h3>
+<ul>
+<li><strong>Description</strong>: The ratio of correctly predicted positive observations to all observations in the actual class.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Recall} = \frac{TP}{TP + FN}\)</span></li>
+</ul>
+</section>
+<section id="f1-score" class="level3">
+<h3 class="anchored" data-anchor-id="f1-score">F1-Score</h3>
+<ul>
+<li><strong>Description</strong>: The harmonic mean of Precision and Recall.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></li>
+</ul>
+</section>
+</section>
+<section id="roc-curve-and-auc-area-under-the-curve" class="level2">
+<h2 class="anchored" data-anchor-id="roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve) 📈</h2>
+<ul>
+<li><strong>ROC Curve</strong>: A graphical representation of the true positive rate vs.&nbsp;false positive rate at various threshold settings.</li>
+<li><strong>AUC</strong>: Measures the entire two-dimensional area underneath the ROC curve. Higher AUC indicates better model performance.</li>
+</ul>
+</section>
+<section id="mean-absolute-error-mae" class="level2">
+<h2 class="anchored" data-anchor-id="mean-absolute-error-mae">7. Mean Absolute Error (MAE) 📏</h2>
+<ul>
+<li><strong>Description</strong>: The average of the absolute differences between predicted and actual values.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\)</span></li>
+</ul>
+</section>
+<section id="mean-squared-error-mse-and-root-mean-squared-error-rmse" class="level2">
+<h2 class="anchored" data-anchor-id="mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE) 📊</h2>
+<section id="mse" class="level3">
+<h3 class="anchored" data-anchor-id="mse">MSE</h3>
+<ul>
+<li><strong>Description</strong>: The average of the squared differences between predicted and actual values.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></li>
+</ul>
+</section>
+<section id="rmse" class="level3">
+<h3 class="anchored" data-anchor-id="rmse">RMSE</h3>
+<ul>
+<li><strong>Description</strong>: The square root of MSE.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}}\)</span></li>
+</ul>
+</section>
+</section>
+<section id="r-squared-coefficient-of-determination" class="level2">
+<h2 class="anchored" data-anchor-id="r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination) 📉</h2>
+<ul>
+<li><strong>Description</strong>: Indicates the proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></li>
+</ul>
+</section>
+<section id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="level2">
+<h2 class="anchored" data-anchor-id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC) 🧮</h2>
+<section id="aic" class="level3">
+<h3 class="anchored" data-anchor-id="aic">AIC</h3>
+<ul>
+<li><strong>Description</strong>: Measures the relative quality of a statistical model for a given set of data.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{AIC} = 2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is the number of parameters and <span class="math inline">\(L\)</span> is the likelihood.</li>
+</ul>
+</section>
+<section id="bic" class="level3">
+<h3 class="anchored" data-anchor-id="bic">BIC</h3>
+<ul>
+<li><strong>Description</strong>: Similar to AIC but includes a penalty term for the number of parameters.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{BIC} = k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is the number of observations.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="so-what-can-akaike-information-criteria-aic-do-for-us" class="level1">
+<h1>So what can Akaike Information Criteria (AIC) do for us?</h1>
+<p>widely used to measure of a statistical model. It basically quantifies</p>
+<ul>
+<li>The goodness of fit</li>
+<li>The simplicity/parsimony of the model into a single statistic</li>
+</ul>
+<p><em>When comparing 2 models, the one with the lower AIC is generally “better”</em></p>
+<p>The Akaike Information Criterion (AIC) is a measure used to compare different statistical models. It helps in model selection by balancing the goodness of fit and the complexity of the model. Here’s how to interpret the AIC value:</p>
+<ul>
+<li><em>Lower AIC is Better</em>: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.</li>
+<li><em>Comparative Measure</em>: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.</li>
+<li><em>Penalty for Complexity</em>: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.</li>
+<li><h1 id="machine-learning">Machine Learning</h1></li>
+</ul>
 </section>
 
 </main>
