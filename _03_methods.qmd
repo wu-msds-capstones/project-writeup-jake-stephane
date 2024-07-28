@@ -1,3 +1,13 @@
+---
+title: "Methods"
+format: html
+#editor: visual
+jupyter: python3
+execute:
+  echo: true
+  output: true
+---
+
 # Methodology & Tool Deployed
 
 Employing NumPy and Pandas for data manipulation, Matplotlib and Seaborn for visualization, time series forecasting algorithms like SARIMAX, Flask or Power BI for interactive dashboards, and Python as the primary programming language will provide practical experience in implementing comprehensive air quality forecasting solutions.

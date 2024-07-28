@@ -8,11 +8,3 @@ The EPA developed the Air Quality Index (AQI) in 1999, creating an easily unders
 
 
 
-# move to reference with quarto
-Bibliography
-Environmental Protection Agency, https://www.epa.gov/clean-air-act-overview/evolution-clean-air-act
-Zhang Et. Al. https://acp.copernicus.org/articles/18/15003/2018/ 
-American Lung Association, https://www.lung.org/research/sota/key-findings 
-Airnow.gov, https://www.airnow.gov/aqi/aqi-basics/using-air-quality-index 
-World Health Organization, https://www.who.int/news/item/25-03-2014-7-million-premature-deaths-annually-linked-to-air-pollution
-Fuller, Landrigan, Balakrishnan, et al., https://www.thelancet.com/journals/lanplh/article/PIIS2542-5196(22)00090-0/fulltext 
