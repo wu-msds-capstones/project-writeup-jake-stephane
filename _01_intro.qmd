@@ -1,3 +1,7 @@
 # Introduction
-hello
-hello
+
+In this project, we will be focusing on the key factors contributing to Portland’s air quality and the impact that has on the health outcomes of the population. We aim to shed light on the complex interplay between various environmental and human-made factors that contribute to air pollution levels. We decided to focus on Portland, Oregon as we live here and are directly impacted by the changing air quality.
+
+It is important to understand how our actions impact the air we breathe and to find ways to improve it. This project aims to develop and validate machine learning models for use in analysis of the various factors that influence air quality. By focusing on Portland in comparison to other large US cities, we hope to find things Portland does that lead to the greater AQI outcomes. Our approach will consider a range of variables, including meteorological conditions, pollution sources, and transit systems. Through this analysis, we aim to provide actionable insights and recommendations for sustaining and enhancing air quality. By examining both the contributors to clean air and the potential causes of pollution, we can understand air quality factors more accurately and develop comprehensive strategies for improvement.
+
+WIP
