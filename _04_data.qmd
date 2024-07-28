@@ -1,6 +1,5 @@
-# Data
 ---
-title: "AQI Prophet and More JW"
+title: "AQI Prophet JW"
 format: html
 editor: visual
 ---
@@ -62,19 +61,19 @@ pdxprophet = prophet(pdx)
 
 The future data is created with the make_future_dataframe function. Here we want one year of additional data to be forcasted.
 ```{r}
-future <- make_future_dataframe(pdx2, periods = 365)
+future <- make_future_dataframe(pdxprophet, periods = 365)
 tail(future)
 ```
 
 We predict future values based on the existing data and the future period. This will return the actual data and predictions, with an error range shown with the upper and lower bounds.
 ```{r}
-forecast <- predict(pdx2, future)
+forecast <- predict(pdxprophet, future)
 tail(forecast[c('ds', 'yhat', 'yhat_lower', 'yhat_upper')])
 ```
 
 To visualize this we can plot it. The black dots represent the actual values. The dark blue line represents the prediction made by the algorithm. The light blue transparent area represents the upper and lower bounds of the prediction. Right away, we can see the yearly increase in aqi every year during the late summer. The large spike in 2020 will be something to take a closer look at. This corresponds with the large forest fire in the Columbia Gorge. At the end, we can see forcasted data for the year 2023.
 ```{r}
-plot(pdx2, forecast)
+plot(pdxprophet, forecast)
 ```
 
 We can also see specific trends including the total (entire eight years), weekly, and yearly trends. This allows us to see how aqi goes up and down fairly consistantly based on the time of year, though the day of the week tends to have very little impact (it may look significant but it is only moving up and down less than 1.5 aqi between days). This allows us to see the consistant increase during the late summer to mid fall each year. 
@@ -99,4 +98,6 @@ We can plot each of these metrics to see how accurate the predictions are over t
 #mean absolute percent error
 plot_cross_validation_metric(pdx_cv, metric = 'mape')
 ```
+
+
 
