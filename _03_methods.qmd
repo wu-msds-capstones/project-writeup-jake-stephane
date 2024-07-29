@@ -9,7 +9,7 @@ execute:
 ---
 
 # Tools Deployed
-Python wil be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.
+Python will be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.
 
 To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.
 
