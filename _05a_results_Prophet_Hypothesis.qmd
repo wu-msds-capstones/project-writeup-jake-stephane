@@ -2,23 +2,28 @@
 title: "Result Prophet & Hypothesis Testing"
 format: html
 #editor: visual
-jupyter: r
+jupyter: ir
 execute:
   echo: true
   output: true
+---
 ---
 
 # Portland Vs Other Metro Areas AQI
 To gain an understanding of how Portland's AQI differs from other large cities, we can run a hypothesis test to determine the significance.
 
-
-
-```{r}
+```{r library import}
 #| warning: false
 library(dbplyr)
 library(tidyverse)
 library(lubridate)
 library(IRkernel)
+
+library(prophet)
+#library(DBI)
+
+#library(RPostgres)
+library(rpivotTable)
 ```
 
 
@@ -109,16 +114,6 @@ Based on the low p value of .02553, we reject the null. Portland transit ridersh
 
 # Prophet AQI Trend Visualization and Forecasting
 Prophet by Meta is used as time series prediction to estimate and map trends based on out data. We use this to see how AQI trends vary by day, month, and year. It is also able to give us a forecast for a given period after the end of our data which we can analyze and use to anticipate future AQI values.
-
-```{r}
-#| warning: false
-library(prophet)
-library(DBI)
-library(dbplyr)
-library(tidyverse)
-library(RPostgres)
-library(rpivotTable)
-```
 
 Initially, we connected the R instance to the PostgreSQL database and pulled information directly using dbConnece and RPostgres. For this report, we simply call our information from a local csv.
 

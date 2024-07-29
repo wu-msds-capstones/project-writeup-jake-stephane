@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.53">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Result Prophet &amp; Hypothesis Testing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="_05a_results_Prophet_Hypothesis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="_05a_results_Prophet_Hypothesis_files/libs/quarto-html/quarto.js"></script>
+<script src="_05a_results_Prophet_Hypothesis_files/libs/quarto-html/popper.min.js"></script>
+<script src="_05a_results_Prophet_Hypothesis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="_05a_results_Prophet_Hypothesis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="_05a_results_Prophet_Hypothesis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="_05a_results_Prophet_Hypothesis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="_05a_results_Prophet_Hypothesis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="_05a_results_Prophet_Hypothesis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="_05a_results_Prophet_Hypothesis_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Result Prophet &amp; Hypothesis Testing</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<hr>
+<section id="portland-vs-other-metro-areas-aqi" class="level1">
+<h1>Portland Vs Other Metro Areas AQI</h1>
+<p>To gain an understanding of how Portland’s AQI differs from other large cities, we can run a hypothesis test to determine the significance.</p>
+<div id="6143f979" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(IRkernel)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prophet)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#library(DBI)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#library(RPostgres)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpivotTable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="560c2f6f" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>large_metro_data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>portland_data <span class="ot">=</span> large_metro_data <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(city <span class="sc">==</span> <span class="st">'Portland'</span> <span class="sc">&amp;</span> state <span class="sc">==</span> <span class="st">'Oregon'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Initially we can run a two sample t-test to show that Portland’s AQI average is statistically greater than the average AQI of all large metropolitan areas within the US. We compare the sample of Portland AQI datapoints in the time period with the sample of all metropolitan areas with greater than one million population.</p>
+<p><em>Null Hypothesis</em>: The Portland AQI is greater than or equal to the AQI of all large metro cities in the US. <em>Alternate Hypothesis</em>: The Portland AQI is less than the AQI of all large metro cities in the US.</p>
+<div id="104eb242" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(portland_data<span class="sc">$</span>aqi, large_metro_data<span class="sc">$</span>aqi, <span class="at">alternative =</span> <span class="st">"less"</span>, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  portland_data$aqi and large_metro_data$aqi
+t = -24.604, df = 3038.7, p-value &lt; 2.2e-16
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+      -Inf -9.912464
+sample estimates:
+mean of x mean of y 
+ 37.87269  48.49553 </code></pre>
+</div>
+</div>
+<p>Based on the low P-value of &lt; 2.2*10^-16, we can safely reject the null hypothesis. We conclude that Portland’s AQI mean is not greater than or equal to the AQI of all large metropolitan areas. This agrees with our initial observations on the greater AQI outcomes of Portland, and specifies the significance of this statistically.</p>
+</section>
+<section id="september-2020-wildfires" class="level1">
+<h1>September 2020 Wildfires</h1>
+<p>From the initial EDA, we can see a large spike in AQI during September of 2020. During this month, the most destructive wildfire in Oregon history ravaged the state. The fires burned more than one million acres of land, destroying thousands of homes, and killing 11 people. 500,000 Oregonians were on evacuation alert, and 40,000 were actually forced to leave (Oregon Department of Emergency Management). Anyone around during that time will recall the orange skies, thick atmosphere, and strong smoke smell, but how unusual actually was this period?</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/2020_Oregon_wildfires.png?raw=true" class="img-fluid figure-img"></p>
+<figcaption>Wildfires Map</figcaption>
+</figure>
+</div>
+<p>To understand, we will conduct a t-test to see whether or not this month had greater than usual AQI.</p>
+<p><em>Null Hypothesis</em>: September 2020 AQI less than or equal to AQI of entire period in Portland <em>Alternate Hypothesis</em>: September 2020 AQI greater AQI of entire period in Portland</p>
+<div id="716e5b70" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pdx_data <span class="ot">=</span> large_metro_data <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    city <span class="sc">==</span> <span class="st">"Portland"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(date, aqi)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>pdx_data<span class="sc">$</span>month <span class="ot">=</span> <span class="fu">month</span>(pdx_data<span class="sc">$</span>date, <span class="at">label =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>pdx_data<span class="sc">$</span>year <span class="ot">=</span> <span class="fu">year</span>(pdx_data<span class="sc">$</span>date)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>pdx_09_2020 <span class="ot">=</span> pdx_data <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month<span class="sc">==</span><span class="st">"Sep"</span> <span class="sc">&amp;</span> year<span class="sc">==</span><span class="st">"2020"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(pdx_09_2020<span class="sc">$</span>aqi, pdx_data<span class="sc">$</span>aqi, <span class="at">alternative =</span> <span class="st">"greater"</span>, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pdx_09_2020$aqi and pdx_data$aqi
+t = 3.1995, df = 29.015, p-value = 0.001661
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ 39.7636     Inf
+sample estimates:
+mean of x mean of y 
+122.66667  37.87269 </code></pre>
+</div>
+</div>
+<p>Based on the low pvalue of 1.661*10^-3, we reject the null. We conclude that the September AQI in Portland is not less than or equal to the AQI for the entire period. The wildfire had a significant effect on the air quality, making it much more difficult to breathe. This aligns with the observation of the large spike during this period. We must do more to address and combat the wildfires that not only harm the air we breathe, but cause long lasting damage to the local environment.</p>
+</section>
+<section id="portland-transit-system" class="level1">
+<h1>Portland Transit System</h1>
+<p>One hypothesis for Portland’s better air quality outcomes is due to the increased focus on public transportation. Portland has placed high emphasis on utilizing public transit, with rates comparable to larger cities and higher than most other cities of its size. We will run a proportion statistical test to see how Portland’s rate of ridership compares with other cites.</p>
+<p>We have standardized rates by passenger miles ridden per person. This allows us to properly compare cities with different population sizes.</p>
+<p><em>Null Hypothesis</em>: Transit ridership in Portland is less than or equal to transit ridership across the country (large metro areas only) <em>Alternate Hypothesis</em>: Transit ridership in Portland is greater than transit ridership across the country (large metro areas only)</p>
+<div id="15e964f0" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pdx_transit <span class="ot">=</span> large_metro_data <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    city <span class="sc">==</span> <span class="st">"Portland"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(city, population, num_busses, operating_miles, passenger_miles)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>pdx_transit <span class="ot">=</span> <span class="fu">unique</span>(pdx_transit)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>pdx_transit<span class="sc">$</span>pass_miles_per_person <span class="ot">=</span> pdx_transit<span class="sc">$</span>passenger_miles<span class="sc">/</span>pdx_transit<span class="sc">$</span>population</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>large_metro_transit <span class="ot">=</span> large_metro_data <span class="sc">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(city, population, num_busses, operating_miles, passenger_miles)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>large_metro_transit <span class="ot">=</span> <span class="fu">drop_na</span>(<span class="fu">unique</span>(large_metro_transit))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>large_metro_transit<span class="sc">$</span>pass_miles_per_person <span class="ot">=</span> large_metro_transit<span class="sc">$</span>passenger_miles<span class="sc">/</span>large_metro_transit<span class="sc">$</span>population</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>large_metro_transit_avg <span class="ot">=</span> large_metro_transit <span class="sc">%&gt;%</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(city) <span class="sc">%&gt;%</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_pass_miles =</span> <span class="fu">mean</span>(passenger_miles),</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_pass_miles_per_person =</span> <span class="fu">mean</span>(pass_miles_per_person))</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(pdx_transit<span class="sc">$</span>pass_miles_per_person, large_metro_transit_avg<span class="sc">$</span>avg_pass_miles_per_person, <span class="at">alternative =</span> <span class="st">'greater'</span>, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pdx_transit$pass_miles_per_person and large_metro_transit_avg$avg_pass_miles_per_person
+t = 2.1653, df = 12.096, p-value = 0.02553
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ 5.834119      Inf
+sample estimates:
+mean of x mean of y 
+ 95.90601  63.02489 </code></pre>
+</div>
+</div>
+<p>Based on the low p value of .02553, we reject the null. Portland transit ridership is not less than or equal to the average transit ridership of large metro areas across the country. Portland’s higher transit numbers could be an influence in the better air outcomes of the city. However, because transit ridership is better in some other cites such as Baltimore and New York but not reflected in their AQI outcomes, this leads us to believe that transit ridership does not have sole influence in the air quality.</p>
+</section>
+<section id="prophet-aqi-trend-visualization-and-forecasting" class="level1">
+<h1>Prophet AQI Trend Visualization and Forecasting</h1>
+<p>Prophet by Meta is used as time series prediction to estimate and map trends based on out data. We use this to see how AQI trends vary by day, month, and year. It is also able to give us a forecast for a given period after the end of our data which we can analyze and use to anticipate future AQI values.</p>
+<div id="0e3da8ad" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prophet)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library(DBI)</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(RPostgres)</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpivotTable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Initially, we connected the R instance to the PostgreSQL database and pulled information directly using dbConnece and RPostgres. For this report, we simply call our information from a local csv.</p>
+<div id="5f099470" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># con &lt;- dbConnect(RPostgres::Postgres(),</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                  dbname = 'air',</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                  host = 'localhost',</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                  port = 5432,</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                  user = 'postgres',</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                  password = 'postgres')</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>metro_1mil <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv'</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Portland Only</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># portland &lt;- tbl(con, sql("SELECT * FROM air.air_quality</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.dates USING (date_id)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.locations USING (location_id)</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.aqi_categories USING (category_id)</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.yearly_transit USING (yearly_transit_id)</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                        WHERE city = 'Portland' AND</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#                        state = 'Oregon'</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#                        ORDER BY date"))</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>portland_data <span class="ot">=</span> metro_1mil <span class="sc">%&gt;%</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(city <span class="sc">==</span> <span class="st">'Portland'</span> <span class="sc">&amp;</span> state <span class="sc">==</span> <span class="st">'Oregon'</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#portland_data &lt;- as.data.frame(portland)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="data-forecasting" class="level2">
+<h2 class="anchored" data-anchor-id="data-forecasting">Data Forecasting</h2>
+<p>To use the package, data must be in the format of a two column graph, with the first column being the date data, and the second being the variable being mapped and preddicted. In this case, we will be predicting AQI.</p>
+<div id="776c5593" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pdx <span class="ot">=</span> portland_data <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(date, aqi)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">ds =</span> date,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> aqi</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 2</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">ds</th>
+<th data-quarto-table-cell-role="th" scope="col">y</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>2019-06-25</td>
+<td>29</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>2019-06-26</td>
+<td>31</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>2019-06-27</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>2019-06-28</td>
+<td>32</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>2019-06-29</td>
+<td>34</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>2019-06-30</td>
+<td>41</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We begin the prophet forecast by transforming the dataframe into the prophet object.</p>
+<div id="0fd1e5dd" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pdxprophet <span class="ot">=</span> <span class="fu">prophet</span>(pdx) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The future data is created with the make_future_dataframe function. Here we want one year of additional data to be forcasted.</p>
+<div id="1fcc1215" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(pdxprophet, <span class="at">periods =</span> <span class="dv">365</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(future)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 1</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">ds</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dttm&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3282</td>
+<td>2023-12-26</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3283</td>
+<td>2023-12-27</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3284</td>
+<td>2023-12-28</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3285</td>
+<td>2023-12-29</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3286</td>
+<td>2023-12-30</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3287</td>
+<td>2023-12-31</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We predict future values based on the existing data and the future period. This will return the actual data and predictions, with an error range shown with the upper and lower bounds.</p>
+<div id="b91e690a" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>forecast <span class="ot">&lt;-</span> <span class="fu">predict</span>(pdxprophet, future)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(forecast[<span class="fu">c</span>(<span class="st">'ds'</span>, <span class="st">'yhat'</span>, <span class="st">'yhat_lower'</span>, <span class="st">'yhat_upper'</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 4</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">ds</th>
+<th data-quarto-table-cell-role="th" scope="col">yhat</th>
+<th data-quarto-table-cell-role="th" scope="col">yhat_lower</th>
+<th data-quarto-table-cell-role="th" scope="col">yhat_upper</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dttm&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3282</td>
+<td>2023-12-26</td>
+<td>36.31957</td>
+<td>7.729355</td>
+<td>66.28377</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3283</td>
+<td>2023-12-27</td>
+<td>36.19091</td>
+<td>7.873892</td>
+<td>64.51600</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3284</td>
+<td>2023-12-28</td>
+<td>35.45571</td>
+<td>5.031923</td>
+<td>60.13808</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3285</td>
+<td>2023-12-29</td>
+<td>34.15332</td>
+<td>3.671065</td>
+<td>62.17947</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3286</td>
+<td>2023-12-30</td>
+<td>35.47973</td>
+<td>7.015142</td>
+<td>62.58695</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">3287</td>
+<td>2023-12-31</td>
+<td>35.52047</td>
+<td>7.435410</td>
+<td>63.54035</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>To visualize this we can plot it. The black dots represent the actual values. The dark blue line represents the prediction made by the algorithm. The light blue transparent area represents the upper and lower bounds of the prediction. Right away, we can see the yearly increase in aqi every year during the late summer. The large spike in 2020 will be something to take a closer look at. This corresponds with the large forest fire in the Columbia Gorge. At the end, we can see forcasted data for the year 2023.</p>
+<div id="607c5d06" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdxprophet, forecast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="_05a_results_Prophet_Hypothesis_files/figure-html/cell-13-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also see specific trends including the total (entire eight years), weekly, and yearly trends. This allows us to see how aqi goes up and down fairly consistantly based on the time of year, though the day of the week tends to have very little impact (it may look significant but it is only moving up and down less than 1.5 aqi between days). This allows us to see the consistant increase during the late summer to mid fall each year.</p>
+<div id="f8831281" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prophet_plot_components</span>(pdxprophet, forecast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="_05a_results_Prophet_Hypothesis_files/figure-html/cell-14-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation">Cross Validation</h2>
+<p>We can cross validate the predictions to see how accurate they turned out to be. This will predict over the period from the cutoff date up to specified date in the ds column date. The forecast is made for each point between cutoff and cutoff + horizon. We have specified only to predict up to a year out as that is the amount of time we forcasted in the initial Portland forcast above. We can then compute the difference between y and yhat to see how accurate the prediction is.</p>
+<div id="30fde04a" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pdx_cv <span class="ot">&lt;-</span> <span class="fu">cross_validation</span>(pdxprophet, <span class="at">initial =</span> <span class="dv">730</span>, <span class="at">period =</span> <span class="dv">180</span>, <span class="at">horizon =</span> <span class="dv">365</span>, <span class="at">units =</span> <span class="st">'days'</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 6</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">y</th>
+<th data-quarto-table-cell-role="th" scope="col">ds</th>
+<th data-quarto-table-cell-role="th" scope="col">yhat</th>
+<th data-quarto-table-cell-role="th" scope="col">yhat_lower</th>
+<th data-quarto-table-cell-role="th" scope="col">yhat_upper</th>
+<th data-quarto-table-cell-role="th" scope="col">cutoff</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dttm&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dttm&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>25</td>
+<td>2017-01-27</td>
+<td>34.25423</td>
+<td>17.92831</td>
+<td>50.48765</td>
+<td>2017-01-26</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>17</td>
+<td>2017-01-28</td>
+<td>36.59664</td>
+<td>20.40739</td>
+<td>52.33792</td>
+<td>2017-01-26</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>49</td>
+<td>2017-01-29</td>
+<td>35.96572</td>
+<td>21.67841</td>
+<td>51.87580</td>
+<td>2017-01-26</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>53</td>
+<td>2017-01-30</td>
+<td>33.80520</td>
+<td>16.17727</td>
+<td>48.60577</td>
+<td>2017-01-26</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>41</td>
+<td>2017-01-31</td>
+<td>34.08924</td>
+<td>17.94275</td>
+<td>50.08890</td>
+<td>2017-01-26</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>10</td>
+<td>2017-02-01</td>
+<td>34.98429</td>
+<td>19.11125</td>
+<td>50.15154</td>
+<td>2017-01-26</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This chart shows the mean squared error (MSE), root mean squared error (RMSE), mean absolute error (MAE), mean absolute percent error (MAPE), median absolute percent error (MDAPE) and coverage of the yhat_lower and yhat_upper estimates. As the horizon increases, the errors tend to increase, but overall they are not too large.</p>
+<div id="c4f18000" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pdx_perf <span class="ot">&lt;-</span> <span class="fu">performance_metrics</span>(pdx_cv)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx_perf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 8</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">horizon</th>
+<th data-quarto-table-cell-role="th" scope="col">mse</th>
+<th data-quarto-table-cell-role="th" scope="col">rmse</th>
+<th data-quarto-table-cell-role="th" scope="col">mae</th>
+<th data-quarto-table-cell-role="th" scope="col">mape</th>
+<th data-quarto-table-cell-role="th" scope="col">mdape</th>
+<th data-quarto-table-cell-role="th" scope="col">smape</th>
+<th data-quarto-table-cell-role="th" scope="col">coverage</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;drtn&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>37 days</td>
+<td>477.8973</td>
+<td>21.86086</td>
+<td>14.72203</td>
+<td>0.4161539</td>
+<td>0.3127868</td>
+<td>0.3530235</td>
+<td>0.7805486</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>38 days</td>
+<td>485.7761</td>
+<td>22.04033</td>
+<td>14.94405</td>
+<td>0.4268476</td>
+<td>0.3170282</td>
+<td>0.3579551</td>
+<td>0.7744276</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>39 days</td>
+<td>494.1912</td>
+<td>22.23041</td>
+<td>15.07162</td>
+<td>0.4284520</td>
+<td>0.3204344</td>
+<td>0.3591622</td>
+<td>0.7694400</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>40 days</td>
+<td>503.6057</td>
+<td>22.44116</td>
+<td>15.29299</td>
+<td>0.4331915</td>
+<td>0.3284341</td>
+<td>0.3633180</td>
+<td>0.7619587</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>41 days</td>
+<td>515.0069</td>
+<td>22.69376</td>
+<td>15.48735</td>
+<td>0.4369072</td>
+<td>0.3301875</td>
+<td>0.3667491</td>
+<td>0.7581047</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>42 days</td>
+<td>556.9106</td>
+<td>23.59895</td>
+<td>15.78155</td>
+<td>0.4375043</td>
+<td>0.3301875</td>
+<td>0.3690468</td>
+<td>0.7560644</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We can plot each of these metrics to see how accurate the predictions are over the estimated period. The light grey datapoints represent the mean absolute percent error. A datapoint with a x value 200 and y value 1 means it was predicted for a period of 200 days after the cutoff date, and was 1% off the actual value. We can see that most predictions are under 1%, making this a pretty decent estimation. The fact that they do not increase over time allows us to have a certain degree of confidence in the prediction even a year out. The blue line shows the mean of these datapoints.</p>
+<div id="89e1b4c2" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mean absolute percent error</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cross_validation_metric</span>(pdx_cv, <span class="at">metric =</span> <span class="st">'mape'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="_05a_results_Prophet_Hypothesis_files/figure-html/cell-17-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
