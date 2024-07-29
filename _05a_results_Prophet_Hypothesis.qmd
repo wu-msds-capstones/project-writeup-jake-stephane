@@ -8,6 +8,100 @@ execute:
   output: true
 ---
 
+# Portland Vs Other Metro Areas AQI
+To gain an understanding of how Portland's AQI differs from other large cities, we can run a hypothesis test to determine the significance.
+
+```{r}
+#| warning: false
+library(dbplyr)
+library(tidyverse)
+library(lubridate)
+```
+
+
+```{r}
+large_metro_data = read.csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
+
+portland_data = large_metro_data %>%
+  filter(city == 'Portland' & state == 'Oregon')
+```
+
+Initially we can run a two sample t-test to show that Portland's AQI average is statistically greater than the average AQI of all large metropolitan areas within the US. We compare the sample of Portland AQI datapoints in the time period with the sample of all metropolitan areas with greater than one million population. 
+
+*Null Hypothesis*: The Portland AQI is greater than or equal to the AQI of all large metro cities in the US.
+*Alternate Hypothesis*: The Portland AQI is less than the AQI of all large metro cities in the US.
+
+```{r}
+t.test(portland_data$aqi, large_metro_data$aqi, alternative = "less", var.equal = FALSE)
+```
+
+Based on the low P-value of < 2.2*10^-16, we can safely reject the null hypothesis. We conclude that Portland's AQI mean is not greater than or equal to the AQI of all large metropolitan areas. This agrees with our initial observations on the greater AQI outcomes of Portland, and specifies the significance of this statistically.
+
+
+# September 2020 Wildfires
+
+From the initial EDA, we can see a large spike in AQI during September of 2020. During this month, the most destructive wildfire in Oregon history ravaged the state. The fires burned more than one million acres of land, destroying thousands of homes, and killing 11 people. 500,000 Oregonians were on evacuation alert, and 40,000 were actually forced to leave (Oregon Department of Emergency Management). Anyone around during that time will recall the orange skies, thick atmosphere, and strong smoke smell, but how unusual actually was this period?
+
+To understand, we will conduct a t-test to see whether or not this month had greater than usual AQI.
+
+*Null Hypothesis*: September 2020 AQI less than or equal to AQI of entire period in Portland
+*Alternate Hypothesis*: September 2020 AQI greater AQI of entire period in Portland
+
+```{r}
+pdx_data = large_metro_data %>%
+  filter(
+    city == "Portland"
+  ) %>%
+  select(date, aqi)
+  
+pdx_data$month = month(pdx_data$date, label = TRUE)
+pdx_data$year = year(pdx_data$date)
+
+pdx_09_2020 = pdx_data %>%
+  filter(month=="Sep" & year=="2020")
+
+
+t.test(pdx_09_2020$aqi, pdx_data$aqi, alternative = "greater", var.equal = FALSE)
+```
+Based on the low pvalue of 1.661*10^-3, we reject the null. We conclude that the September AQI in Portland is not less than or equal to the AQI for the entire period. The wildfire had a significant effect on the air quality, making it much more difficult to breathe. This aligns with the observation of the large spike during this period. We must do more to address and combat the wildfires that not only harm the air we breathe, but cause long lasting damage to the local environment. 
+
+
+# Portland Transit System
+
+One hypothesis for Portland's better air quality outcomes is due to the increased focus on public transportation. Portland has placed high emphasis on utilizing public transit, with rates comparable to larger cities and higher than most other cities of its size. We will run a proportion statistical test to see how Portland's rate of ridership compares with other cites.
+
+We have standardized rates by passenger miles ridden per person. This allows us to properly compare cities with different population sizes.
+
+*Null Hypothesis*: Transit ridership in Portland is less than or equal to transit ridership across the country (large metro areas only)
+*Alternate Hypothesis*: Transit ridership in Portland is greater than transit ridership across the country (large metro areas only)
+
+```{r}
+pdx_transit = large_metro_data %>%
+  filter(
+    city == "Portland"
+  ) %>%
+  select(city, population, num_busses, operating_miles, passenger_miles)
+
+pdx_transit = unique(pdx_transit)
+pdx_transit$pass_miles_per_person = pdx_transit$passenger_miles/pdx_transit$population
+
+large_metro_transit = large_metro_data %>%
+  select(city, population, num_busses, operating_miles, passenger_miles)
+
+large_metro_transit = drop_na(unique(large_metro_transit))
+large_metro_transit$pass_miles_per_person = large_metro_transit$passenger_miles/large_metro_transit$population
+
+large_metro_transit_avg = large_metro_transit %>%
+  group_by(city) %>%
+  summarize(avg_pass_miles = mean(passenger_miles),
+            avg_pass_miles_per_person = mean(pass_miles_per_person))
+
+t.test(pdx_transit$pass_miles_per_person, large_metro_transit_avg$avg_pass_miles_per_person, alternative = 'greater', var.equal = FALSE)
+```
+
+Based on the low p value of .02553, we reject the null. Portland transit ridership is not less than or equal to the average transit ridership of large metro areas across the country. Portland's higher transit numbers could be an influence in the better air outcomes of the city. However, because transit ridership is better in some other cites such as Baltimore and New York but not reflected in their AQI outcomes, this leads us to believe that transit ridership does not have sole influence in the air quality. 
+
+
 # Prophet AQI Trend Visualization and Forecasting
 Prophet by Meta is used as time series prediction to estimate and map trends based on out data. We use this to see how AQI trends vary by day, month, and year. It is also able to give us a forecast for a given period after the end of our data which we can analyze and use to anticipate future AQI values.
 

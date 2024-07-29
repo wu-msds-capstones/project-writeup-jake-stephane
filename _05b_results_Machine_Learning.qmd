@@ -36,7 +36,7 @@ from scipy.stats import randint
 
 Starting by looking at the head to see all of our columns. Immediately, we can some missing data, which must be addressed before any machine learning algorithms can be conducted.
 
-## import df.pkl file
+## Import the Data
 ```{python}
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 ```
@@ -498,4 +498,4 @@ ConfusionMatrixDisplay(
 
 We can use this model for the prediction of AQI around the country, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase. This will be further expanded upon in the conclusions section of this report.
 
-#  ML time series rom stephane
+#  ML time series from stephane
