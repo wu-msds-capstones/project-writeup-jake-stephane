@@ -9,7 +9,6 @@ execute:
 ---
 
 # Data Explaination
-
 The data for this project was initially scattered across multiple sources and required significant organization and compilation. The focus of this project is on the air quality in Portland, Oregon, so various data sources were aggregated and processed to compare a variety of air quality indicators.
 
 ## Air Quality Data:
@@ -26,27 +25,29 @@ This data was given daily by city, separated into different files by year. They 
 ## Transit Data:
 Information on motor buses taken from the National Transit Database, produced by the Federal Transit Administration. Includes information of bus systems and ridership by city, separated by year. Data is recorded yearly, encompassing annual totals for information such as number of buses, total revenue, passengers, and miles driven for the respective city transit systems. Information was given in yearly CSVs, separated by the city transit system. For cities with multiple systems, data was combined. Only motorbus data was used, which may not be reflective of cities with other large methods of public transportation, such as the New York subway system.
 
-## Population data:
+## Population Data:
 Data on population and population density sourced from the Simplemaps United States Cities database, which is built from multiple sources including the U.S. Geological Survey and the U.S. Census Bureau. Data is updated as of May 6, 2024, reflecting very up to date information. 
 
 # Data Processing
-
 The data was downloaded in R. For information given in yearly CSV files, data was stacked vertically to include all years in our time frame. In all tables, relevant columns were selected and renamed, reducing the information being brought into our initial SQL database. R was connected and imported to PostgreSQL using the RPostgres package, and used to read, stack, select columns, and rename columns before being written into a PostgreSQL database. 
 
 ## Data Organization
+Given the raw data available, the table structure was simplified compared to the original data sources. Data was organized in a star schema centered on the air_quality fact table. This table tracks AQI, pollutant, weather and toxin data daily for each location. The first dimension table is the dates table, a serialized list of dates from January 1st, 2015 to December 31st, 2022. Next, we have a locations dimension table, a serialized list of over 1400 cities and towns from around the country. These are labeled by the state, county, and city name, as well as the population and population density, allowing connection to information based on what is given. The aqi_category dimension table is a short list of AQI value categories (Good, Unhealthy, Hazardous, etc.) with their respective AQI value range as minimum and maximum values. 
 
-Given the raw data available, the table structure was simplified compared to the original data sources. Data was organized in a star schema centered on the air_quality fact table. This table tracks AQI, pollutant, weather and toxin data daily for each location. The first dimension table is the dates table, a serialized list of dates from January 1st, 2015 to December 31st, 2022. Next, we have a locations dimension table, a serialized list of over 1400 cities and towns from around the country. These are labeled by the state, county, and city name, as well as the population and population density, allowing connection to information based on what is given. The aqi_category dimension table is a short list of AQI value categories (Good, Unhealthy, Hazardous, etc.) with their respective AQI value range as minimum and maximum values. Finally, the yearly_transit dimension table gives the information for the transit system of the respective city during the specified year attached in the fact table. This table seems counterproductive to not include the location or year of the specified line or even a reference id, but in keeping with star schema, it was decided that this was the best way to reference this information. Understanding the context of a specified line requires joining the table back to the fact table, and joining the location and date tables to that as well. 
+Finally, the yearly_transit dimension table gives the information for the transit system of the respective city during the specified year attached in the fact table. This table seems counterproductive to not include the location or year of the specified line or even a reference id, but in keeping with star schema, it was decided that this was the best way to reference this information. Understanding the context of a specified line requires joining the table back to the fact table, and joining the location and date tables to that as well. 
 
 Each table has a unique serialized primary key, and all dimension tables are connected via foreign key. Several additional indexes are included on columns that will be queried often. Finally, constraints have been added to limit unusual or impossible data.
 
 Tracking these identifiers independently allows for accurate analysis of changes over time and across different areas, and allows adding new information should we need to update the database. (Figure 1) illustrates the resulting ERD structure using drawSQL.
 
 
-Figure 1.
-!(ERD diagram)[https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/aqi_erd_final.png]
+Figure 1.  
+
+![ERD Diagram](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/aqi_erd_final.png?raw=true)
 
 
 ```{python}
+#| label: import-package
 from sqlalchemy import create_engine, text
 import dotenv
 import datetime
@@ -60,75 +61,74 @@ import missingno as msno
 from summarytools import dfSummary
 import sweetviz as sv
 from ydata_profiling import ProfileReport
-
-#%pip install ydata-profiling
-#%pip install missingno
 ```
 
-# Exploratory Data Analysis (EDA) - Initial
-
+# Initial Exploratory Data Analysis (EDA)
 We have a new dataset named metro_1mil.csv. This file was created using a SQL statement that joins all relevant tables, filtering for metropolitan areas with populations less than or equal to 1 million. This approach limits our EDA to mid-sized metropolitan cities, such as Portland, Oregon.
 
 ```{python}
+#| label: read-data
+#| message: false
+#| cache: true
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 ```
 
 ```{python}
+#| message: false
+#| output-location: slide
 print(df.head(10))
 ```
 
-# Describe Dataset numerical features
+# Describe Dataset Numerical Features
 ```{python}
 print(df.describe(include=['float64', 'int64']))
 ```
 
-# Describe Dataset Objects features
+# Describe Dataset Objects Features
 ```{python}
 print(df.describe(include=['object']))
 ```
 
-# Size of the dataframe: rows, columns
+# Dataframe Size: rows, columns
 ```{python}
 num_rows, num_columns = df.shape
 print(f"The dataset contains {num_rows} rows and {num_columns} columns.")
 ```
 
-# To start our EDA, we focus on Portland OR 
+# Exploring Oregon: Initiating Our Exploratory Data Analysis by filtering
 ```{python}
 df = df[df['state'] == 'Oregon']
 df.shape[0]
 ```
 
 # Features Engineering
-## We need to have proper datatype for the time series analysis and clean data without NaN values
-
+## Data Preparation: Ensuring Proper Datatypes and Handling Missing Values for Time Series Analysis
 ```{python}
 # date is an object, we must convert to datetime for time series analysis
 df['date'] = pd.to_datetime(df['date'])
 ```
 
-# Let's confirm the range of data in our DataFrame
+# Validating Data Range: Examining the Temporal Scope of Our DataFram
 ```{python}
 # range of the date column
 print(f"The date range is from {df['date'].min()} to {df['date'].max()}.")
 ```
 
-# Let's confirm the datatype is correct!
+# Verifying Data Types: Ensuring Correct Format for Analysis
 ```{python}
 print(df['date'].info())
 ```
 
-
-# Unique Values in df
+# Identifying Distinct Values: Analyzing Uniqueness in the Datase
 ```{python}
 for column in df.columns:
     unique_count = df[column].nunique()
     print(f"Number of unique values in column '{column}': {unique_count}")
 ```
 
-# Check our Dtypes in df
+# Examining Data Structure: Assessing Column Datatypes in the DataFrame
 ```{python}
-print(df.dtypes) # this will return the data type of each column
+print(df.dtypes)
 ```
 
 # Check Missing Values by columns in df
@@ -136,112 +136,55 @@ print(df.dtypes) # this will return the data type of each column
 print(df.isnull().sum().sort_values(ascending=True))
 ```
 
-As you can see, we have many NaN in our DataFrame, so let's work on it with amputation.
-
-# Amputation
+# Data Quality Assessment: Addressing Missing Values through Imputation Techniques
 
 ```{python}
 #| echo: false
 #| error: false
-# Calculate the mean of the 'mean_temperature_fahrenheit' column
-mean_temp = df['mean_temperature_fahrenheit'].mean()
+# List of columns to impute
+columns_to_impute = [
+    'mean_temperature_fahrenheit', 'max_temperature_fahrenheit',
+    'mean_pressure_millibars', 'max_pressure_millibars',
+    'mean_humidity_percent_relative_humidity', 'max_humidity_percent_relative_humidity',
+    'mean_wind_knots', 'max_wind_knots',
+    'mean_co_ppm', 'max_co_ppm',
+    'mean_no2_ppb', 'max_no2_ppb',
+    'mean_ozone_ppm', 'max_ozone_ppm',
+    'mean_so2_ppb', 'max_so2_ppb'
+]
 
-# Replace missing values in the 'mean_temperature_fahrenheit' column with the calculated mean
-df['mean_temperature_fahrenheit'].fillna(mean_temp, inplace=True)
-
-# Calculate the mean of the 'max_temperature_fahrenheit' column
-mean_maxtemp = df['max_temperature_fahrenheit'].mean()
-
-# Replace missing values in the 'max_temperature_fahrenheit' column with the calculated mean
-df['max_temperature_fahrenheit'].fillna(mean_maxtemp, inplace=True)
-
-# Lets do the same thing for mean_pressure_millibars and max_pressure_millibars
-mean_pressure = df['mean_pressure_millibars'].mean()
-df['mean_pressure_millibars'].fillna(mean_pressure, inplace=True)
-
-mean_maxpressure = df['max_pressure_millibars'].mean()
-df['max_pressure_millibars'].fillna(mean_maxpressure, inplace=True)
-
-# same for the mean_humidity_percent_relative_humidity and max_humidity_percent_relative_humidity
-mean_humidity = df['mean_humidity_percent_relative_humidity'].mean()
-df['mean_humidity_percent_relative_humidity'].fillna(mean_humidity, inplace=True)
-
-mean_maxhumidity = df['max_humidity_percent_relative_humidity'].mean()
-df['max_humidity_percent_relative_humidity'].fillna(mean_maxhumidity, inplace=True)
-
-# same for the mean_wind_speed_mph and max_wind_speed_mph
-mean_wind = df['mean_wind_knots'].mean()
-df['mean_wind_knots'].fillna(mean_wind, inplace=True)
-
-mean_maxwind = df['max_wind_knots'].mean()
-df['max_wind_knots'].fillna(mean_maxwind, inplace=True)
-
-# same for the mean_co_ppm and max_co_ppm
-mean_co = df['mean_co_ppm'].mean()
-df['mean_co_ppm'].fillna(mean_co, inplace=True)
-
-mean_maxco = df['max_co_ppm'].mean()
-df['max_co_ppm'].fillna(mean_maxco, inplace=True)
-
-# same mean_no2_ppb and max_no2_ppb
-mean_no2 = df['mean_no2_ppb'].mean()
-df['mean_no2_ppb'].fillna(mean_no2, inplace=True)
-
-mean_maxno2 = df['max_no2_ppb'].mean()
-df['max_no2_ppb'].fillna(mean_maxno2, inplace=True)
-
-# mean_ozone_ppm and max_ozone_ppm
-mean_ozone = df['mean_ozone_ppm'].mean()
-df['mean_ozone_ppm'].fillna(mean_ozone, inplace=True)
-
-mean_maxozone = df['max_ozone_ppm'].mean()
-df['max_ozone_ppm'].fillna(mean_maxozone, inplace=True)
-
-# mean_so2_ppb and max_so2_ppb
-mean_so2 = df['mean_so2_ppb'].mean()
-df['mean_so2_ppb'].fillna(mean_so2, inplace=True)
-
-mean_maxso2 = df['max_so2_ppb'].mean()
-df['max_so2_ppb'].fillna(mean_maxso2, inplace=True)
+# Calculate means and fill missing values
+means = {col: df[col].mean() for col in columns_to_impute}
+df = df.assign(**{col: df[col].fillna(means[col]) for col in columns_to_impute})
 ```
 
 
-Missing Values Plot Chart
-```{python}
-# Generate a color map
-cmap = plt.get_cmap('viridis')
-colors = cmap(np.linspace(0, 1, df.shape[1]))
-
-# Plot missing values with custom colors
-ax = msno.bar(df, color=colors)
-
-# fig size 
-plt.figure(figsize=(8, 5))
-
-# Set the title for the plot
-plt.title('Missing values in the dataset')
-
-# Show the plot
-plt.show()
-```
-
-The EDA is completed, but let's check the statistical summary,data distribution sing Sweetviz Report.
+# Comprehensive Data Overview: Generating Statistical Summary and Distribution Analysis with Sweetviz.
 
 ```{python}
 my_report = sv.analyze(df)
-my_report.show_html()
+my_report.show_notebook()
 ```
 
-Bonus : We have the ydata profiling report as well!
+# Advanced Exploratory Data Analysis: Leveraging ydata-profiling for Time Series Insights
 
-The support to time series can be enabled by passing the parameter tsmode=True to the ProfileReport when its enabled, pandas profiling will try to identify time-dependent features using the feature's autocorrelation, which requires a sorted DataFrame or the definition of the `sortby` parameter.
+## Introduction to Enhanced EDA Tool
+We're employing ydata-profiling, a powerful automatic EDA package that offers more detailed analysis than Sweetviz.
+Enabling Time Series Analysis To unlock time series-specific features in ydata-profiling:
 
-When a feature is identified as time series will trigger the following changes:
-   - the histogram will be replaced by a line plot
-   - the feature details will have a new tab with autocorrelation and partial autocorrelation plots
-   - two new warnings: `NON STATIONARY` and `SEASONAL` (which indicates that the series may have seasonality)
+- Set tsmode=True when creating the ProfileReport
+- Ensure your DataFrame is sorted or specify the sortby parameter
+- Time Series Feature Identification
 
-In cases where the data has multiple entities,  as in this example, where we have different meteorological stations, each station can be interpreted as a time series, its necessary to filter the entities and profile each station separately.
+The ydata identifies time-dependent features using autocorrelation analysis. For recognized time series features:
+- Histograms are replaced with line plots
+- Feature details include new autocorrelation and partial autocorrelation plots
+- Two additional warnings may appear: "NON STATIONARY" and "SEASONAL"
+
+Handling Multi-Entity Time Series Data, In our case, with category_id:
+
+Each pollutants represents a distinct time series
+For optimal analysis, we filter and profile each pollutant separately
 
 ```{python}
 # Return the profile per category_id
@@ -265,10 +208,10 @@ profile = ProfileReport(
     # title=f"Air Quality profiling - Site Num: {group[0]}"
 )
 
-#profile.to_file("your_report2.html")
+profile.to_file("your_report2.html")
 ```
 
-# Save the df for quarto cross-reference
+# Persisting Data: Exporting DataFrame for Quarto Cross-Document Reference
 ```{python}
 df.to_pickle('df.pkl')
 ```
