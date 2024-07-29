@@ -122,7 +122,8 @@ Those values are crucial and have be near idal to have reliable forecasts.
 - **Description**: Similar to AIC but includes a penalty term for the number of parameters.
 - **Formula**: $\text{BIC} = k\ln(n) - 2\ln(L)$ where $n$ is the number of observations.
 
-# So what can Akaike Information Criteria (AIC) do for us?
+# Machine Learning AQI Time Series
+## So what can Akaike Information Criteria (AIC) do for us?
 widely used to measure of a statistical model. It basically quantifies
 
 - The goodness of fit
@@ -135,7 +136,8 @@ The Akaike Information Criterion (AIC) is a measure used to compare different st
 - *Lower AIC is Better*: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.
 - *Comparative Measure*: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.
 - *Penalty for Complexity*: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.
-- 
-# Machine Learning AQI Time Series
+
+what # memo for stephane
+
 
 

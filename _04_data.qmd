@@ -216,4 +216,62 @@ profile.to_file("your_report2.html")
 df.to_pickle('df.pkl')
 ```
 
-We first performed `manual` EDA analysis, and generated automatic EDA packages reports using  the Sweetviz and ydata to further confirm the quality of our data such as unbalance, missing value (NaN).
+"Our exploratory data analysis (EDA) process consisted of two complementary approaches:
+
+Manual Investigation: We conducted an in-depth, hands-on examination of the dataset.
+Automated Analysis: We leveraged two powerful EDA packages:
+
+*Sweetviz*: For quick, visual data summaries
+*ydata-profiling*: For more detailed, customizable reports
+
+These methods allowed us to thoroughly evaluate key data quality aspects, including:
+
+- Class balance in categorical variables
+- Presence and distribution of missing values (NaN)
+- Feature distributions and correlations
+- Potential time-series characteristics
+
+This multi-faceted approach ensures a robust understanding of our dataset's structure, quality, and potential challenges before proceeding with further analysis.
+
+# Time Series Visualization for AQI
+
+```{python}
+df_aqi = df[['date', 'aqi']]
+df_aqi = df_aqi.set_index('date')
+```
+
+```{python}
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Ensure the DataFrame has a datetime index
+# df_aqi.index = pd.to_datetime(df_aqi.index)
+
+# Resample the data
+df_aqi_year = df_aqi.resample('YE').mean().assign(Resample='Year')
+df_aqi_month = df_aqi.resample('ME').mean().assign(Resample='Month')
+df_aqi_day = df_aqi.resample('D').mean().assign(Resample='Day')
+
+# Combine the resampled data
+df_aqi_combined = pd.concat([df_aqi_year, df_aqi_month, df_aqi_day])
+
+# Fill missing values using forward fill
+df_aqi_combined.ffill(inplace=True)
+
+# Reset index to use it in the plot
+df_aqi_combined.reset_index(inplace=True)
+
+# Set the figure size
+plt.figure(figsize=(15, 20))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_aqi_combined, row='Resample', hue='Resample', sharey=False, height=6, aspect=2)
+g.map(sns.lineplot, 'date', 'aqi')  # Use 'date' and 'aqi' as the column names
+
+# Adjust the plot
+g.add_legend()
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('AQI Resampled by Year, Month, and Day')
+plt.show()
+```

@@ -1,5 +1,5 @@
 ---
-title: "Result"
+title: "Result Machine Learning"
 format: html
 #editor: visual
 jupyter: python3
@@ -7,11 +7,8 @@ execute:
   echo: true
   output: true
 ---
-
-# Machine Learning
-
+# Machine Learning using SKlearn
 Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm. 
-
 
 ```{python}
 #| warning: false
@@ -39,9 +36,8 @@ from scipy.stats import randint
 
 Starting by looking at the head to see all of our columns. Immediately, we can some missing data, which must be addressed before any machine learning algorithms can be conducted.
 
-# import df.pkl file
+## import df.pkl file
 ```{python}
-#df = pd.read_pickle('df.pkl')
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 ```
 
@@ -501,3 +497,5 @@ ConfusionMatrixDisplay(
 
 
 We can use this model for the prediction of AQI around the country, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase. This will be further expanded upon in the conclusions section of this report.
+
+#  ML time series rom stephane
