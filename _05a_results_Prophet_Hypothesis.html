@@ -103,7 +103,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="portland-vs-other-metro-areas-aqi" class="level1">
 <h1>Portland Vs Other Metro Areas AQI</h1>
 <p>To gain an understanding of how Portland’s AQI differs from other large cities, we can run a hypothesis test to determine the significance.</p>
-<div id="6143f979" class="cell" data-execution_count="1">
+<div id="49244288" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
@@ -115,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#library(RPostgres)</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpivotTable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="560c2f6f" class="cell" data-execution_count="2">
+<div id="af012412" class="cell" data-cache="true" data-message="false" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>large_metro_data <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>portland_data <span class="ot">=</span> large_metro_data <span class="sc">%&gt;%</span></span>
@@ -123,7 +123,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Initially we can run a two sample t-test to show that Portland’s AQI average is statistically greater than the average AQI of all large metropolitan areas within the US. We compare the sample of Portland AQI datapoints in the time period with the sample of all metropolitan areas with greater than one million population.</p>
 <p><em>Null Hypothesis</em>: The Portland AQI is greater than or equal to the AQI of all large metro cities in the US. <em>Alternate Hypothesis</em>: The Portland AQI is less than the AQI of all large metro cities in the US.</p>
-<div id="104eb242" class="cell" data-execution_count="3">
+<div id="fd323684" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(portland_data<span class="sc">$</span>aqi, large_metro_data<span class="sc">$</span>aqi, <span class="at">alternative =</span> <span class="st">"less"</span>, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>
@@ -152,7 +152,7 @@ mean of x mean of y
 </div>
 <p>To understand, we will conduct a t-test to see whether or not this month had greater than usual AQI.</p>
 <p><em>Null Hypothesis</em>: September 2020 AQI less than or equal to AQI of entire period in Portland <em>Alternate Hypothesis</em>: September 2020 AQI greater AQI of entire period in Portland</p>
-<div id="716e5b70" class="cell" data-execution_count="4">
+<div id="73856d3d" class="cell" data-cache="true" data-message="false" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pdx_data <span class="ot">=</span> large_metro_data <span class="sc">%&gt;%</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    city <span class="sc">==</span> <span class="st">"Portland"</span></span>
@@ -188,7 +188,7 @@ mean of x mean of y
 <p>One hypothesis for Portland’s better air quality outcomes is due to the increased focus on public transportation. Portland has placed high emphasis on utilizing public transit, with rates comparable to larger cities and higher than most other cities of its size. We will run a proportion statistical test to see how Portland’s rate of ridership compares with other cites.</p>
 <p>We have standardized rates by passenger miles ridden per person. This allows us to properly compare cities with different population sizes.</p>
 <p><em>Null Hypothesis</em>: Transit ridership in Portland is less than or equal to transit ridership across the country (large metro areas only) <em>Alternate Hypothesis</em>: Transit ridership in Portland is greater than transit ridership across the country (large metro areas only)</p>
-<div id="15e964f0" class="cell" data-execution_count="5">
+<div id="6e00d10c" class="cell" data-cache="true" data-message="false" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pdx_transit <span class="ot">=</span> large_metro_data <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    city <span class="sc">==</span> <span class="st">"Portland"</span></span>
@@ -229,53 +229,45 @@ mean of x mean of y
 <section id="prophet-aqi-trend-visualization-and-forecasting" class="level1">
 <h1>Prophet AQI Trend Visualization and Forecasting</h1>
 <p>Prophet by Meta is used as time series prediction to estimate and map trends based on out data. We use this to see how AQI trends vary by day, month, and year. It is also able to give us a forecast for a given period after the end of our data which we can analyze and use to anticipate future AQI values.</p>
-<div id="0e3da8ad" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prophet)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library(DBI)</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbplyr)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#library(RPostgres)</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpivotTable)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <p>Initially, we connected the R instance to the PostgreSQL database and pulled information directly using dbConnece and RPostgres. For this report, we simply call our information from a local csv.</p>
-<div id="5f099470" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># con &lt;- dbConnect(RPostgres::Postgres(),</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                  dbname = 'air',</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                  host = 'localhost',</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                  port = 5432,</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                  user = 'postgres',</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                  password = 'postgres')</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>metro_1mil <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv'</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Portland Only</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># portland &lt;- tbl(con, sql("SELECT * FROM air.air_quality</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.dates USING (date_id)</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.locations USING (location_id)</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.aqi_categories USING (category_id)</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.yearly_transit USING (yearly_transit_id)</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                        WHERE city = 'Portland' AND</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#                        state = 'Oregon'</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#                        ORDER BY date"))</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>portland_data <span class="ot">=</span> metro_1mil <span class="sc">%&gt;%</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(city <span class="sc">==</span> <span class="st">'Portland'</span> <span class="sc">&amp;</span> state <span class="sc">==</span> <span class="st">'Oregon'</span>)</span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#portland_data &lt;- as.data.frame(portland)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="18e6c97b" class="cell" data-cache="true" data-message="false" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># con &lt;- dbConnect(RPostgres::Postgres(),</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#                  dbname = 'air',</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#                  host = 'localhost',</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#                  port = 5432,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#                  user = 'postgres',</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#                  password = 'postgres')</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>metro_1mil <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">'https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv'</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Portland Only</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># portland &lt;- tbl(con, sql("SELECT * FROM air.air_quality</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.dates USING (date_id)</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.locations USING (location_id)</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.aqi_categories USING (category_id)</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                        LEFT JOIN air.yearly_transit USING (yearly_transit_id)</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                        WHERE city = 'Portland' AND</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co">#                        state = 'Oregon'</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co">#                        ORDER BY date"))</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>portland_data <span class="ot">=</span> metro_1mil <span class="sc">%&gt;%</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(city <span class="sc">==</span> <span class="st">'Portland'</span> <span class="sc">&amp;</span> state <span class="sc">==</span> <span class="st">'Oregon'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co">#portland_data &lt;- as.data.frame(portland)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="data-forecasting" class="level2">
 <h2 class="anchored" data-anchor-id="data-forecasting">Data Forecasting</h2>
 <p>To use the package, data must be in the format of a two column graph, with the first column being the date data, and the second being the variable being mapped and preddicted. In this case, we will be predicting AQI.</p>
-<div id="776c5593" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pdx <span class="ot">=</span> portland_data <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(date, aqi)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">ds =</span> date,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> aqi</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="b1434c91" class="cell" data-cache="true" data-message="false" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pdx <span class="ot">=</span> portland_data <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">c</span>(date, aqi)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">ds =</span> date,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> aqi</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 2</caption>
@@ -327,13 +319,13 @@ mean of x mean of y
 </div>
 </div>
 <p>We begin the prophet forecast by transforming the dataframe into the prophet object.</p>
-<div id="0fd1e5dd" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>pdxprophet <span class="ot">=</span> <span class="fu">prophet</span>(pdx) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="da2a97ff" class="cell" data-cache="true" data-message="false" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pdxprophet <span class="ot">=</span> <span class="fu">prophet</span>(pdx) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The future data is created with the make_future_dataframe function. Here we want one year of additional data to be forcasted.</p>
-<div id="1fcc1215" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(pdxprophet, <span class="at">periods =</span> <span class="dv">365</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(future)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cd5e3ba6" class="cell" data-cache="true" data-message="false" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>future <span class="ot">&lt;-</span> <span class="fu">make_future_dataframe</span>(pdxprophet, <span class="at">periods =</span> <span class="dv">365</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(future)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 1</caption>
@@ -377,9 +369,9 @@ mean of x mean of y
 </div>
 </div>
 <p>We predict future values based on the existing data and the future period. This will return the actual data and predictions, with an error range shown with the upper and lower bounds.</p>
-<div id="b91e690a" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>forecast <span class="ot">&lt;-</span> <span class="fu">predict</span>(pdxprophet, future)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(forecast[<span class="fu">c</span>(<span class="st">'ds'</span>, <span class="st">'yhat'</span>, <span class="st">'yhat_lower'</span>, <span class="st">'yhat_upper'</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="700564df" class="cell" data-cache="true" data-message="false" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>forecast <span class="ot">&lt;-</span> <span class="fu">predict</span>(pdxprophet, future)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(forecast[<span class="fu">c</span>(<span class="st">'ds'</span>, <span class="st">'yhat'</span>, <span class="st">'yhat_lower'</span>, <span class="st">'yhat_upper'</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 4</caption>
@@ -404,51 +396,62 @@ mean of x mean of y
 <td data-quarto-table-cell-role="th" scope="row">3282</td>
 <td>2023-12-26</td>
 <td>36.31957</td>
-<td>7.729355</td>
-<td>66.28377</td>
+<td>6.630385</td>
+<td>63.52205</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th" scope="row">3283</td>
 <td>2023-12-27</td>
 <td>36.19091</td>
-<td>7.873892</td>
-<td>64.51600</td>
+<td>7.774048</td>
+<td>65.34996</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th" scope="row">3284</td>
 <td>2023-12-28</td>
 <td>35.45571</td>
-<td>5.031923</td>
-<td>60.13808</td>
+<td>6.510771</td>
+<td>63.37387</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th" scope="row">3285</td>
 <td>2023-12-29</td>
 <td>34.15332</td>
-<td>3.671065</td>
-<td>62.17947</td>
+<td>4.637481</td>
+<td>64.76921</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th" scope="row">3286</td>
 <td>2023-12-30</td>
 <td>35.47973</td>
-<td>7.015142</td>
-<td>62.58695</td>
+<td>5.749367</td>
+<td>65.30744</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th" scope="row">3287</td>
 <td>2023-12-31</td>
 <td>35.52047</td>
-<td>7.435410</td>
-<td>63.54035</td>
+<td>7.225826</td>
+<td>64.01754</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <p>To visualize this we can plot it. The black dots represent the actual values. The dark blue line represents the prediction made by the algorithm. The light blue transparent area represents the upper and lower bounds of the prediction. Right away, we can see the yearly increase in aqi every year during the late summer. The large spike in 2020 will be something to take a closer look at. This corresponds with the large forest fire in the Columbia Gorge. At the end, we can see forcasted data for the year 2023.</p>
-<div id="607c5d06" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdxprophet, forecast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="411f4f5c" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pdxprophet, forecast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="_05a_results_Prophet_Hypothesis_files/figure-html/cell-12-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also see specific trends including the total (entire eight years), weekly, and yearly trends. This allows us to see how aqi goes up and down fairly consistantly based on the time of year, though the day of the week tends to have very little impact (it may look significant but it is only moving up and down less than 1.5 aqi between days). This allows us to see the consistant increase during the late summer to mid fall each year.</p>
+<div id="317b37a7" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prophet_plot_components</span>(pdxprophet, forecast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -457,24 +460,13 @@ mean of x mean of y
 </div>
 </div>
 </div>
-<p>We can also see specific trends including the total (entire eight years), weekly, and yearly trends. This allows us to see how aqi goes up and down fairly consistantly based on the time of year, though the day of the week tends to have very little impact (it may look significant but it is only moving up and down less than 1.5 aqi between days). This allows us to see the consistant increase during the late summer to mid fall each year.</p>
-<div id="f8831281" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prophet_plot_components</span>(pdxprophet, forecast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="_05a_results_Prophet_Hypothesis_files/figure-html/cell-14-output-1.png" width="420" height="420" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
 </section>
 <section id="cross-validation" class="level2">
 <h2 class="anchored" data-anchor-id="cross-validation">Cross Validation</h2>
 <p>We can cross validate the predictions to see how accurate they turned out to be. This will predict over the period from the cutoff date up to specified date in the ds column date. The forecast is made for each point between cutoff and cutoff + horizon. We have specified only to predict up to a year out as that is the amount of time we forcasted in the initial Portland forcast above. We can then compute the difference between y and yhat to see how accurate the prediction is.</p>
-<div id="30fde04a" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pdx_cv <span class="ot">&lt;-</span> <span class="fu">cross_validation</span>(pdxprophet, <span class="at">initial =</span> <span class="dv">730</span>, <span class="at">period =</span> <span class="dv">180</span>, <span class="at">horizon =</span> <span class="dv">365</span>, <span class="at">units =</span> <span class="st">'days'</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="2c4bea9e" class="cell" data-cache="true" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pdx_cv <span class="ot">&lt;-</span> <span class="fu">cross_validation</span>(pdxprophet, <span class="at">initial =</span> <span class="dv">730</span>, <span class="at">period =</span> <span class="dv">180</span>, <span class="at">horizon =</span> <span class="dv">365</span>, <span class="at">units =</span> <span class="st">'days'</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx_cv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 6</caption>
@@ -504,8 +496,8 @@ mean of x mean of y
 <td>25</td>
 <td>2017-01-27</td>
 <td>34.25423</td>
-<td>17.92831</td>
-<td>50.48765</td>
+<td>18.88028</td>
+<td>49.62760</td>
 <td>2017-01-26</td>
 </tr>
 <tr class="even">
@@ -513,8 +505,8 @@ mean of x mean of y
 <td>17</td>
 <td>2017-01-28</td>
 <td>36.59664</td>
-<td>20.40739</td>
-<td>52.33792</td>
+<td>20.35013</td>
+<td>52.93966</td>
 <td>2017-01-26</td>
 </tr>
 <tr class="odd">
@@ -522,8 +514,8 @@ mean of x mean of y
 <td>49</td>
 <td>2017-01-29</td>
 <td>35.96572</td>
-<td>21.67841</td>
-<td>51.87580</td>
+<td>20.78046</td>
+<td>50.92849</td>
 <td>2017-01-26</td>
 </tr>
 <tr class="even">
@@ -531,8 +523,8 @@ mean of x mean of y
 <td>53</td>
 <td>2017-01-30</td>
 <td>33.80520</td>
-<td>16.17727</td>
-<td>48.60577</td>
+<td>18.30769</td>
+<td>51.33331</td>
 <td>2017-01-26</td>
 </tr>
 <tr class="odd">
@@ -540,8 +532,8 @@ mean of x mean of y
 <td>41</td>
 <td>2017-01-31</td>
 <td>34.08924</td>
-<td>17.94275</td>
-<td>50.08890</td>
+<td>19.94112</td>
+<td>52.34561</td>
 <td>2017-01-26</td>
 </tr>
 <tr class="even">
@@ -549,8 +541,8 @@ mean of x mean of y
 <td>10</td>
 <td>2017-02-01</td>
 <td>34.98429</td>
-<td>19.11125</td>
-<td>50.15154</td>
+<td>20.41685</td>
+<td>51.40722</td>
 <td>2017-01-26</td>
 </tr>
 </tbody>
@@ -558,9 +550,9 @@ mean of x mean of y
 </div>
 </div>
 <p>This chart shows the mean squared error (MSE), root mean squared error (RMSE), mean absolute error (MAE), mean absolute percent error (MAPE), median absolute percent error (MDAPE) and coverage of the yhat_lower and yhat_upper estimates. As the horizon increases, the errors tend to increase, but overall they are not too large.</p>
-<div id="c4f18000" class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pdx_perf <span class="ot">&lt;-</span> <span class="fu">performance_metrics</span>(pdx_cv)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx_perf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="d54a5574" class="cell" data-cache="true" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pdx_perf <span class="ot">&lt;-</span> <span class="fu">performance_metrics</span>(pdx_cv)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pdx_perf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>A data.frame: 6 × 8</caption>
@@ -598,7 +590,7 @@ mean of x mean of y
 <td>0.4161539</td>
 <td>0.3127868</td>
 <td>0.3530235</td>
-<td>0.7805486</td>
+<td>0.7780549</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th" scope="row">2</td>
@@ -609,7 +601,7 @@ mean of x mean of y
 <td>0.4268476</td>
 <td>0.3170282</td>
 <td>0.3579551</td>
-<td>0.7744276</td>
+<td>0.7719338</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th" scope="row">3</td>
@@ -620,7 +612,7 @@ mean of x mean of y
 <td>0.4284520</td>
 <td>0.3204344</td>
 <td>0.3591622</td>
-<td>0.7694400</td>
+<td>0.7669463</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th" scope="row">4</td>
@@ -631,7 +623,7 @@ mean of x mean of y
 <td>0.4331915</td>
 <td>0.3284341</td>
 <td>0.3633180</td>
-<td>0.7619587</td>
+<td>0.7594650</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th" scope="row">5</td>
@@ -642,7 +634,7 @@ mean of x mean of y
 <td>0.4369072</td>
 <td>0.3301875</td>
 <td>0.3667491</td>
-<td>0.7581047</td>
+<td>0.7531172</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th" scope="row">6</td>
@@ -653,24 +645,25 @@ mean of x mean of y
 <td>0.4375043</td>
 <td>0.3301875</td>
 <td>0.3690468</td>
-<td>0.7560644</td>
+<td>0.7510769</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <p>We can plot each of these metrics to see how accurate the predictions are over the estimated period. The light grey datapoints represent the mean absolute percent error. A datapoint with a x value 200 and y value 1 means it was predicted for a period of 200 days after the cutoff date, and was 1% off the actual value. We can see that most predictions are under 1%, making this a pretty decent estimation. The fact that they do not increase over time allows us to have a certain degree of confidence in the prediction even a year out. The blue line shows the mean of these datapoints.</p>
-<div id="89e1b4c2" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mean absolute percent error</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cross_validation_metric</span>(pdx_cv, <span class="at">metric =</span> <span class="st">'mape'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="21c66722" class="cell" data-cache="true" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#mean absolute percent error</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cross_validation_metric</span>(pdx_cv, <span class="at">metric =</span> <span class="st">'mape'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="_05a_results_Prophet_Hypothesis_files/figure-html/cell-17-output-1.png" width="420" height="420" class="figure-img"></p>
+<p><img src="_05a_results_Prophet_Hypothesis_files/figure-html/cell-16-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
+{{&lt; page-beak  &gt;}}
 </section>
 </section>
 

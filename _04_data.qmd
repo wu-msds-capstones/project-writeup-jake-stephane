@@ -74,6 +74,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Qualit
 ```
 
 ```{python}
+#| label: print-df
 #| message: false
 #| output-location: slide
 print(df.head(10))
@@ -81,22 +82,26 @@ print(df.head(10))
 
 # Describe Dataset Numerical Features
 ```{python}
+#| label: describe-nums
 print(df.describe(include=['float64', 'int64']))
 ```
 
 # Describe Dataset Objects Features
 ```{python}
+#| label: describe-object
 print(df.describe(include=['object']))
 ```
 
 # Dataframe Size: rows, columns
 ```{python}
+#| label: describe-shape
 num_rows, num_columns = df.shape
 print(f"The dataset contains {num_rows} rows and {num_columns} columns.")
 ```
 
 # Exploring Oregon: Initiating Our Exploratory Data Analysis by filtering
 ```{python}
+#| label: filter-df
 df = df[df['state'] == 'Oregon']
 df.shape[0]
 ```
@@ -104,23 +109,26 @@ df.shape[0]
 # Features Engineering
 ## Data Preparation: Ensuring Proper Datatypes and Handling Missing Values for Time Series Analysis
 ```{python}
-# date is an object, we must convert to datetime for time series analysis
+#| label: convert-dt
 df['date'] = pd.to_datetime(df['date'])
 ```
 
 # Validating Data Range: Examining the Temporal Scope of Our DataFram
 ```{python}
+#| label: check-range
 # range of the date column
 print(f"The date range is from {df['date'].min()} to {df['date'].max()}.")
 ```
 
 # Verifying Data Types: Ensuring Correct Format for Analysis
 ```{python}
+#| label: date-info
 print(df['date'].info())
 ```
 
-# Identifying Distinct Values: Analyzing Uniqueness in the Datase
+# Identifying Distinct Values: Analyzing Uniqueness in the Dataframe
 ```{python}
+#| label: unique-values
 for column in df.columns:
     unique_count = df[column].nunique()
     print(f"Number of unique values in column '{column}': {unique_count}")
@@ -128,20 +136,19 @@ for column in df.columns:
 
 # Examining Data Structure: Assessing Column Datatypes in the DataFrame
 ```{python}
+#| label: df-dtypes
 print(df.dtypes)
 ```
 
 # Check Missing Values by columns in df
 ```{python}
+#| label: list-NaN-sorted
 print(df.isnull().sum().sort_values(ascending=True))
 ```
 
 # Data Quality Assessment: Addressing Missing Values through Imputation Techniques
-
 ```{python}
-#| echo: false
-#| error: false
-# List of columns to impute
+#| label: df-ampute
 columns_to_impute = [
     'mean_temperature_fahrenheit', 'max_temperature_fahrenheit',
     'mean_pressure_millibars', 'max_pressure_millibars',
@@ -162,6 +169,7 @@ df = df.assign(**{col: df[col].fillna(means[col]) for col in columns_to_impute})
 # Comprehensive Data Overview: Generating Statistical Summary and Distribution Analysis with Sweetviz.
 
 ```{python}
+#| label: sweetvis-report
 my_report = sv.analyze(df)
 my_report.show_notebook()
 ```
@@ -187,7 +195,7 @@ Each pollutants represents a distinct time series
 For optimal analysis, we filter and profile each pollutant separately
 
 ```{python}
-# Return the profile per category_id
+#| label: ydata-report
 for group in df.groupby("category_id"):
     # Running 1 profile per station
     profile = ProfileReport(
@@ -201,6 +209,7 @@ for group in df.groupby("category_id"):
 ```
 
 ```{python}
+#| label: ydata-render
 profile = ProfileReport(
     group[1],
     tsmode=True,
@@ -213,13 +222,14 @@ profile.to_file("your_report2.html")
 
 # Persisting Data: Exporting DataFrame for Quarto Cross-Document Reference
 ```{python}
-df.to_pickle('df.pkl')
+#| label: quarto-cross-ref pickle
+df.to_pickle('/data/df.pkl')
 ```
 
-"Our exploratory data analysis (EDA) process consisted of two complementary approaches:
+Our exploratory data analysis (EDA) process consisted of two complementary approaches:
 
-Manual Investigation: We conducted an in-depth, hands-on examination of the dataset.
-Automated Analysis: We leveraged two powerful EDA packages:
+- *Manual Investigation*: We conducted an in-depth, hands-on examination of the dataset.
+- *Automated Analysis*: We leveraged two powerful EDA packages:
 
 *Sweetviz*: For quick, visual data summaries
 *ydata-profiling*: For more detailed, customizable reports
@@ -234,20 +244,14 @@ These methods allowed us to thoroughly evaluate key data quality aspects, includ
 This multi-faceted approach ensures a robust understanding of our dataset's structure, quality, and potential challenges before proceeding with further analysis.
 
 # Time Series Visualization for AQI
-
 ```{python}
+#| label: df-aqi
 df_aqi = df[['date', 'aqi']]
 df_aqi = df_aqi.set_index('date')
 ```
 
 ```{python}
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-# Ensure the DataFrame has a datetime index
-# df_aqi.index = pd.to_datetime(df_aqi.index)
-
+#| label: ts-aqi
 # Resample the data
 df_aqi_year = df_aqi.resample('YE').mean().assign(Resample='Year')
 df_aqi_month = df_aqi.resample('ME').mean().assign(Resample='Month')
@@ -273,5 +277,200 @@ g.map(sns.lineplot, 'date', 'aqi')  # Use 'date' and 'aqi' as the column names
 g.add_legend()
 plt.subplots_adjust(top=0.9)
 g.fig.suptitle('AQI Resampled by Year, Month, and Day')
+plt.show()
+```
+
+# Time Series Visualization for Wind
+```{python}
+#| label: ts-wind
+df_wind = df[['date', 'mean_wind_knots', 'max_wind_knots']]
+df_wind = df_wind.set_index('date')
+
+# Resample the data
+df_wind_year = df_wind.resample('YE').mean().assign(Resample='Year')
+df_wind_month = df_wind.resample('ME').mean().assign(Resample='Month')
+df_wind_day = df_wind.resample('D').mean().assign(Resample='Day')
+
+# Combine the resampled data
+df_wind_combined = pd.concat([df_wind_year, df_wind_month, df_wind_day])
+
+# Fill missing values using forward fill
+df_wind_combined.ffill(inplace=True)
+
+# Reset index to use it in the plot
+df_wind_combined.reset_index(inplace=True)
+
+# Set the figure size
+plt.figure(figsize=(15, 20))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_wind_combined, row='Resample', hue='Resample', sharey=False, height=6, aspect=2)
+g.map(sns.lineplot, 'date', 'mean_wind_knots')
+
+
+# Adjust the plot
+g.add_legend()
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('Mean Wind Knots Resampled by Year, Month, and Day')
+plt.show()
+```
+
+# Time Series Visualization for CO Pollutant
+CO pollutant refers to carbon monoxide, which is a colorless, odorless, and tasteless gas that can be harmful to human health and the environment. Here's some key information about CO as a pollutant:
+
+Primarily produced by incomplete combustion of carbon-containing fuels
+Major sources include vehicle exhaust, industrial processes, and some natural sources like volcanoes
+
+- Slightly less dense than air
+- Highly flammable
+
+```{python}
+#| label: ts-co
+df_co = df[['date', 'mean_co_ppm', 'max_co_ppm']]
+df_co = df_co.set_index('date')
+
+# Resample the data
+df_co_year = df_co.resample('YE').mean().assign(Resample='Year')
+df_co_month = df_co.resample('ME').mean().assign(Resample='Month')
+df_co_day = df_co.resample('D').mean().assign(Resample='Day')
+
+# Combine the resampled data
+df_co_combined = pd.concat([df_co_year, df_co_month, df_co_day])
+
+# Fill missing values using forward fill
+df_co_combined.ffill(inplace=True)
+
+# Reset index to use it in the plot
+df_co_combined.reset_index(inplace=True)
+
+# Set the figure size
+plt.figure(figsize=(15, 20))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_co_combined, row='Resample', hue='Resample', sharey=False, height=6, aspect=2)
+g.map(sns.lineplot, 'date', 'mean_co_ppm')
+
+# Adjust the plot
+g.add_legend()
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('Mean CO PPM Resampled by Year, Month, and Day')
+plt.show()
+```
+
+# Time Series Visualization for NO2
+NO2 (nitrogen dioxide) is an important air pollutant. Here's a concise overview of it:
+- Reddish-brown gas with a pungent odor
+- Part of a group of pollutants known as nitrogen oxides (NOx)
+
+```{python}
+#| label: ts-no2
+# Filter the DataFrame for NO2 data
+df_no2 = df[['date', 'mean_no2_ppb', 'max_no2_ppb']]
+df_no2 = df_no2.set_index('date')
+
+# Resample the data
+df_no2_year = df_no2.resample('YE').mean().assign(Resample='Year')
+df_no2_month = df_no2.resample('ME').mean().assign(Resample='Month')
+df_no2_day = df_no2.resample('D').mean().assign(Resample='Day')
+
+# Combine the resampled data
+df_no2_combined = pd.concat([df_no2_year, df_no2_month, df_no2_day])
+
+# Fill missing values using forward fill
+df_no2_combined.ffill(inplace=True)
+
+# Reset index to use it in the plot
+df_no2_combined.reset_index(inplace=True)
+
+# Set the figure size
+plt.figure(figsize=(15, 20))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_no2_combined, row='Resample', hue='Resample', sharey=False, height=6, aspect=2)
+g.map(sns.lineplot, 'date', 'mean_no2_ppb')
+
+# Adjust the plot
+g.add_legend()
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('Mean NO2 PPB Resampled by Year, Month, and Day')
+plt.show()
+```
+
+# Time Series Visualization for Ozone
+Ozone (O₃) as a pollutant is a complex topic, as it can be both beneficial and harmful depending on its location in the atmosphere. Here's a concise overview of ozone as a ground-level pollutant:
+
+- Colorless to pale blue gas with a distinctive smell
+- Highly reactive molecule composed of three oxygen atoms
+```{python}
+#| label: ts-ozone
+# Filter the DataFrame for ozone data
+df_ozone = df[['date', 'mean_ozone_ppm', 'max_ozone_ppm']]
+df_ozone = df_ozone.set_index('date')
+
+# Resample the data
+df_ozone_year = df_ozone.resample('YE').mean().assign(Resample='Year')
+df_ozone_month = df_ozone.resample('ME').mean().assign(Resample='Month')
+df_ozone_day = df_ozone.resample('D').mean().assign(Resample='Day')
+
+# Combine the resampled data
+df_ozone_combined = pd.concat([df_ozone_year, df_ozone_month, df_ozone_day])
+
+# Fill missing values using forward fill
+df_ozone_combined.ffill(inplace=True)
+
+# Reset index to use it in the plot
+df_ozone_combined.reset_index(inplace=True)
+
+# Set the figure size
+plt.figure(figsize=(15, 20))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_ozone_combined, row='Resample', hue='Resample', sharey=False, height=6, aspect=2)
+g.map(sns.lineplot, 'date', 'mean_ozone_ppm')
+
+# Adjust the plot
+g.add_legend()
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('Mean Ozone PPM Resampled by Year, Month, and Day')
+plt.show()
+```
+
+
+# Time Series Visualization for SO2
+SO2 (sulfur dioxide) is an important air pollutant. Here's a concise overview of SO2 as a pollutant:
+
+- Colorless gas with a sharp, pungent odor
+- Highly soluble in water
+```{python}
+#| label: ts-so2
+# Filter the DataFrame for SO2 data
+df_so2 = df[['date', 'mean_so2_ppb', 'max_so2_ppb']]
+df_so2 = df_so2.set_index('date')
+
+# Resample the data
+df_so2_year = df_so2.resample('YE').mean().assign(Resample='Year')
+df_so2_month = df_so2.resample('ME').mean().assign(Resample='Month')
+df_so2_day = df_so2.resample('D').mean().assign(Resample='Day')
+
+# Combine the resampled data
+df_so2_combined = pd.concat([df_so2_year, df_so2_month, df_so2_day])
+
+# Fill missing values using forward fill
+df_so2_combined.ffill(inplace=True)
+
+# Reset index to use it in the plot
+df_so2_combined.reset_index(inplace=True)
+
+# Set the figure size
+plt.figure(figsize=(15, 20))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_so2_combined, row='Resample', hue='Resample', sharey=False, height=6, aspect=2)
+g.map(sns.lineplot, 'date', 'mean_so2_ppb')
+
+# Adjust the plot
+g.add_legend()
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('Mean SO2 PPB Resampled by Year, Month, and Day')
 plt.show()
 ```

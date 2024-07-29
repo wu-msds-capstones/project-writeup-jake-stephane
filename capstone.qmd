@@ -1,17 +1,16 @@
 ---
 title: "Unveiling the Drivers of Clean Air"
-subtitle: Analysis of Portland Air Quality (AQI)
+subtitle: "Analysis of Portland Air Quality (AQI)"
 authors:
-  - Stephane Berhault
-  - Jake Warmflash
+  - name: "Stephane Berhault"
+  - name: "Jake Warmflash"
 title-block-banner: true
 format: 
   html:
     theme:
-      light: lightly
-      dark: darkly
+      light: "lightly"
+      dark: "darkly"
 ---
-
 {{< include _01_intro.qmd >}}
 {{< include _02_background.qmd >}}
 {{< include _03_methods.qmd >}}
