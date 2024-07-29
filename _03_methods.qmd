@@ -8,50 +8,47 @@ execute:
   output: true
 ---
 
-# Methodology & Tool Deployed
+# Tools Deployed
+Python wil be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.
 
-Employing NumPy and Pandas for data manipulation, Matplotlib and Seaborn for visualization, time series forecasting algorithms like SARIMAX, Flask or Power BI for interactive dashboards, and Python as the primary programming language will provide practical experience in implementing comprehensive air quality forecasting solutions.
+To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.
 
-For each data source, Python’s SQLAlchemy package was used to connect to the existing Railway Postgres databases, extract the relevant information, and write it into a centralized capstone database. Raw Data was already curated and pre-processed by the EPA website. 
+We will address data inconsistencies, missing values and ensure that data is in a tidy format.
 
-Data cleaning procedures were  required to handle missing values, or to correct inconsistencies, nevertheless we ensured that all data was in a tidy format. 
-This involved normalizing or standardizing data as necessary and creating new features through aggregation to enhance the model’s performance.
-
-`The most common method used in time series forecasting is known as ARIMA model. We will use an extended version called SARIMAX (*Seasonal Auto Regressive Integrated Moving Averages with exogenous factor*)`
-
+We may need to normalize or standardize data if necessary and create new features through aggregation to enhance the model’s performance.
 
 ## What is Prophet?
 
-Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. `We utilized prophet to gain a quick understanding of our AQI patterns`, seeking to understand basic trends before conducting a more thorough analysis.
+Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. We utilized prophet to gain a quick understanding of our AQI patterns, seeking to understand basic trends before conducting a more thorough analysis.
 
 Key features of Prophet include seasonality detection and holiday incorporation, while providing easy use and understanding for users. 
-We can use this software to get complex understanding from simple application.
+We can use this software to get complex understanding from simple applications.
 
 To conduct this analysis, we prepare data into a two column table, date and AQI. Prophet uses the trends of past data to highlight similarities over days of the year, weeks, months, and seasons. From this, prophet is able to generate its predictions, cross validate, and give performance metrics such as mean absolute percentage error to quantify the accuracy of the results.
 
 ## What is SARIMAX algorithm?​​​​​​​​​​​​​​​
+The most common method used in time series forecasting is known as the ARIMA model. We will use an extended version called SARIMAX (*Seasonal Auto Regressive Integrated Moving Averages with exogenous factor*)
 
 - The SARIMAX model is used when the data sets have seasonal cycles. 
-- In the dataset converning the air quality/aqi there is a seasonal pattern which we have explianed in the above section.
-- ARIMA is a model that can be fitted to time series data in order to better understand or predict future points in the series
-- SARIMAX is particularly useful for forecasting time series data that exhibit both trend and seasonality.
+- In the dataset concerning the air quality/AQI there is a seasonal pattern which we have explained in the above section.
+- SARIMAX is a model that can be fitted to time series data in order to better understand or predict future points in the time series
+- SARIMAX is particularly useful for forecasting time series data that exhibits both trends and seasonality.
 
 Here's a breakdown of its components:
 
-There are 3 distinct integer (p,d,q) that are used to parametrize ARIMA models, Because of that, ARIMA models are denoted withthe notation ARIMA(p,d,q).
+There are three distinct integers (p,d,q) that are used to parametrize SARIMAX models. Because of that, ARIMA models are denoted with the notation SARIMAX(p,d,q).
 
-Together these 3 parameters account for seasonality, trend and noise in datasets:
+Together these three parameters account for seasonality, trend, and noise in datasets:
 
-1. *Seasonal*: Accounts for recurring patterns or cycles in the data.
+1. *Seasonality (S)*: Accounts for recurring patterns or cycles in the data.
 2. *AutoRegressive (AR)*: Uses past values to predict future values.
 3. *Integrated (I)*: Applies differencing to make the time series stationary.
 4. *Moving Average (MA)*: Uses past forecast errors in the prediction.
 5. *eXogenous factors (X)*: Incorporates external variables that may influence the forecast.
 
-We are trying to find the right `p,d, q hyperparameters` to correctly forecast and predict the aqi values.
-Those values are crucial and have be near idal to have reliable forecasts.
+We are trying to find the right p, d, q hyperparameters to correctly forecast and predict the AQI values.
 
-# Common Techniques to Evaluate the Performance of SARIMAX Predictive Model
+# Common Techniques to Evaluate the Performance of Machine Model
 
 ## 1. Train-Test Split 
 
@@ -92,7 +89,7 @@ Those values are crucial and have be near idal to have reliable forecasts.
 - **ROC Curve**: A graphical representation of the true positive rate vs. false positive rate at various threshold settings.
 - **AUC**: Measures the entire two-dimensional area underneath the ROC curve. Higher AUC indicates better model performance.
 
-## 7. Mean Absolute Error (MAE) 📏
+## 7. Mean Absolute Error (MAE)
 
 - **Description**: The average of the absolute differences between predicted and actual values.
 - **Formula**: $\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$
@@ -109,7 +106,7 @@ Those values are crucial and have be near idal to have reliable forecasts.
 
 ## 9. R-squared (Coefficient of Determination) 
 
-- **Description**: Indicates the proportion of the variance in the dependent variable that is predictable from the independent variables.
+- **Description**: The proportion of the variance in the dependent variable that is predictable from the independent variables.
 - **Formula**: $R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$
 
 ## 10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC) 
@@ -123,21 +120,18 @@ Those values are crucial and have be near idal to have reliable forecasts.
 - **Formula**: $\text{BIC} = k\ln(n) - 2\ln(L)$ where $n$ is the number of observations.
 
 # Machine Learning AQI Time Series
-## So what can Akaike Information Criteria (AIC) do for us?
-widely used to measure of a statistical model. It basically quantifies
+## How can we use Akaike Information Criteria (AIC)?
+Used to measure of a statistical model, it quantifies:
 
 - The goodness of fit
-- The simplicity/parsimony of the model into a single statistic
-
-*When comparing 2 models, the one with the lower AIC is generally "better"*
+- The simplicity of the model into a single statistic
+- When comparing two models, the one with the lower AIC is generally "better"
 
 The Akaike Information Criterion (AIC) is a measure used to compare different statistical models. It helps in model selection by balancing the goodness of fit and the complexity of the model. Here's how to interpret the AIC value:
 
 - *Lower AIC is Better*: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.
 - *Comparative Measure*: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.
 - *Penalty for Complexity*: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.
-
-what # memo for stephane
 
 
 

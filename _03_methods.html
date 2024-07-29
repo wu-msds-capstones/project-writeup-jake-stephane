@@ -91,41 +91,42 @@ window.Quarto = {
 </header>
 
 
-<section id="methodology-tool-deployed" class="level1">
-<h1>Methodology &amp; Tool Deployed</h1>
-<p>Employing NumPy and Pandas for data manipulation, Matplotlib and Seaborn for visualization, time series forecasting algorithms like SARIMAX, Flask or Power BI for interactive dashboards, and Python as the primary programming language will provide practical experience in implementing comprehensive air quality forecasting solutions.</p>
-<p>For each data source, Python’s SQLAlchemy package was used to connect to the existing Railway Postgres databases, extract the relevant information, and write it into a centralized capstone database. Raw Data was already curated and pre-processed by the EPA website.</p>
-<p>Data cleaning procedures were required to handle missing values, or to correct inconsistencies, nevertheless we ensured that all data was in a tidy format. This involved normalizing or standardizing data as necessary and creating new features through aggregation to enhance the model’s performance.</p>
-<p><code>The most common method used in time series forecasting is known as ARIMA model. We will use an extended version called SARIMAX (*Seasonal Auto Regressive Integrated Moving Averages with exogenous factor*)</code></p>
+<section id="tools-deployed" class="level1">
+<h1>Tools Deployed</h1>
+<p>Python wil be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.</p>
+<p>To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.</p>
+<p>We will address data inconsistencies, missing values and ensure that data is in a tidy format.</p>
+<p>We may need to normalize or standardize data if necessary and create new features through aggregation to enhance the model’s performance.</p>
 <section id="what-is-prophet" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-prophet">What is Prophet?</h2>
-<p>Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. <code>We utilized prophet to gain a quick understanding of our AQI patterns</code>, seeking to understand basic trends before conducting a more thorough analysis.</p>
-<p>Key features of Prophet include seasonality detection and holiday incorporation, while providing easy use and understanding for users. We can use this software to get complex understanding from simple application.</p>
+<p>Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. We utilized prophet to gain a quick understanding of our AQI patterns, seeking to understand basic trends before conducting a more thorough analysis.</p>
+<p>Key features of Prophet include seasonality detection and holiday incorporation, while providing easy use and understanding for users. We can use this software to get complex understanding from simple applications.</p>
 <p>To conduct this analysis, we prepare data into a two column table, date and AQI. Prophet uses the trends of past data to highlight similarities over days of the year, weeks, months, and seasons. From this, prophet is able to generate its predictions, cross validate, and give performance metrics such as mean absolute percentage error to quantify the accuracy of the results.</p>
 </section>
 <section id="what-is-sarimax-algorithm" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-sarimax-algorithm">What is SARIMAX algorithm?​​​​​​​​​​​​​​​</h2>
+<p>The most common method used in time series forecasting is known as the ARIMA model. We will use an extended version called SARIMAX (<em>Seasonal Auto Regressive Integrated Moving Averages with exogenous factor</em>)</p>
 <ul>
 <li>The SARIMAX model is used when the data sets have seasonal cycles.</li>
-<li>In the dataset converning the air quality/aqi there is a seasonal pattern which we have explianed in the above section.</li>
-<li>ARIMA is a model that can be fitted to time series data in order to better understand or predict future points in the series</li>
-<li>SARIMAX is particularly useful for forecasting time series data that exhibit both trend and seasonality.</li>
+<li>In the dataset concerning the air quality/AQI there is a seasonal pattern which we have explained in the above section.</li>
+<li>SARIMAX is a model that can be fitted to time series data in order to better understand or predict future points in the time series</li>
+<li>SARIMAX is particularly useful for forecasting time series data that exhibits both trends and seasonality.</li>
 </ul>
 <p>Here’s a breakdown of its components:</p>
-<p>There are 3 distinct integer (p,d,q) that are used to parametrize ARIMA models, Because of that, ARIMA models are denoted withthe notation ARIMA(p,d,q).</p>
-<p>Together these 3 parameters account for seasonality, trend and noise in datasets:</p>
+<p>There are three distinct integers (p,d,q) that are used to parametrize SARIMAX models. Because of that, ARIMA models are denoted with the notation SARIMAX(p,d,q).</p>
+<p>Together these three parameters account for seasonality, trend, and noise in datasets:</p>
 <ol type="1">
-<li><em>Seasonal</em>: Accounts for recurring patterns or cycles in the data.</li>
+<li><em>Seasonality (S)</em>: Accounts for recurring patterns or cycles in the data.</li>
 <li><em>AutoRegressive (AR)</em>: Uses past values to predict future values.</li>
 <li><em>Integrated (I)</em>: Applies differencing to make the time series stationary.</li>
 <li><em>Moving Average (MA)</em>: Uses past forecast errors in the prediction.</li>
 <li><em>eXogenous factors (X)</em>: Incorporates external variables that may influence the forecast.</li>
 </ol>
-<p>We are trying to find the right <code>p,d, q hyperparameters</code> to correctly forecast and predict the aqi values. Those values are crucial and have be near idal to have reliable forecasts.</p>
+<p>We are trying to find the right p, d, q hyperparameters to correctly forecast and predict the AQI values.</p>
 </section>
 </section>
-<section id="common-techniques-to-evaluate-the-performance-of-sarimax-predictive-model" class="level1">
-<h1>Common Techniques to Evaluate the Performance of SARIMAX Predictive Model</h1>
+<section id="common-techniques-to-evaluate-the-performance-of-machine-model" class="level1">
+<h1>Common Techniques to Evaluate the Performance of Machine Model</h1>
 <section id="train-test-split" class="level2">
 <h2 class="anchored" data-anchor-id="train-test-split">1. Train-Test Split</h2>
 <ul>
@@ -186,7 +187,7 @@ window.Quarto = {
 </ul>
 </section>
 <section id="mean-absolute-error-mae" class="level2">
-<h2 class="anchored" data-anchor-id="mean-absolute-error-mae">7. Mean Absolute Error (MAE) 📏</h2>
+<h2 class="anchored" data-anchor-id="mean-absolute-error-mae">7. Mean Absolute Error (MAE)</h2>
 <ul>
 <li><strong>Description</strong>: The average of the absolute differences between predicted and actual values.</li>
 <li><strong>Formula</strong>: <span class="math inline">\(\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\)</span></li>
@@ -212,7 +213,7 @@ window.Quarto = {
 <section id="r-squared-coefficient-of-determination" class="level2">
 <h2 class="anchored" data-anchor-id="r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</h2>
 <ul>
-<li><strong>Description</strong>: Indicates the proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
+<li><strong>Description</strong>: The proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
 <li><strong>Formula</strong>: <span class="math inline">\(R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></li>
 </ul>
 </section>
@@ -236,21 +237,20 @@ window.Quarto = {
 </section>
 <section id="machine-learning-aqi-time-series" class="level1">
 <h1>Machine Learning AQI Time Series</h1>
-<section id="so-what-can-akaike-information-criteria-aic-do-for-us" class="level2">
-<h2 class="anchored" data-anchor-id="so-what-can-akaike-information-criteria-aic-do-for-us">So what can Akaike Information Criteria (AIC) do for us?</h2>
-<p>widely used to measure of a statistical model. It basically quantifies</p>
+<section id="how-can-we-use-akaike-information-criteria-aic" class="level2">
+<h2 class="anchored" data-anchor-id="how-can-we-use-akaike-information-criteria-aic">How can we use Akaike Information Criteria (AIC)?</h2>
+<p>Used to measure of a statistical model, it quantifies:</p>
 <ul>
 <li>The goodness of fit</li>
-<li>The simplicity/parsimony of the model into a single statistic</li>
+<li>The simplicity of the model into a single statistic</li>
+<li>When comparing two models, the one with the lower AIC is generally “better”</li>
 </ul>
-<p><em>When comparing 2 models, the one with the lower AIC is generally “better”</em></p>
 <p>The Akaike Information Criterion (AIC) is a measure used to compare different statistical models. It helps in model selection by balancing the goodness of fit and the complexity of the model. Here’s how to interpret the AIC value:</p>
 <ul>
 <li><em>Lower AIC is Better</em>: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.</li>
 <li><em>Comparative Measure</em>: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.</li>
 <li><em>Penalty for Complexity</em>: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.</li>
 </ul>
-<p>what # memo for stephane</p>
 </section>
 </section>
 
