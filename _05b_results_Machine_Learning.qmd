@@ -595,16 +595,17 @@ results.plot_diagnostics(figsize=(15, 12))
 ```
 
 # Train and Test
-The final critical phase in our research methodology is the rigorous validation and empirical testing of the newly developed model. To ensure the robustness and generalizability of our results, it is imperative to implement a careful data partitioning strategy. Specifically, we will employ a train-test split methodology to mitigate the risk of data leakage, which could otherwise lead to overly optimistic performance estimates and compromise the validity of our findings.
-By segregating our dataset into distinct training and testing subsets, we create an environment that closely simulates real-world scenarios where the model encounters previously unseen data. This approach serves multiple crucial purposes:
+Rigorous validation is paramount to establishing the model's reliability and practical application. To ensure the model's generalizability, we will employ a train-test split. This approach safeguards against overfitting by exposing the model to unseen data, allowing for a more accurate assessment of its predictive capabilities.
 
-- *Model Validation*: It allows us to assess the model's performance on an independent dataset, providing a more reliable estimate of its predictive capabilities in practical applications.
-- *Overfitting Detection*: By comparing performance metrics on both training and testing sets, we can identify potential overfitting issues where the model may have learned noise or idiosyncrasies specific to the training data.
-Generalization Assessment: The test set serves as a proxy for new, unseen data, enabling us to evaluate the model's ability to generalize beyond the specific instances it was trained on.
-Reliability Quantification: Through this approach, we can compute confidence intervals and other statistical measures to quantify the reliability and stability of our model's predictions.
-Iterative Refinement: The insights gained from this validation process can inform potential model adjustments or hyperparameter tuning, leading to improved performance and robustness.
+By partitioning the dataset, we can:
 
-This methodological step is crucial in establishing the credibility and practical utility of our predictive model, ensuring that our research conclusions are both scientifically sound and applicable in real-world contexts.
+    Evaluate performance: Measure the model's accuracy on unseen data.
+    Detect overfitting: Identify discrepancies between training and testing performance.
+    Assess generalization: Determine the model's ability to handle new data.
+    Quantify reliability: Calculate confidence intervals for prediction accuracy.
+    Iteratively improve: Use insights to refine the model.
+
+This rigorous process underpins the credibility and utility of our research findings.
 
 To split the data, we follow the recommended 70:30 ratio, 70% of the data is the training data, and 30% of the data is the testing data.
 ```{python}
@@ -618,14 +619,14 @@ print(f"Start date of the data:", df_aqi.index.min())
 print(f"End date of the data:", df_aqi.index.max())
 ```
 
-The code is use get the predicted values after we have created the model. The `.get_prediction() method is used to get the predicted values based on the datatime.
+Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input
 ```{python}
 #| label: check-prediction
 pred = results.get_prediction(start=pd.to_datetime('2023-01-01 00:00:00'), dynamic=False)
 pred_ci = pred.conf_int()
 ```
 
-The graph allows us to confirm that the testing data and training data are overlapping. This means that the forecasting model would perform well.
+The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model's performance.
 ```{python}
 #| label: plot-prediction
 ax = df_aqi['2015-01-31 00:00:00':].plot(label='Observed') # plot the observed data 
@@ -639,14 +640,15 @@ plt.legend()
 plt.show()
 ```
 
-The next step is to create a separate DataFrame which would be helpful to compare the true test data and the predicted values by using the Mean Error Estimation
+To facilitate comparison of true and predicted test values, we will create a separate DataFrame. 
+Mean Error Estimation will be used for analysis.
 ```{python}
 #| label: define-forecast-truth
 y_forecasted = pred.predicted_mean
 y_truth = df_aqi['2022-12-31 00:00:00':]
 ```
 
-We calculate the MSE
+To evaluate model performance, we calculate the MSE
 ```{python}
 #| label: calculate-mse
 from sklearn.metrics import mean_squared_error
@@ -654,18 +656,47 @@ mse = np.sqrt(mean_squared_error(y_truth, y_forecasted))
 print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
 ```
 
-We can now approaching the end of the model, to forecast or predict the next 7 values. The variable result contains actual model information. The `.get_forecast()` medthod is responsible to take the information about the model from the variable results, and then
-based up the observations of the various patterns it would generate the required forecast value.
+## Forecasting Future Values
+
+As we conclude our modeling process, we generate predictions for the next 7 data points:
+
+1. **Model Information**: The `result` variable contains our fitted model's details.
+
+2. **Forecasting Method**: We use the `.get_forecast()` method on our model results.
+
+3. **Prediction Generation**: This method analyzes observed patterns in our data to project future values.
+
+4. **Output**: We obtain forecasts for the next 7 time points, representing predicted air quality levels.
+
+This step transforms our analytical work into actionable insights for air quality management.
 ```{python}
 #| label: recheck-forecast
 pred_uc = results.get_forecast(steps=7)
 pred_ci = pred_uc.conf_int()
 ```
 
-This is it!, the final part is to create the actual plot which would then make all sense of this complex project.
-As you can see, the observed and the forecasted values in the plot, the `blue` line is the observed values.
-The orange line represents the values which are predicting using SARIMAX Time Series Model.
-The shaded region tells that is is whithin 95% confidence interval (CI)
+## Visualizing Our Results: The Culmination of Our Analysis
+
+The final and crucial step of our project is the creation of a comprehensive plot that encapsulates our complex analysis. This visualization serves as the key to understanding and interpreting our findings.
+
+### Interpreting the Forecast Plot
+
+Our plot consists of several key elements:
+
+1. **Observed Values (Blue Line)**
+   - Represents the actual, historical air quality measurements
+   - Provides a baseline for comparing our predictions
+
+2. **Forecasted Values (Orange Line)**
+   - Depicts the future air quality levels predicted by our SARIMAX Time Series Model
+   - Allows us to visualize potential trends and patterns in air quality
+
+3. **Confidence Interval (Shaded Region)**
+   - The shaded area around the forecast line represents the 95% Confidence Interval (CI)
+   - Indicates the range within which we can be 95% confident that the true future values will fall
+   - Wider intervals suggest greater uncertainty in the prediction
+
+This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.
 
 ```{python}
 #| label: plot-forecast
