@@ -112,7 +112,7 @@ df.shape[0]
 df['date'] = pd.to_datetime(df['date'])
 ```
 
-# Validating Data Range: Examining the Temporal Scope of Our DataFram
+# Validating Data Range: Examining the Temporal Scope of Our DataFrame
 ```{python}
 #| label: check-range
 # range of the date column
@@ -125,7 +125,7 @@ print(f"The date range is from {df['date'].min()} to {df['date'].max()}.")
 print(df['date'].info())
 ```
 
-# Identifying Distinct Values: Analyzing Uniqueness in the Dataframe
+# Identifying Distinct Values: Analyzing Uniqueness in the DataFrame
 ```{python}
 #| label: unique-values
 for column in df.columns:
@@ -177,21 +177,22 @@ my_report.show_notebook()
 
 ## Introduction to Enhanced EDA Tool
 We're employing ydata-profiling, a powerful automatic EDA package that offers more detailed analysis than Sweetviz.
-Enabling Time Series Analysis To unlock time series-specific features in ydata-profiling:
+Enabling Time Series Analysis to unlock time series-specific features in ydata-profiling:
 
 - Set tsmode=True when creating the ProfileReport
-- Ensure your DataFrame is sorted or specify the sortby parameter
+- Ensure our DataFrame is sorted or by specifying the sortby parameter
 - Time Series Feature Identification
 
-The ydata identifies time-dependent features using autocorrelation analysis. For recognized time series features:
+The ydata identifies time-dependent features using autocorrelation analysis.  
+For recognized time series features:
 - Histograms are replaced with line plots
 - Feature details include new autocorrelation and partial autocorrelation plots
 - Two additional warnings may appear: "NON STATIONARY" and "SEASONAL"
 
 Handling Multi-Entity Time Series Data, In our case, with category_id:
 
-Each pollutants represents a distinct time series
-For optimal analysis, we filter and profile each pollutant separately
+- Each pollutants represents a distinct time series
+- For optimal analysis, we filter and profile each pollutant separately
 
 ```{python}
 #| label: ydata-report
@@ -230,8 +231,8 @@ Our exploratory data analysis (EDA) process consisted of two complementary appro
 - *Manual Investigation*: We conducted an in-depth, hands-on examination of the dataset.
 - *Automated Analysis*: We leveraged two powerful EDA packages:
 
-*Sweetviz*: For quick, visual data summaries
-*ydata-profiling*: For more detailed, customizable reports
+- *Sweetviz*: For quick, visual data summaries
+- *ydata-profiling*: For more detailed, customizable reports
 
 These methods allowed us to thoroughly evaluate key data quality aspects, including:
 
