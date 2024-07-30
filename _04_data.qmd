@@ -7,7 +7,6 @@ execute:
   echo: true
   output: true
 ---
-
 # Data Explaination
 The data for this project was initially scattered across multiple sources and required significant organization and compilation. The focus of this project is on the air quality in Portland, Oregon, so various data sources were aggregated and processed to compare a variety of air quality indicators.
 

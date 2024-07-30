@@ -1,5 +1,10 @@
-# Introduction
-
+---
+title: "Introduction"
+format: html
+execute:
+  echo: true
+  output: true
+---
 On October 30, 1948, the Donora High School Football team pushed through a dense smog to complete the game with hundreds of fans in the audience, despite very poor visibility. The team, backed by a sense of resilience, took pride in playing through poor conditions, a testament to the high spirit of the small town. Soon after, calls to the town’s medical offices began rushing in, complaining of difficulty breathing and respiratory issues. Donora, Pennsylvania, was a town of metalworks, built by the American Steel and Wire company and the Donora Zinc Works company, which made up the largest parts of the town’s economy. The heavy smog and pollution clouds that covered the sky were a sign of prosperity. Only twelve hours later, seventeen people would be dead, 1440 seriously affected, and 4470 with mild to moderate conditions, almost half the town’s working population (Jacobs, Burgess, Abbott). This event, the Donora Smog of 1948, would lead the country into taking a close look at the negative impacts of air pollution. Widespread debate surrounding the event would lead to the first legislation regarding the regulation of the air within the United States, ushering in a new era of tracking, combatting, and reversing ill effects of poor air quality. 
 
 The quality of air we breathe has direct impacts on our health. We must understand the factors that contribute to poor air quality and how we personally and collectively contribute to the changes. Until we are able to visualize the impact we have on our atmosphere, we will continue behavior that negatively impacts the air around us. 

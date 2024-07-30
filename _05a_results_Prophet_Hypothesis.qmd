@@ -7,8 +7,6 @@ execute:
   echo: true
   output: true
 ---
----
-
 # Portland Vs Other Metro Areas AQI
 To gain an understanding of how Portland's AQI differs from other large cities, we can run a hypothesis test to determine the significance.
 
