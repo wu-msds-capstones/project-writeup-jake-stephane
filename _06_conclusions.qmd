@@ -2,7 +2,7 @@
 title: "Conclusions"
 format: html
 ---
-# By Jake
+# Jake's conclusion
 After conducting our thorough research, we have landed on these specific recommendations. First, we found there are high seasonal trends where late summer/early fall tends to have the worst air quality. These numbers consistently show up each year, exasperated by the dry heat and lack of rainfall. As climate change raises temperatures and water sources dry up, wildfire season will continue to get worse over time. We must be aware of the nature of air quality and how it differs at different parts of the year. We should understand how the AQI works, and avoid being outside for too long when it reaches more dangerous levels.
 
 Next, we should focus on the variables that have the greatest impact on the AQI. These are city, temperature, humidity, CO, NO2, O3, PM10, and PM2.5. City, temperature, and humidity for the most part are out of our control. That leaves us with three criteria gasses and all particulate matter. The largest source of carbon monoxide, nitrogen dioxide, and ozone is the cars, trucks, and other vehicles we use daily (Environmental Protection Agency). We can lower our reliance on personal vehicles by utilizing public transportation, carpooling, walking, biking, increasing work from home to lower commutes when available, and overall be more considerate about if driving a car is necessary. We often drive unnecessarily, out of convenience or impatience. For many Americans, personal vehicles are required. Many urban and suburban areas lack proper public transportation, or existing public transportation systems are inadequate, unreliable, and infrequent. Many towns and cities in the United States were designed for cars instead of for people. Fixing this will require a substantial overhaul, necessitating millions or billions of dollars in spending. This is not to say that we shouldn’t bother, any investment that increases the public transportation system’s usage decreases the amount of cars on the road. A small step to start is better than not changing anything. 
@@ -13,14 +13,40 @@ Wildfires not only increase the particle matter in the air, but burn forests, ca
 
 Ultimately, we have a responsibility to take care of our planet and combat climate change. The worse climate conditions get, the more wildfires will spread, and the worse the air quality will become. As time goes on, with worsening air conditions, more people will catch and even die from preventable conditions sparked by poor air quality.  Water, pollution, food, and financial problems will get worse. One should look at what they can do to make a difference, support those who vouch to make larger changes, and encourage people they know to do the same. It can get much worse, but it can also get much better.
 
-# By Stephane
-During this capstone project, I learned how to forecast up to a significant time. But there are some caveats to this:
+# Stephane's conclusion
 
-1. Air Quality is subject to external factors which are uncontrollable and natural such as weather, wind speed, temperature, humidity and atmosphereric pressure, even solar radiation. We found out the correlation between these variables.
 
-!(Correlation Matrix)[https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/Correlation%20Matrix.png?raw=true]
+## Insights and Limitations of Air Quality Forecasting
 
-But Overhall, the forecast can give us a general sense of how the value would fluctuate.
+Our capstone project has provided valuable experience in long-term air quality forecasting. However, it's crucial to acknowledge several key factors that influence the accuracy and reliability of these predictions:
 
-2.The forecast reliability also depends up the algorithm used.
+1. **Impact of Uncontrollable Environmental Factors**
+   - Air quality is significantly affected by various natural and unpredictable elements, including:
+     - Weather conditions
+     - Wind speed and direction
+     - Temperature fluctuations
+     - Humidity levels
+     - Atmospheric pressure
+     - Solar radiation intensity
+   
+   Our analysis revealed correlations between these variables, as illustrated in the following correlation matrix:
 
+   ![Correlation Matrix](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/Correlation%20Matrix.png?raw=true)
+
+   Despite these complexities, our forecasts can provide a general trend of air quality fluctuations.
+
+2. **Algorithm Dependence**
+   - The reliability of forecasts is inherently tied to the chosen predictive algorithms.
+   - Different models may yield varying results, emphasizing the importance of algorithm selection and validation.
+
+3. **Geographical Considerations**
+   - Our data analysis couldn't fully quantify the unique geographical features of Portland and the broader Willamette Valley region:
+     - The protective influence of surrounding mountain ranges
+     - The impact on wind patterns and air circulation
+     - The potential effects of wildfires on air quality
+
+   These geographical factors play a significant role in local air quality dynamics but were beyond the scope of our current data set.
+     ![AirNow Map](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/Correlation%20Matrix.png?raw=true)
+
+
+By recognizing these limitations, we can better interpret and apply our forecasting results, while also identifying areas for future research and data collection to enhance prediction accuracy.
