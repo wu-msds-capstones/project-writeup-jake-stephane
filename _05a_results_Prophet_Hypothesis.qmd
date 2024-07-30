@@ -18,12 +18,11 @@ library(dbplyr)
 library(tidyverse)
 library(lubridate)
 library(IRkernel)
-
 library(prophet)
-#library(DBI)
-
-#library(RPostgres)
 library(rpivotTable)
+
+#library(DBI) # Database connection
+#library(RPostgres)
 ```
 
 

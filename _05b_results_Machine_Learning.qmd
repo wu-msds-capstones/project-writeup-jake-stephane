@@ -497,10 +497,30 @@ ConfusionMatrixDisplay(
 We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.
 
 
-
 #  ML Time Series with SARIMAX
 ## Decomposing the Time Series Additive Method
-```{pyton}
+```{python}
+#| label: read-data
+import pandas as pd
+df = pd.read_pickle('/data/df.pkl')
+```
+
+```{python}
+df.head()
+```
+
+```{python}
+df_aqi = df[['date','aqi']]
+df_aqi = df_aqi.set_index('date')
+
+df_aqi = df_aqi.resample('ME').mean()
+df_aqi.ffill(inplace=True)
+df_aqi.plot(figsize=(15, 6))
+```
+
+```{python}
+#| label: additive-decomp
+from matplotlib import pyplot as plt
 import statsmodels.api as sm
 decomposition = sm.tsa.seasonal_decompose(df_aqi, model='additive')
 fig = decomposition.plot()
@@ -509,14 +529,17 @@ plt.show()
 
 ## Decomposing the Time Series Multiplicative Method
 ```{python}
+#| label: multiplicative-decomp
+from matplotlib import pyplot as plt
 import statsmodels.api as sm
 decomposition = sm.tsa.seasonal_decompose(df_aqi, model='multiplicative')
-fig2 = decomposition.plot()
+fig = decomposition.plot()
 plt.show()
 ```
 
 ## Time Series Prediction
 ```{python}
+#| label: grid-search
 import statsmodels.api as sm
 import itertools
 
@@ -526,9 +549,6 @@ pdq = list(itertools.product(p, d, q))
 
 # Define the seasonal p, d, q parameters to take any value between 0 and 2, and the seasonality period (e.g., 12 for monthly data)
 seasonal_pdq = [(x[0], x[1], x[2], 12) for x in pdq]
-
-# Load your data into a DataFrame (assuming df_aqi is already loaded)
-df_aqi = pd.read_csv('path_to_your_data.csv')
 
 # Iterate over all combinations of pdq and seasonal_pdq
 for param in pdq:
@@ -548,12 +568,14 @@ for param in pdq:
 
 
 ```{python}
+#| label: mod-fit
 mod = sm.tsa.statespace.SARIMAX(df_aqi,order=(1, 1, 1),seasonal_order=(0,1, 1, 12),enforce_stationarity=False,enforce_invertibility=False)
 results = mod.fit()
 print(results.summary().tables[1])
 ```
 
 ```{python}
+#| label: fit-summary-AIC
 import statsmodels.api as sm
 
 # Fit the SARIMAX model
@@ -571,6 +593,7 @@ print(f"AIC: {aic_value}")
 ```
 
 ```{python}
+#| label: plot-diag
 results.plot_diagnostics(figsize=(15, 12))
 ```
 
