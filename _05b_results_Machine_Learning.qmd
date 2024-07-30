@@ -610,8 +610,62 @@ Iterative Refinement: The insights gained from this validation process can infor
 This methodological step is crucial in establishing the credibility and practical utility of our predictive model, ensuring that our research conclusions are both scientifically sound and applicable in real-world contexts.
 
 To split the data, we follow the recommended 70:30 ratio, 70% of the data is the training data, and 30% of the data is the testing data.
+```{python}
+#| label: check-min-date
+# Check the minimum date in the 'date' column
+print(f"Start date of the data:", df_aqi.index.min())
+```
 
 ```{python}
+#| label: check-max-date
+print(f"End date of the data:", df_aqi.index.max())
+```
+
+```{python}
+#| label: check-prediction
 pred = results.get_prediction(start=pd.to_datetime('2016-01-01'), dynamic=False)
 pred_ci = pred.conf_int()
+```
+
+```{python}
+#| label: plot-prediction
+ax = df_aqi['2015-01-31 00:00:00':].plot(label='Observed') # plot the observed data 
+pred.predicted_mean.plot(ax=ax, label='One-step ahead Forecast', alpha=.7, figsize=(14, 7))
+
+ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.2)
+
+ax.set_xlabel('Days')
+ax.set_ylabel('AQI index')
+plt.legend()
+plt.show()
+```
+
+```{python}
+#| label: define-forecast-truth
+y_forecasted = pred.predicted_mean
+y_truth = df_aqi['2022-12-31 00:00:00':]
+```
+
+```{python}
+#| label: calculate-mse
+from sklearn.metrics import mean_squared_error
+mse = np.sqrt(mean_squared_error(y_truth, y_forecasted))   
+print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
+```
+
+```{python}
+#| label: recheck-forecast
+pred_uc = results.get_forecast(steps=7)
+pred_ci = pred_uc.conf_int()
+```
+
+```{python}
+#| label: plot-forecast
+ax = df_aqi.plot(label='Observed', figsize=(14, 7))
+pred_uc.predicted_mean.plot(ax=ax, label='Forecast')
+ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.25)
+ax.set_xlabel('Days')
+ax.set_ylabel('AQI index')
+plt.legend()
+plt.show()
 ```

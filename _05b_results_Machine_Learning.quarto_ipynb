@@ -17,7 +17,7 @@
         "# Machine Learning using SKlearn\n",
         "Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm. \n"
       ],
-      "id": "bd1bffd3"
+      "id": "226f945b"
     },
     {
       "cell_type": "code",
@@ -45,7 +45,7 @@
         "from sklearn.model_selection import RandomizedSearchCV\n",
         "from scipy.stats import randint"
       ],
-      "id": "e4c9bbec",
+      "id": "79b1525f",
       "execution_count": null,
       "outputs": []
     },
@@ -57,7 +57,7 @@
         "\n",
         "## Import the Data"
       ],
-      "id": "2aa4a05e"
+      "id": "bdd2c2a1"
     },
     {
       "cell_type": "code",
@@ -65,7 +65,7 @@
       "source": [
         "df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')"
       ],
-      "id": "e4d5d4a1",
+      "id": "00eb0a9b",
       "execution_count": null,
       "outputs": []
     },
@@ -75,7 +75,7 @@
       "source": [
         "len(df)"
       ],
-      "id": "a2cf3878",
+      "id": "3b0755df",
       "execution_count": null,
       "outputs": []
     },
@@ -85,7 +85,7 @@
       "source": [
         "Here we can see all the missing data in each column. There are some very large numbers we must address. The entire dataset is only 147039 rows long. Some columnshave more than half the data missing.\n"
       ],
-      "id": "1e503c42"
+      "id": "870493ab"
     },
     {
       "cell_type": "code",
@@ -94,7 +94,7 @@
         "#Check out missing data\n",
         "df.isna().sum()"
       ],
-      "id": "03796fa7",
+      "id": "30d415ca",
       "execution_count": null,
       "outputs": []
     },
@@ -104,7 +104,7 @@
       "source": [
         "The first steps to addressing the missing data will be to drop the columns that will definitely not be needed. This includes the id columns used for joining within the SQL database, as well as the maximum columns as we already have the mean data. We also rename the columns to make it easier to understand and reference.\n"
       ],
-      "id": "3dcd96de"
+      "id": "bca26d0d"
     },
     {
       "cell_type": "code",
@@ -153,7 +153,7 @@
         "                          'mean_pm25_micrograms_per_cubic_meter': 'pm25', \n",
         "                          'mean_lead_micrograms_per_cubic_meter': 'lead'})"
       ],
-      "id": "ae568121",
+      "id": "a29349ee",
       "execution_count": null,
       "outputs": []
     },
@@ -163,7 +163,7 @@
       "source": [
         "Now the missing data looks like this, it is a little better, but we can still do so much more.\n"
       ],
-      "id": "5654127e"
+      "id": "b8ca1dd2"
     },
     {
       "cell_type": "code",
@@ -172,7 +172,7 @@
         "#See missing data\n",
         "met.isna().sum()"
       ],
-      "id": "f1d12ca7",
+      "id": "64d04677",
       "execution_count": null,
       "outputs": []
     },
@@ -182,7 +182,7 @@
       "source": [
         "We will group data by week. This will take an average count for the entire week for each variable for each city. This will eliminate any missing data that was not captured everyday, but only some days. For example, the pollutants (PM10 and PM2.5) were captured once every three days. \n"
       ],
-      "id": "d0278711"
+      "id": "f5861fd3"
     },
     {
       "cell_type": "code",
@@ -215,7 +215,7 @@
         "    'operating_miles': 'mean'\n",
         "}).reset_index()"
       ],
-      "id": "9fef0f46",
+      "id": "06630b50",
       "execution_count": null,
       "outputs": []
     },
@@ -225,7 +225,7 @@
       "source": [
         "We can also see that the city Virginia Beach has almost no data, so it will be easiest to drop that city. \n"
       ],
-      "id": "7d4f1f20"
+      "id": "eb8a07d5"
     },
     {
       "cell_type": "code",
@@ -234,7 +234,7 @@
         "#drop virginia beach due to large amount of missing data\n",
         "met = met[met['city'] != 'Virginia Beach']"
       ],
-      "id": "f9e18a69",
+      "id": "d079a05c",
       "execution_count": null,
       "outputs": []
     },
@@ -244,7 +244,7 @@
       "source": [
         "Next, since we will be measuring and predicting AQI, we will drop all rows missing AQI data.\n"
       ],
-      "id": "f2b90208"
+      "id": "8278dd07"
     },
     {
       "cell_type": "code",
@@ -253,7 +253,7 @@
         "#drop null aqi\n",
         "met = met.dropna(subset=['aqi'])"
       ],
-      "id": "f98db91b",
+      "id": "15034baf",
       "execution_count": null,
       "outputs": []
     },
@@ -263,7 +263,7 @@
       "source": [
         "Missing data is better, but there is still work to do.\n"
       ],
-      "id": "769a83c5"
+      "id": "c5f41176"
     },
     {
       "cell_type": "code",
@@ -272,7 +272,7 @@
         "#Check missing data\n",
         "met.isna().sum()"
       ],
-      "id": "ddde3b90",
+      "id": "f56b7475",
       "execution_count": null,
       "outputs": []
     },
@@ -282,7 +282,7 @@
       "source": [
         "The data collected has separate information for the city of New York City. NYC is divided into five borroughs, each within its own county. We will group and average out these values to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York borroughs but not others. \n"
       ],
-      "id": "78fafc43"
+      "id": "d0f6866b"
     },
     {
       "cell_type": "code",
@@ -314,7 +314,7 @@
         "\n",
         "print(nyc)"
       ],
-      "id": "7a5e9376",
+      "id": "be445078",
       "execution_count": null,
       "outputs": []
     },
@@ -326,7 +326,7 @@
         "met = met[met['city'] != 'New York']\n",
         "met = pd.concat([met, nyc], ignore_index=True)"
       ],
-      "id": "7ae81326",
+      "id": "885037d2",
       "execution_count": null,
       "outputs": []
     },
@@ -336,7 +336,7 @@
       "source": [
         "Additionally, Kansas City is located in two states, and thus in two counties. We will do the same thing to contract and standardize the data.\n"
       ],
-      "id": "6d7819c9"
+      "id": "74e6fb8f"
     },
     {
       "cell_type": "code",
@@ -377,7 +377,7 @@
         "met = met[met['city'] != 'Kansas City']\n",
         "met = pd.concat([met, kc], ignore_index=True)"
       ],
-      "id": "cf12e34f",
+      "id": "285acae0",
       "execution_count": null,
       "outputs": []
     },
@@ -387,7 +387,7 @@
       "source": [
         "After doing this, we drop the rest of the rows with missing data, leaving us with a total of 17 cities with metropolitan area populations greater than one million.\n"
       ],
-      "id": "e80e8754"
+      "id": "99807d5b"
     },
     {
       "cell_type": "code",
@@ -398,7 +398,7 @@
         "\n",
         "ds.groupby('city').size().reset_index(name='count')"
       ],
-      "id": "109fa05b",
+      "id": "ce8b1889",
       "execution_count": null,
       "outputs": []
     },
@@ -408,7 +408,7 @@
       "source": [
         "To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are shown below:\n"
       ],
-      "id": "cb2b838f"
+      "id": "eeb35124"
     },
     {
       "cell_type": "code",
@@ -422,7 +422,7 @@
         "\n",
         "ds.head()"
       ],
-      "id": "e3902702",
+      "id": "bf6a0258",
       "execution_count": null,
       "outputs": []
     },
@@ -435,7 +435,7 @@
         "\n",
         "ds.head()"
       ],
-      "id": "eb8b7c9f",
+      "id": "a7037430",
       "execution_count": null,
       "outputs": []
     },
@@ -446,7 +446,7 @@
         "ds.loc[:,'year'] = pd.to_datetime(ds['date']).dt.year\n",
         "ds.loc[:,'month'] = pd.to_datetime(ds['date']).dt.month"
       ],
-      "id": "ea951815",
+      "id": "5dc4055c",
       "execution_count": null,
       "outputs": []
     },
@@ -456,7 +456,7 @@
       "source": [
         "To set up the ML prediction, we must specify the variable being predicted (aqi_discrete, the aqi separated into bins), and the independent prediction variables. We will use a feature selector to select the most accurate predictors to try to optimize the model. Therefore, we initially choose every other variable to be our independent variables.\n"
       ],
-      "id": "9d539491"
+      "id": "f2815e71"
     },
     {
       "cell_type": "code",
@@ -488,7 +488,7 @@
         "        'month'\n",
         "        ]]"
       ],
-      "id": "6ee0d698",
+      "id": "5251a479",
       "execution_count": null,
       "outputs": []
     },
@@ -498,7 +498,7 @@
       "source": [
         "We must split the data into training and testing datasets. We also define an encoder to transform the discrete predictors into many binary variables for each category.\n"
       ],
-      "id": "c11fcd0a"
+      "id": "658ce615"
     },
     {
       "cell_type": "code",
@@ -508,7 +508,7 @@
         "X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)\n",
         "encoder = OneHotEncoder(sparse_output=False, min_frequency=5, handle_unknown='infrequent_if_exist')"
       ],
-      "id": "812e2e43",
+      "id": "dfe18ce1",
       "execution_count": null,
       "outputs": []
     },
@@ -518,7 +518,7 @@
       "source": [
         "A transformer is used to quickly transform variables into the necessary form for modeling.\n"
       ],
-      "id": "2fe88052"
+      "id": "e01dde48"
     },
     {
       "cell_type": "code",
@@ -556,7 +556,7 @@
         "#fit transformer\n",
         "transformer.fit(X_train, y_train)"
       ],
-      "id": "13569553",
+      "id": "52d2711c",
       "execution_count": null,
       "outputs": []
     },
@@ -566,7 +566,7 @@
       "source": [
         "Feature selection is done on the data. From this we are given the following variables: City, Temperature, Humidity, Carbon Monoxide, Nitrogen Dioxide, Ozone, PM10, and PM2.5.\n"
       ],
-      "id": "f42f7ff9"
+      "id": "4c25bc5f"
     },
     {
       "cell_type": "code",
@@ -584,7 +584,7 @@
         "feature_selector.scores_[feature_selector.get_support()]\n",
         "X_train_trans_df.columns[feature_selector.get_support()]"
       ],
-      "id": "a3cb33ab",
+      "id": "feeb3e61",
       "execution_count": null,
       "outputs": []
     },
@@ -594,7 +594,7 @@
       "source": [
         "Using these selected features, we will run our models.\n"
       ],
-      "id": "00533a73"
+      "id": "8646835d"
     },
     {
       "cell_type": "code",
@@ -618,7 +618,7 @@
         "    'temp', 'humidity', 'co', 'no2','o3', 'pm100', 'pm25'\n",
         "    ]].merge(X_test_enc, left_index = True, right_index = True)"
       ],
-      "id": "5cdaf2fd",
+      "id": "9a3b8526",
       "execution_count": null,
       "outputs": []
     },
@@ -628,7 +628,7 @@
       "source": [
         "We will test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models selected are: K nearest neighbors, Tree model, Random Forest model, Logistic Regression, and Naive Bayes.Running the models shows us that the Random Forest model is the most accurate.\n"
       ],
-      "id": "905f0bf4"
+      "id": "22de904b"
     },
     {
       "cell_type": "code",
@@ -649,7 +649,7 @@
         "    print(\"Accuracy: \", sum(y_test == y_pred)/len(y_test))\n",
         "    print(\"\\n\")"
       ],
-      "id": "5b1f8439",
+      "id": "d701236c",
       "execution_count": null,
       "outputs": []
     },
@@ -659,7 +659,7 @@
       "source": [
         "Running a basic Random Forest model gives us the following cohen kappa score and accuracy. This will serve as the baseline to be compared to.\n"
       ],
-      "id": "fbb7d4b6"
+      "id": "f918a981"
     },
     {
       "cell_type": "code",
@@ -683,7 +683,7 @@
         "        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
         "        ).plot(xticks_rotation='vertical')"
       ],
-      "id": "d3df30a3",
+      "id": "3d0dcdc2",
       "execution_count": null,
       "outputs": []
     },
@@ -693,7 +693,7 @@
       "source": [
         "We will further simplify this with a transformer to be used in a pipeline.\n"
       ],
-      "id": "e89cd6af"
+      "id": "26a4a625"
     },
     {
       "cell_type": "code",
@@ -722,7 +722,7 @@
         "                                    ])\n",
         "classification_pipeline.fit(X_train, y_train)"
       ],
-      "id": "d54e23ae",
+      "id": "512ebece",
       "execution_count": null,
       "outputs": []
     },
@@ -732,7 +732,7 @@
       "source": [
         "Next we will optimize hyperparameters to make the model more accurate. \n"
       ],
-      "id": "9ad1a9ba"
+      "id": "017b64e9"
     },
     {
       "cell_type": "code",
@@ -741,7 +741,7 @@
         "#hyperparameter optimization\n",
         "classification_pipeline.get_params()"
       ],
-      "id": "7881cae8",
+      "id": "1d2b0cda",
       "execution_count": null,
       "outputs": []
     },
@@ -751,7 +751,7 @@
       "source": [
         "The following parameters are selected, each with a range of possible values. A large 100 iterations are run to find the highest score.\n"
       ],
-      "id": "ec24f9cf"
+      "id": "95face29"
     },
     {
       "cell_type": "code",
@@ -774,7 +774,7 @@
         "random_search.fit(X_train, y_train)\n",
         "print(random_search.best_score_)"
       ],
-      "id": "bb8677b7",
+      "id": "33541cc7",
       "execution_count": null,
       "outputs": []
     },
@@ -784,7 +784,7 @@
       "source": [
         "We can see which hyperparameters are selected.\n"
       ],
-      "id": "93facbfb"
+      "id": "52ff4c44"
     },
     {
       "cell_type": "code",
@@ -792,7 +792,7 @@
       "source": [
         "random_search.best_estimator_.get_params()"
       ],
-      "id": "ae697f78",
+      "id": "c743e095",
       "execution_count": null,
       "outputs": []
     },
@@ -802,7 +802,7 @@
       "source": [
         "Using these hyperparameters, we reach an accuracy of about 63%.\n"
       ],
-      "id": "cdd0bf18"
+      "id": "75973e55"
     },
     {
       "cell_type": "code",
@@ -819,7 +819,7 @@
         "        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
         "        ).plot(xticks_rotation='vertical')"
       ],
-      "id": "b770aac2",
+      "id": "a24729c8",
       "execution_count": null,
       "outputs": []
     },
@@ -833,7 +833,7 @@
         "#  ML Time Series with SARIMAX\n",
         "## Decomposing the Time Series Additive Method"
       ],
-      "id": "f74c53b5"
+      "id": "72cc0199"
     },
     {
       "cell_type": "code",
@@ -853,7 +853,7 @@
       "source": [
         "df.head()"
       ],
-      "id": "f42ee6c1",
+      "id": "3cc06758",
       "execution_count": null,
       "outputs": []
     },
@@ -868,7 +868,7 @@
         "df_aqi.ffill(inplace=True)\n",
         "df_aqi.plot(figsize=(15, 6))"
       ],
-      "id": "5655298d",
+      "id": "e20e7154",
       "execution_count": null,
       "outputs": []
     },
@@ -877,6 +877,7 @@
       "metadata": {},
       "source": [
         "#| label: additive-decomp\n",
+        "from matplotlib import pyplot as plt\n",
         "import statsmodels.api as sm\n",
         "decomposition = sm.tsa.seasonal_decompose(df_aqi, model='additive')\n",
         "fig = decomposition.plot()\n",
@@ -892,17 +893,18 @@
       "source": [
         "## Decomposing the Time Series Multiplicative Method"
       ],
-      "id": "992b1d43"
+      "id": "e41e5a6c"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
         "#| label: multiplicative-decomp\n",
-        "#import statsmodels.api as sm\n",
-        "#decomposition = sm.tsa.seasonal_decompose(df_aqi, model='multiplicative')\n",
-        "#fig = decomposition.plot()\n",
-        "#plt.show()"
+        "from matplotlib import pyplot as plt\n",
+        "import statsmodels.api as sm\n",
+        "decomposition = sm.tsa.seasonal_decompose(df_aqi, model='multiplicative')\n",
+        "fig = decomposition.plot()\n",
+        "plt.show()"
       ],
       "id": "multiplicative-decomp",
       "execution_count": null,
@@ -914,7 +916,7 @@
       "source": [
         "## Time Series Prediction"
       ],
-      "id": "51f65ce0"
+      "id": "407d9c38"
     },
     {
       "cell_type": "code",
@@ -1014,9 +1016,31 @@
         "\n",
         "This methodological step is crucial in establishing the credibility and practical utility of our predictive model, ensuring that our research conclusions are both scientifically sound and applicable in real-world contexts.\n",
         "\n",
-        "To split the data, we follow the recommended 70:30 ratio, 70% of the data is the training data, and 30% of the data is the testing data.\n"
+        "To split the data, we follow the recommended 70:30 ratio, 70% of the data is the training data, and 30% of the data is the testing data."
       ],
-      "id": "f6a57ec6"
+      "id": "dc4defa2"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Check the minimum date in the 'date' column\n",
+        "print(f\"Start date of the data:\", df_aqi.index.min())"
+      ],
+      "id": "bbe937a6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Check the max date in the 'date' column\n",
+        "print(f\"End date of the data:\", df_aqi.index.max())"
+      ],
+      "id": "5d971019",
+      "execution_count": null,
+      "outputs": []
     },
     {
       "cell_type": "code",
@@ -1025,7 +1049,77 @@
         "pred = results.get_prediction(start=pd.to_datetime('2016-01-01'), dynamic=False)\n",
         "pred_ci = pred.conf_int()"
       ],
-      "id": "867cecbf",
+      "id": "b0e2687f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "ax = df_aqi['2015-01-31 00:00:00':].plot(label='Observed') # plot the observed data \n",
+        "pred.predicted_mean.plot(ax=ax, label='One-step ahead Forecast', alpha=.7, figsize=(14, 7))\n",
+        "\n",
+        "ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.2)\n",
+        "\n",
+        "ax.set_xlabel('Days')\n",
+        "ax.set_ylabel('AQI index')\n",
+        "plt.legend()\n",
+        "plt.show()"
+      ],
+      "id": "7091bac4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import numpy as np\n",
+        "y_forecasted = pred.predicted_mean\n",
+        "y_truth = df_aqi['2022-12-31 00:00:00':]"
+      ],
+      "id": "ca14a015",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "import numpy as np\n",
+        "from sklearn.metrics import mean_squared_error\n",
+        "mse = np.sqrt(mean_squared_error(y_truth, y_forecasted))   \n",
+        "print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))"
+      ],
+      "id": "b1ffb99f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "pred_uc = results.get_forecast(steps=7)\n",
+        "pred_ci = pred_uc.conf_int()"
+      ],
+      "id": "833c83c3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "ax = df_aqi.plot(label='Observed', figsize=(14, 7))\n",
+        "pred_uc.predicted_mean.plot(ax=ax, label='Forecast')\n",
+        "ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.25)\n",
+        "ax.set_xlabel('Days')\n",
+        "ax.set_ylabel('AQI index')\n",
+        "plt.legend()\n",
+        "plt.show()"
+      ],
+      "id": "5a866e1e",
       "execution_count": null,
       "outputs": []
     }
