@@ -506,10 +506,7 @@ df = pd.read_pickle('/data/df.pkl')
 ```
 
 ```{python}
-df.head()
-```
-
-```{python}
+#| label: define-df_aqi
 df_aqi = df[['date','aqi']]
 df_aqi = df_aqi.set_index('date')
 
@@ -621,12 +618,14 @@ print(f"Start date of the data:", df_aqi.index.min())
 print(f"End date of the data:", df_aqi.index.max())
 ```
 
+The code is use get the predicted values after we have created the model. The `.get_prediction() method is used to get the predicted values based on the datatime.
 ```{python}
 #| label: check-prediction
-pred = results.get_prediction(start=pd.to_datetime('2016-01-01'), dynamic=False)
+pred = results.get_prediction(start=pd.to_datetime('2023-01-01 00:00:00'), dynamic=False)
 pred_ci = pred.conf_int()
 ```
 
+The graph allows us to confirm that the testing data and training data are overlapping. This means that the forecasting model would perform well.
 ```{python}
 #| label: plot-prediction
 ax = df_aqi['2015-01-31 00:00:00':].plot(label='Observed') # plot the observed data 
@@ -640,12 +639,14 @@ plt.legend()
 plt.show()
 ```
 
+The next step is to create a separate DataFrame which would be helpful to compare the true test data and the predicted values by using the Mean Error Estimation
 ```{python}
 #| label: define-forecast-truth
 y_forecasted = pred.predicted_mean
 y_truth = df_aqi['2022-12-31 00:00:00':]
 ```
 
+We calculate the MSE
 ```{python}
 #| label: calculate-mse
 from sklearn.metrics import mean_squared_error
@@ -653,11 +654,18 @@ mse = np.sqrt(mean_squared_error(y_truth, y_forecasted))
 print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
 ```
 
+We can now approaching the end of the model, to forecast or predict the next 7 values. The variable result contains actual model information. The `.get_forecast()` medthod is responsible to take the information about the model from the variable results, and then
+based up the observations of the various patterns it would generate the required forecast value.
 ```{python}
 #| label: recheck-forecast
 pred_uc = results.get_forecast(steps=7)
 pred_ci = pred_uc.conf_int()
 ```
+
+This is it!, the final part is to create the actual plot which would then make all sense of this complex project.
+As you can see, the observed and the forecasted values in the plot, the `blue` line is the observed values.
+The orange line represents the values which are predicting using SARIMAX Time Series Model.
+The shaded region tells that is is whithin 95% confidence interval (CI)
 
 ```{python}
 #| label: plot-forecast

@@ -13,6 +13,13 @@ Wildfires not only increase the particle matter in the air, but burn forests, ca
 
 Ultimately, we have a responsibility to take care of our planet and combat climate change. The worse climate conditions get, the more wildfires will spread, and the worse the air quality will become. As time goes on, with worsening air conditions, more people will catch and even die from preventable conditions sparked by poor air quality.  Water, pollution, food, and financial problems will get worse. One should look at what they can do to make a difference, support those who vouch to make larger changes, and encourage people they know to do the same. It can get much worse, but it can also get much better.
 
+# By Stephane
+During this capstone project, I learned how to forecast up to a significant time. But there are some caveats to this:
+
+1. Air Quality is subject to external factors which are uncontrollable and natural such as weather, wind speed, temperature, humidity and atmosphereric pressure, even solar radiation.
+We found out the correlation between these variables see figure.1
+
+!(Correlation Matrix)[]
 
 
 
