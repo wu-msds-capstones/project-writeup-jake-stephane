@@ -231,8 +231,8 @@ Our exploratory data analysis (EDA) process consisted of two complementary appro
 - *Manual Investigation*: We conducted an in-depth, hands-on examination of the dataset.
 - *Automated Analysis*: We leveraged two powerful EDA packages:
 
-- *Sweetviz*: For quick, visual data summaries
-- *ydata-profiling*: For more detailed, customizable reports
+- *Sweetviz*: For quick, visual data summaries  
+- *ydata-profiling*: For more detailed, customizable reports  
 
 These methods allowed us to thoroughly evaluate key data quality aspects, including:
 
