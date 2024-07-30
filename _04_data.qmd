@@ -180,7 +180,7 @@ We're employing ydata-profiling, a powerful automatic EDA package that offers mo
 Enabling Time Series Analysis To unlock time series-specific features in ydata-profiling:
 
 - Set tsmode=True when creating the ProfileReport
-- Ensure your DataFrame is sorted or specify the sortby parameter
+- Ensure our DataFrame is sorted or specify the sortby parameter
 - Time Series Feature Identification
 
 The ydata identifies time-dependent features using autocorrelation analysis. For recognized time series features:
