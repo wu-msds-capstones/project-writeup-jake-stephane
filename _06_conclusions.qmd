@@ -16,10 +16,11 @@ Ultimately, we have a responsibility to take care of our planet and combat clima
 # By Stephane
 During this capstone project, I learned how to forecast up to a significant time. But there are some caveats to this:
 
-1. Air Quality is subject to external factors which are uncontrollable and natural such as weather, wind speed, temperature, humidity and atmosphereric pressure, even solar radiation.
-We found out the correlation between these variables see figure.1
+1. Air Quality is subject to external factors which are uncontrollable and natural such as weather, wind speed, temperature, humidity and atmosphereric pressure, even solar radiation. We found out the correlation between these variables.
 
-!(Correlation Matrix)[]
+!(Correlation Matrix)[https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/Correlation%20Matrix.png?raw=true]
 
+But Overhall, the forecast can give us a general sense of how the value would fluctuate.
 
+2.The forecast reliability also depends up the algorithm used.
 
