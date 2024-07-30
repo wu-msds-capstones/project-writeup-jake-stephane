@@ -494,8 +494,101 @@ ConfusionMatrixDisplay(
         ).plot(xticks_rotation='vertical')
 ```
 
+We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.
 
 
-We can use this model for the prediction of AQI around the country, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase. This will be further expanded upon in the conclusions section of this report.
 
-#  ML time series from stephane
+#  ML Time Series with SARIMAX
+## Decomposing the Time Series Additive Method
+```{pyton}
+import statsmodels.api as sm
+decomposition = sm.tsa.seasonal_decompose(df_aqi, model='additive')
+fig = decomposition.plot()
+plt.show()
+```
+
+## Decomposing the Time Series Multiplicative Method
+```{python}
+import statsmodels.api as sm
+decomposition = sm.tsa.seasonal_decompose(df_aqi, model='multiplicative')
+fig2 = decomposition.plot()
+plt.show()
+```
+
+## Time Series Prediction
+```{python}
+import statsmodels.api as sm
+import itertools
+
+# Define the p, d, q parameters to take any value between 0 and 2
+p = d = q = range(0, 2)
+pdq = list(itertools.product(p, d, q))
+
+# Define the seasonal p, d, q parameters to take any value between 0 and 2, and the seasonality period (e.g., 12 for monthly data)
+seasonal_pdq = [(x[0], x[1], x[2], 12) for x in pdq]
+
+# Load your data into a DataFrame (assuming df_aqi is already loaded)
+df_aqi = pd.read_csv('path_to_your_data.csv')
+
+# Iterate over all combinations of pdq and seasonal_pdq
+for param in pdq:
+    for param_seasonal in seasonal_pdq:
+        try:
+            mod = sm.tsa.statespace.SARIMAX(df_aqi,
+                                            order=param,
+                                            seasonal_order=param_seasonal,
+                                            enforce_stationarity=False,
+                                            enforce_invertibility=False)
+            results = mod.fit()
+            print('ARIMA{}x{} - AIC:{}'.format(param, param_seasonal, results.aic))
+        except Exception as e:
+            print(f"Error with parameters {param} and {param_seasonal}: {e}")
+            continue
+```
+
+
+```{python}
+mod = sm.tsa.statespace.SARIMAX(df_aqi,order=(1, 1, 1),seasonal_order=(0,1, 1, 12),enforce_stationarity=False,enforce_invertibility=False)
+results = mod.fit()
+print(results.summary().tables[1])
+```
+
+```{python}
+import statsmodels.api as sm
+
+# Fit the SARIMAX model
+mod = sm.tsa.statespace.SARIMAX(df_aqi, order=(1, 1, 1), seasonal_order=(0, 1, 1, 12), enforce_stationarity=False, enforce_invertibility=False)
+results = mod.fit()
+
+# Print the summary which includes AIC
+print(results.summary())
+
+# Extract AIC value
+aic_value = results.aic
+print(f"AIC: {aic_value}")
+
+# Additional performance metrics can be calculated as needed
+```
+
+```{python}
+results.plot_diagnostics(figsize=(15, 12))
+```
+
+# Train and Test
+The final critical phase in our research methodology is the rigorous validation and empirical testing of the newly developed model. To ensure the robustness and generalizability of our results, it is imperative to implement a careful data partitioning strategy. Specifically, we will employ a train-test split methodology to mitigate the risk of data leakage, which could otherwise lead to overly optimistic performance estimates and compromise the validity of our findings.
+By segregating our dataset into distinct training and testing subsets, we create an environment that closely simulates real-world scenarios where the model encounters previously unseen data. This approach serves multiple crucial purposes:
+
+- *Model Validation*: It allows us to assess the model's performance on an independent dataset, providing a more reliable estimate of its predictive capabilities in practical applications.
+- *Overfitting Detection*: By comparing performance metrics on both training and testing sets, we can identify potential overfitting issues where the model may have learned noise or idiosyncrasies specific to the training data.
+Generalization Assessment: The test set serves as a proxy for new, unseen data, enabling us to evaluate the model's ability to generalize beyond the specific instances it was trained on.
+Reliability Quantification: Through this approach, we can compute confidence intervals and other statistical measures to quantify the reliability and stability of our model's predictions.
+Iterative Refinement: The insights gained from this validation process can inform potential model adjustments or hyperparameter tuning, leading to improved performance and robustness.
+
+This methodological step is crucial in establishing the credibility and practical utility of our predictive model, ensuring that our research conclusions are both scientifically sound and applicable in real-world contexts.
+
+To split the data, we follow the recommended 70:30 ratio, 70% of the data is the training data, and 30% of the data is the testing data.
+
+```{python}
+pred = results.get_prediction(start=pd.to_datetime('2016-01-01'), dynamic=False)
+pred_ci = pred.conf_int()
+```
