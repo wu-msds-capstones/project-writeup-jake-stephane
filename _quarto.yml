@@ -1,2 +1,4 @@
+execute: 
+  freeze: auto
 project:
   output-dir: _output

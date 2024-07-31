@@ -500,7 +500,7 @@ We can use this model for the prediction of AQI, exploring the features that pre
 #  ML Time Series with SARIMAX
 ## Decomposing the Time Series Additive Method
 ```{python}
-#| label: read-data
+#| label: read-data2
 import pandas as pd
 df = pd.read_pickle('/data/df.pkl')
 ```

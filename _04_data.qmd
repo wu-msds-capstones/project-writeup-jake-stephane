@@ -68,7 +68,6 @@ We have a new dataset named metro_1mil.csv. This file was created using a SQL st
 ```{python}
 #| label: read-data
 #| message: false
-#| cache: true
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 ```
 
