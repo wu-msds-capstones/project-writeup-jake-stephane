@@ -34,23 +34,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="capstone_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="capstone_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="capstone_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<style>html{ scroll-behavior: smooth; }</style>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -242,7 +229,7 @@ window.Quarto = {
 <h2 data-number="4.4" class="anchored" data-anchor-id="accuracy"><span class="header-section-number">4.4</span> 4. Accuracy</h2>
 <ul>
 <li><strong>Description</strong>: The ratio of correctly predicted instances to the total instances.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}\)</span></li>
 </ul>
 </section>
 <section id="precision-recall-and-f1-score" class="level2" data-number="4.5">
@@ -251,21 +238,21 @@ window.Quarto = {
 <h3 data-number="4.5.1" class="anchored" data-anchor-id="precision"><span class="header-section-number">4.5.1</span> Precision</h3>
 <ul>
 <li><strong>Description</strong>: The ratio of correctly predicted positive observations to the total predicted positives.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{Precision} = \frac{TP}{TP + FP}</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Precision} = \frac{TP}{TP + FP}\)</span></li>
 </ul>
 </section>
 <section id="recall-sensitivity" class="level3" data-number="4.5.2">
 <h3 data-number="4.5.2" class="anchored" data-anchor-id="recall-sensitivity"><span class="header-section-number">4.5.2</span> Recall (Sensitivity)</h3>
 <ul>
 <li><strong>Description</strong>: The ratio of correctly predicted positive observations to all observations in the actual class.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{Recall} = \frac{TP}{TP + FN}</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Recall} = \frac{TP}{TP + FN}\)</span></li>
 </ul>
 </section>
 <section id="f1-score" class="level3" data-number="4.5.3">
 <h3 data-number="4.5.3" class="anchored" data-anchor-id="f1-score"><span class="header-section-number">4.5.3</span> F1-Score</h3>
 <ul>
 <li><strong>Description</strong>: The harmonic mean of Precision and Recall.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></li>
 </ul>
 </section>
 </section>
@@ -280,7 +267,7 @@ window.Quarto = {
 <h2 data-number="4.7" class="anchored" data-anchor-id="mean-absolute-error-mae"><span class="header-section-number">4.7</span> 7. Mean Absolute Error (MAE)</h2>
 <ul>
 <li><strong>Description</strong>: The average of the absolute differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\)</span></li>
 </ul>
 </section>
 <section id="mean-squared-error-mse-and-root-mean-squared-error-rmse" class="level2" data-number="4.8">
@@ -289,14 +276,14 @@ window.Quarto = {
 <h3 data-number="4.8.1" class="anchored" data-anchor-id="mse"><span class="header-section-number">4.8.1</span> MSE</h3>
 <ul>
 <li><strong>Description</strong>: The average of the squared differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></li>
 </ul>
 </section>
 <section id="rmse" class="level3" data-number="4.8.2">
 <h3 data-number="4.8.2" class="anchored" data-anchor-id="rmse"><span class="header-section-number">4.8.2</span> RMSE</h3>
 <ul>
 <li><strong>Description</strong>: The square root of MSE.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{RMSE} = \sqrt{\text{MSE}}</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}}\)</span></li>
 </ul>
 </section>
 </section>
@@ -304,7 +291,7 @@ window.Quarto = {
 <h2 data-number="4.9" class="anchored" data-anchor-id="r-squared-coefficient-of-determination"><span class="header-section-number">4.9</span> 9. R-squared (Coefficient of Determination)</h2>
 <ul>
 <li><strong>Description</strong>: The proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
-<li><strong>Formula</strong>: <span class="math inline">R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}</span></li>
+<li><strong>Formula</strong>: <span class="math inline">\(R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></li>
 </ul>
 </section>
 <section id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="level2" data-number="4.10">
@@ -313,14 +300,14 @@ window.Quarto = {
 <h3 data-number="4.10.1" class="anchored" data-anchor-id="aic"><span class="header-section-number">4.10.1</span> AIC</h3>
 <ul>
 <li><strong>Description</strong>: Measures the relative quality of a statistical model for a given set of data.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{AIC} = 2k - 2\ln(L)</span> where <span class="math inline">k</span> is the number of parameters and <span class="math inline">L</span> is the likelihood.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{AIC} = 2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is the number of parameters and <span class="math inline">\(L\)</span> is the likelihood.</li>
 </ul>
 </section>
 <section id="bic" class="level3" data-number="4.10.2">
 <h3 data-number="4.10.2" class="anchored" data-anchor-id="bic"><span class="header-section-number">4.10.2</span> BIC</h3>
 <ul>
 <li><strong>Description</strong>: Similar to AIC but includes a penalty term for the number of parameters.</li>
-<li><strong>Formula</strong>: <span class="math inline">\text{BIC} = k\ln(n) - 2\ln(L)</span> where <span class="math inline">n</span> is the number of observations.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{BIC} = k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is the number of observations.</li>
 </ul>
 </section>
 </section>
@@ -847,4 +834,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
+<script src="capstone_files/libs/quarto-html/zenscroll-min.js"></script>
 </body></html>
