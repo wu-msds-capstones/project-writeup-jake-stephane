@@ -1,13 +1,6 @@
----
-title: "Data"
-format: html
-#editor: visual
-jupyter: python3
-execute:
-  echo: true
-  output: true
----
-# Data Explaination
+# Data
+
+## Data Explaination
 The data for this project was initially scattered across multiple sources and required significant organization and compilation. The focus of this project is on the air quality in Portland, Oregon, so various data sources were aggregated and processed to compare a variety of air quality indicators.
 
 ## Air Quality Data:
@@ -67,14 +60,11 @@ We have a new dataset named metro_1mil.csv. This file was created using a SQL st
 
 ```{python}
 #| label: read-data
-#| message: false
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 ```
 
 ```{python}
 #| label: print-df
-#| message: false
-#| output-location: slide
 print(df.head(10))
 ```
 
@@ -114,7 +104,6 @@ df['date'] = pd.to_datetime(df['date'])
 # Validating Data Range: Examining the Temporal Scope of Our DataFrame
 ```{python}
 #| label: check-range
-# range of the date column
 print(f"The date range is from {df['date'].min()} to {df['date'].max()}.")
 ```
 
@@ -158,7 +147,6 @@ columns_to_impute = [
     'mean_so2_ppb', 'max_so2_ppb'
 ]
 
-# Calculate means and fill missing values
 means = {col: df[col].mean() for col in columns_to_impute}
 df = df.assign(**{col: df[col].fillna(means[col]) for col in columns_to_impute})
 ```
@@ -168,16 +156,16 @@ df = df.assign(**{col: df[col].fillna(means[col]) for col in columns_to_impute})
 
 ```{python}
 #| label: sweetvis-report
-my_report = sv.analyze(df)
-my_report.show_notebook()
+#my_report = sv.analyze(df)
+#my_report.show_notebook()
 ```
 
 # Advanced Exploratory Data Analysis: Leveraging ydata-profiling for Time Series Insights
 
 ## Introduction to Enhanced EDA Tool
 We're employing ydata-profiling, a powerful automatic EDA package that offers more detailed analysis than Sweetviz.
-Enabling Time Series Analysis to unlock time series-specific features in ydata-profiling:
 
+Enabling Time Series Analysis to unlock time series-specific features in ydata-profiling:
 - Set tsmode=True when creating the ProfileReport
 - Ensure our DataFrame is sorted or specify the sortby parameter
 - Time Series Feature Identification
@@ -195,34 +183,33 @@ Handling Multi-Entity Time Series Data, In our case, with category_id:
 
 ```{python}
 #| label: ydata-report
-for group in df.groupby("category_id"):
-    # Running 1 profile per station
-    profile = ProfileReport(
-        group[1],
-        minimal=True,
-        sortby="date",
-        # title=f"Air Quality profiling - Site Num: {group[0]}"
-    )
+#for group in df.groupby("category_id"):
+#    # Running 1 profile per station
+#    profile = ProfileReport(
+#        group[1],
+#        minimal=True,
+#        sortby="date",
+#        # title=f"Air Quality profiling - Site Num: {group[0]}"
+#    )
 
-    profile.to_file(f"Ts_Profile_{group[0]}.html")
+ #   profile.to_file(f"Ts_Profile_{group[0]}.html")
 ```
 
 ```{python}
 #| label: ydata-render
-profile = ProfileReport(
-    group[1],
-    tsmode=True,
-    sortby="date",
-    # title=f"Air Quality profiling - Site Num: {group[0]}"
-)
-
-profile.to_file("your_report2.html")
+#profile = ProfileReport(
+#    group[1],
+#    tsmode=True,
+#    sortby="date",
+#    # title=f"Air Quality profiling - Site Num: {group[0]}"
+#)
+#profile.to_file("your_report2.html")
 ```
 
 # Persisting Data: Exporting DataFrame for Quarto Cross-Document Reference
 ```{python}
 #| label: quarto-cross-ref pickle
-df.to_pickle('/data/df.pkl')
+#df.to_pickle('/data/df.pkl')
 ```
 
 Our exploratory data analysis (EDA) process consisted of two complementary approaches:
@@ -473,3 +460,5 @@ plt.subplots_adjust(top=0.9)
 g.fig.suptitle('Mean SO2 PPB Resampled by Year, Month, and Day')
 plt.show()
 ```
+
+EDA is completed.

@@ -1,4 +1,5 @@
 execute: 
   freeze: auto
+  echo: false
 project:
   output-dir: _output

@@ -1,7 +1,3 @@
----
-title: "Conclusions"
-format: html
----
 # Jake's conclusion
 After conducting our thorough research, we have landed on these specific recommendations. First, we found there are high seasonal trends where late summer/early fall tends to have the worst air quality. These numbers consistently show up each year, exasperated by the dry heat and lack of rainfall. As climate change raises temperatures and water sources dry up, wildfire season will continue to get worse over time. We must be aware of the nature of air quality and how it differs at different parts of the year. We should understand how the AQI works, and avoid being outside for too long when it reaches more dangerous levels.
 
