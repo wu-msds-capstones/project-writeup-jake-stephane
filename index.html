@@ -8,7 +8,7 @@
 
 <meta name="dcterms.date" content="2024-07-30">
 
-<title>Conclusions</title>
+<title>Unveiling the Drivers of Clean Air</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -75,7 +75,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Conclusions</h1>
+<h1 class="title">Unveiling the Drivers of Clean Air</h1>
 <p class="subtitle lead">Analysis of Portland Air Quality (AQI)</p>
 </div>
 
@@ -99,19 +99,28 @@ window.Quarto = {
 </header>
 
 
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
 <p>On October 30, 1948, the Donora High School Football team pushed through a dense smog to complete the game with hundreds of fans in the audience, despite very poor visibility. The team, backed by a sense of resilience, took pride in playing through poor conditions, a testament to the high spirit of the small town. Soon after, calls to the town’s medical offices began rushing in, complaining of difficulty breathing and respiratory issues. Donora, Pennsylvania, was a town of metalworks, built by the American Steel and Wire company and the Donora Zinc Works company, which made up the largest parts of the town’s economy. The heavy smog and pollution clouds that covered the sky were a sign of prosperity. Only twelve hours later, seventeen people would be dead, 1440 seriously affected, and 4470 with mild to moderate conditions, almost half the town’s working population (Jacobs, Burgess, Abbott). This event, the Donora Smog of 1948, would lead the country into taking a close look at the negative impacts of air pollution. Widespread debate surrounding the event would lead to the first legislation regarding the regulation of the air within the United States, ushering in a new era of tracking, combatting, and reversing ill effects of poor air quality.</p>
 <p>The quality of air we breathe has direct impacts on our health. We must understand the factors that contribute to poor air quality and how we personally and collectively contribute to the changes. Until we are able to visualize the impact we have on our atmosphere, we will continue behavior that negatively impacts the air around us.</p>
 <p>In this project, we will be focusing on the key factors contributing to Portland, Oregon’s air quality. We aim to shed light on the complex interplay between various environmental and human-made factors that contribute to high air pollution levels. Initially, we were surprised to learn that Portland, the city we reside in, has some of the best air quality for a city of its size within the United States. This ultimately led us to narrow our focus on the factors that impact and lead to these outcomes within this city.</p>
 <p>This project aims to develop and validate machine learning models for use in analysis of the various factors that influence air quality. By focusing on Portland in comparison to other large US cities, we hope to find things Portland does that lead to the greater AQI outcomes. Our approach will consider a range of variables, including meteorological conditions, pollution sources, and transit systems. Through this analysis, we aim to provide actionable insights and recommendations for sustaining and enhancing air quality. By examining both the contributors to clean air and the potential causes of pollution, we can understand air quality factors more accurately and develop comprehensive strategies for improvement.</p>
+</section>
+<section id="background" class="level1">
+<h1>Background</h1>
 <p>Federal regulation of air quality in the United States began in 1955 with the Air Pollution Control Act. This new piece of legislation provided the funds for initial research in air quality and pollution in the US. Using this and privately funded research, congress passed the Clean Air Act of 1963, putting into law the first federal regulation regarding control of air pollution. This established a new federal program within the US Public Health Service, dedicated to the monitoring and control of air quality. In 1967, congress passed the Air Quality Act, giving more federal oversight and enforcement policies. With this act, the government conducted extensive monitoring on interstate air pollution. This all led to the passing of the 1970 Clean Air Act, meant to restrict and regulate emissions, measure and reduce pollutant particles, and address upcoming pollution threats (Environmental Protection Agency).</p>
 <p>Also created in 1970, the Environmental Protection Agency (EPA) implemented and monitored the requirements established by these rulings. These would affect not just federal lands and roads, but all companies operating within the United States. Enforcement authority was expanded to allow upholding these established standards, and prevent companies from circumventing the law. Much of the turnaround in the quality of air in the US over the past fifty years can be attributed to these regulations. In 1990, when deaths due to air quality were first measured, an estimated 135,000 Americans died. By 2010 that number had dropped to 71,000 (Zhang et al.). Despite the significant decreases led by the federal guidelines of the late 70s, nearly four in ten Americans still live in places where they are exposed to unhealthy air (American Lung Association).</p>
 <p>The EPA developed the Air Quality Index (AQI) in 1999, creating an easily understood measurement for the quality of the air we breathe. The AQI measures the level of air pollution on a scale from 0 to 500. It is divided into six categories, with 0 to 50 representing good air quality which poses little or no risk to those breathing it in. On the other hand, a score above 300 signifies emergency conditions, an extremely high risk which impacts everyone. This measurement is mainly derived from five major pollutants: Ozone, Particle pollution (2.5μm and 10μm), Carbon Monoxide, Nitrogen Dioxide, and Sulphur Dioxide (Airnow.gov). Poor air quality has been linked to a variety of diseases including respiratory infections, stroke, heart disease, lung cancer, and chronic obstructive pulmonary disease among others (World Health Organization). An estimated seven million premature deaths annually can be attributed to air pollution, or a global mean loss of life expectancy of 2.9 years, quantifying it as the largest environmental risk factor for disease and premature death (Fuller, Landrigan, Balakrishnan, et. al.). Thus, it is important to understand factors that contribute to poor air quality, and outcomes that can be attributed to the state of the AQI.</p>
-<section id="tools-deployed" class="level1">
-<h1>Tools Deployed</h1>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="tools-deployed" class="level2">
+<h2 class="anchored" data-anchor-id="tools-deployed">Tools Deployed</h2>
 <p>Python will be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.</p>
 <p>To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.</p>
 <p>We will address data inconsistencies, missing values and ensure that data is in a tidy format.</p>
 <p>We may need to normalize or standardize data if necessary and create new features through aggregation to enhance the model’s performance.</p>
+</section>
 <section id="what-is-prophet" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-prophet">What is Prophet?</h2>
 <p>Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. We utilized prophet to gain a quick understanding of our AQI patterns, seeking to understand basic trends before conducting a more thorough analysis.</p>
