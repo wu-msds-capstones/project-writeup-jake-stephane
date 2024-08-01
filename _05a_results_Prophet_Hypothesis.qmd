@@ -1,13 +1,6 @@
----
-title: "Result Prophet & Hypothesis Testing"
-format: html
-#editor: visual
-jupyter: ir
-execute:
-  echo: true
-  output: true
----
-# Portland Vs Other Metro Areas AQI
+# Result Prophet & Hypothesis Testing
+
+## Portland Vs Other Metro Areas AQI
 To gain an understanding of how Portland's AQI differs from other large cities, we can run a hypothesis test to determine the significance.
 
 ```{r library import}
