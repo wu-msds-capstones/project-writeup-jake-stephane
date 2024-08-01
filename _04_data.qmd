@@ -1,10 +1,3 @@
----
-execute:
-  echo: false
-jupyter: python3
----
-# Data
-
 ## Data Explaination
 The data for this project was initially scattered across multiple sources and required significant organization and compilation. The focus of this project is on the air quality in Portland, Oregon, so various data sources were aggregated and processed to compare a variety of air quality indicators.
 
@@ -68,12 +61,6 @@ We have a new dataset named metro_1mil.csv. This file was created using a SQL st
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 ```
 
-## DataFrame Head
-```{python}
-#| label: print-df
-#print(df.head(10))
-```
-
 ## Visualization AQI Distribution
 ```{python}
 #| label: plot-aqi
@@ -89,9 +76,7 @@ plt.show()
 ```{python}
 #| label: describe-shape
 num_rows, num_columns = df.shape
-#print(f"The dataset contains {num_rows} rows and {num_columns} columns.")
 ```
-
 The DataFrame contains `{python} num_rows` rows and `{python} num_columns` columns.
 
 # Exploring Oregon State: 
@@ -100,33 +85,14 @@ The DataFrame contains `{python} num_rows` rows and `{python} num_columns` colum
 df = df[df['state'] == 'Oregon']
 num_rows_oregon = df.shape[0]
 ```
-
 By filtering our Dataframe for Oregon state, our DataFrame contains `{python} num_rows_oregon` rows.
 
 # Features Engineering
-## We convert our date column to datetime object
+
 ```{python}
 #| label: convert-dt
 df['date'] = pd.to_datetime(df['date'])
 ```
-
-## Validating Data Range
-```{python}
-#| label: check-range
-date_min = df['date'].min()
-date_max = df['date'].max()
-#print(f"The date range is from {df['date'].min()} to {df['date'].max()}.")
-```
-
-The data range is from `{python} date_min` to `{python} date_max`.
-
-## Verifying Data Types
-```{python}
-#| label: date-info
-print(df['date'].info())
-```
-
-The date column is a proper pandas.core.series.Series object.
 
 ```{python}
 #| label: df-drop-col
@@ -152,19 +118,55 @@ columns_to_impute = [
 means = {col: df[col].mean() for col in columns_to_impute}
 df = df.assign(**{col: df[col].fillna(means[col]) for col in columns_to_impute})
 ```
-We have addressed Missing Values (NaN) through Imputation techniques using the mean() method.
 
-# Comprehensive Data Overview
+Date Column Preprocessing:
+
+- Converted the date column to DateTime objects for easier manipulation and analysis.
+- Extracted additional time-based features: year, month, day of week, and quarter.
+
+
+Feature Selection:
+
+- Removed irrelevant columns to focus the analysis on pertinent variables.
+- Retained features: pollutant, aqi, wind
+
+
+Missing Value Treatment:
+
+- Identified columns with missing values: most all of them
+- Applied mean() imputation method for numerical columns.
+- For categorical columns: n/a
+
+
+Data Types and Memory Usage:
+
+- Optimized data types to reduce memory usage (e.g., using categories for low-cardinality strings, int8/int16 for small integers).
+
+Basic Statistics:
+
+- Generated summary statistics for numerical columns using df.describe().
+- Calculated frequency distributions for categorical variables.
+
+
+Distribution Analysis:
+
+- Plotted histograms and kernel density estimates for main numerical features.
+
+
+Time Series Components:
+
+- Decomposed time series data into trend, seasonality, and residual components for relevant variables.
+
+# Sweetviz Data Report
 ```{python}
 #| label: sweetvis-report
 my_report = sv.analyze(df)
-my_report.show_notebook()
+my_report.show_html()
 ```
-
-We have generated a complete statistical summary with Sweetviz Python package.
+We have generated a complete statistical report confirming the quality of EDA steps.
 
 # Advanced Exploratory Data Analysis
-We're employed the ydata-profiling package, a powerful Time Series Analysis EDA package that offers more detailed analysis than Sweetviz.
+We have also employed the ydata-profiling package, a powerful Time Series Analysis EDA package that offers more detailed analysis.
 
 We have unlocked time series-specific features using ydata-profiling:
 - Set tsmode=True when creating the ProfileReport
@@ -218,7 +220,7 @@ Our exploratory data analysis (EDA) process consisted of two complementary appro
 - *Manual Investigation*: We conducted an in-depth, hands-on examination of the dataset.
 - *Automated Analysis*: We leveraged two powerful EDA packages:
 
-- *Sweetviz*: For quick, visual data summaries  
+- *Sweetviz*: For quick, visual data summaries
 - *ydata-profiling*: For more detailed, customizable reports  
 
 These methods allowed us to thoroughly evaluate key data quality aspects, including:
@@ -391,4 +393,4 @@ plt.subplots_adjust(top=0.9)
 g.fig.suptitle('Mean SO2, NO2, and Ozone Resampled by Year, Month, and Day')
 plt.show()
 ```
-EDA is completed.
+The EDA is completed.

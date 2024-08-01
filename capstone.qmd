@@ -12,7 +12,7 @@ format:
       - text: Airnow Open Data
         href: https://www.airnow.gov
     code-links:
-      - text: Data Import Code
+      - text: Sweetviz Analysis Report
         icon: file-code
         href: data-import.py
     html-math-method: mathjax
@@ -24,5 +24,6 @@ jupyter: python3
 {{< include _01_intro.qmd >}}
 {{< include _02_background.qmd >}}
 {{< include _03_methods.qmd >}}
+{{< include _04_data.qmd >}}
 {{< include _06_conclusions.qmd >}}
 {{< include _07_bibliography.qmd >}}
