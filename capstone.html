@@ -40,35 +40,6 @@ ul.task-list li input[type="checkbox"] {
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -81,53 +52,12 @@ window.Quarto = {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
-  <ul class="collapse">
-  <li><a href="#tools-deployed" id="toc-tools-deployed" class="nav-link" data-scroll-target="#tools-deployed">Tools Deployed</a></li>
-  <li><a href="#what-is-prophet" id="toc-what-is-prophet" class="nav-link" data-scroll-target="#what-is-prophet">What is Prophet?</a></li>
-  <li><a href="#what-is-sarimax-algorithm" id="toc-what-is-sarimax-algorithm" class="nav-link" data-scroll-target="#what-is-sarimax-algorithm">What is SARIMAX algorithm?​​​​​​​​​​​​​​​</a></li>
-  </ul></li>
-  <li><a href="#common-techniques-to-evaluate-the-performance-of-machine-model" id="toc-common-techniques-to-evaluate-the-performance-of-machine-model" class="nav-link" data-scroll-target="#common-techniques-to-evaluate-the-performance-of-machine-model">Common Techniques to Evaluate the Performance of Machine Model</a>
-  <ul class="collapse">
-  <li><a href="#train-test-split" id="toc-train-test-split" class="nav-link" data-scroll-target="#train-test-split">1. Train-Test Split</a></li>
-  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">2. Cross-Validation</a></li>
-  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">3. Confusion Matrix</a></li>
-  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy">4. Accuracy</a></li>
-  <li><a href="#precision-recall-and-f1-score" id="toc-precision-recall-and-f1-score" class="nav-link" data-scroll-target="#precision-recall-and-f1-score">5. Precision, Recall, and F1-Score</a>
-  <ul class="collapse">
-  <li><a href="#precision" id="toc-precision" class="nav-link" data-scroll-target="#precision">Precision</a></li>
-  <li><a href="#recall-sensitivity" id="toc-recall-sensitivity" class="nav-link" data-scroll-target="#recall-sensitivity">Recall (Sensitivity)</a></li>
-  <li><a href="#f1-score" id="toc-f1-score" class="nav-link" data-scroll-target="#f1-score">F1-Score</a></li>
-  </ul></li>
-  <li><a href="#roc-curve-and-auc-area-under-the-curve" id="toc-roc-curve-and-auc-area-under-the-curve" class="nav-link" data-scroll-target="#roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve)</a></li>
-  <li><a href="#mean-absolute-error-mae" id="toc-mean-absolute-error-mae" class="nav-link" data-scroll-target="#mean-absolute-error-mae">7. Mean Absolute Error (MAE)</a></li>
-  <li><a href="#mean-squared-error-mse-and-root-mean-squared-error-rmse" id="toc-mean-squared-error-mse-and-root-mean-squared-error-rmse" class="nav-link" data-scroll-target="#mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)</a>
-  <ul class="collapse">
-  <li><a href="#mse" id="toc-mse" class="nav-link" data-scroll-target="#mse">MSE</a></li>
-  <li><a href="#rmse" id="toc-rmse" class="nav-link" data-scroll-target="#rmse">RMSE</a></li>
-  </ul></li>
-  <li><a href="#r-squared-coefficient-of-determination" id="toc-r-squared-coefficient-of-determination" class="nav-link" data-scroll-target="#r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</a></li>
-  <li><a href="#akaike-information-criterion-aic-and-bayesian-information-criterion-bic" id="toc-akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="nav-link" data-scroll-target="#akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC)</a>
-  <ul class="collapse">
-  <li><a href="#aic" id="toc-aic" class="nav-link" data-scroll-target="#aic">AIC</a></li>
-  <li><a href="#bic" id="toc-bic" class="nav-link" data-scroll-target="#bic">BIC</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#machine-learning-aqi-time-series" id="toc-machine-learning-aqi-time-series" class="nav-link" data-scroll-target="#machine-learning-aqi-time-series">Machine Learning AQI Time Series</a>
-  <ul class="collapse">
-  <li><a href="#how-can-we-use-akaike-information-criteria-aic" id="toc-how-can-we-use-akaike-information-criteria-aic" class="nav-link" data-scroll-target="#how-can-we-use-akaike-information-criteria-aic">How can we use Akaike Information Criteria (AIC)?</a></li>
-  </ul></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
-  <ul class="collapse">
-  <li><a href="#data-explaination" id="toc-data-explaination" class="nav-link" data-scroll-target="#data-explaination">Data Explaination</a></li>
+  <li><a href="#data-explaination" id="toc-data-explaination" class="nav-link active" data-scroll-target="#data-explaination">Data Explaination</a></li>
   <li><a href="#air-quality-data" id="toc-air-quality-data" class="nav-link" data-scroll-target="#air-quality-data">Air Quality Data:</a></li>
   <li><a href="#meteorological-data" id="toc-meteorological-data" class="nav-link" data-scroll-target="#meteorological-data">Meteorological Data:</a></li>
   <li><a href="#pollution-source-data" id="toc-pollution-source-data" class="nav-link" data-scroll-target="#pollution-source-data">Pollution Source Data:</a></li>
   <li><a href="#transit-data" id="toc-transit-data" class="nav-link" data-scroll-target="#transit-data">Transit Data:</a></li>
   <li><a href="#population-data" id="toc-population-data" class="nav-link" data-scroll-target="#population-data">Population Data:</a></li>
-  </ul></li>
   <li><a href="#data-processing" id="toc-data-processing" class="nav-link" data-scroll-target="#data-processing">Data Processing</a>
   <ul class="collapse">
   <li><a href="#data-organization" id="toc-data-organization" class="nav-link" data-scroll-target="#data-organization">Data Organization</a></li>
@@ -182,186 +112,8 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<p>On October 30, 1948, the Donora High School Football team pushed through a dense smog to complete the game with hundreds of fans in the audience, despite very poor visibility. The team, backed by a sense of resilience, took pride in playing through poor conditions, a testament to the high spirit of the small town. Soon after, calls to the town’s medical offices began rushing in, complaining of difficulty breathing and respiratory issues. Donora, Pennsylvania, was a town of metalworks, built by the American Steel and Wire company and the Donora Zinc Works company, which made up the largest parts of the town’s economy. The heavy smog and pollution clouds that covered the sky were a sign of prosperity. Only twelve hours later, seventeen people would be dead, 1440 seriously affected, and 4470 with mild to moderate conditions, almost half the town’s working population (Jacobs, Burgess, Abbott). This event, the Donora Smog of 1948, would lead the country into taking a close look at the negative impacts of air pollution. Widespread debate surrounding the event would lead to the first legislation regarding the regulation of the air within the United States, ushering in a new era of tracking, combatting, and reversing ill effects of poor air quality.</p>
-<p>The quality of air we breathe has direct impacts on our health. We must understand the factors that contribute to poor air quality and how we personally and collectively contribute to the changes. Until we are able to visualize the impact we have on our atmosphere, we will continue behavior that negatively impacts the air around us.</p>
-<p>In this project, we will be focusing on the key factors contributing to Portland, Oregon’s air quality. We aim to shed light on the complex interplay between various environmental and human-made factors that contribute to high air pollution levels. Initially, we were surprised to learn that Portland, the city we reside in, has some of the best air quality for a city of its size within the United States. This ultimately led us to narrow our focus on the factors that impact and lead to these outcomes within this city.</p>
-<p>This project aims to develop and validate machine learning models for use in analysis of the various factors that influence air quality. By focusing on Portland in comparison to other large US cities, we hope to find things Portland does that lead to the greater AQI outcomes. Our approach will consider a range of variables, including meteorological conditions, pollution sources, and transit systems. Through this analysis, we aim to provide actionable insights and recommendations for sustaining and enhancing air quality. By examining both the contributors to clean air and the potential causes of pollution, we can understand air quality factors more accurately and develop comprehensive strategies for improvement.</p>
-</section>
-<section id="background" class="level1">
-<h1>Background</h1>
-<p>Federal regulation of air quality in the United States began in 1955 with the Air Pollution Control Act. This new piece of legislation provided the funds for initial research in air quality and pollution in the US. Using this and privately funded research, congress passed the Clean Air Act of 1963, putting into law the first federal regulation regarding control of air pollution. This established a new federal program within the US Public Health Service, dedicated to the monitoring and control of air quality. In 1967, congress passed the Air Quality Act, giving more federal oversight and enforcement policies. With this act, the government conducted extensive monitoring on interstate air pollution. This all led to the passing of the 1970 Clean Air Act, meant to restrict and regulate emissions, measure and reduce pollutant particles, and address upcoming pollution threats (Environmental Protection Agency).</p>
-<p>Also created in 1970, the Environmental Protection Agency (EPA) implemented and monitored the requirements established by these rulings. These would affect not just federal lands and roads, but all companies operating within the United States. Enforcement authority was expanded to allow upholding these established standards, and prevent companies from circumventing the law. Much of the turnaround in the quality of air in the US over the past fifty years can be attributed to these regulations. In 1990, when deaths due to air quality were first measured, an estimated 135,000 Americans died. By 2010 that number had dropped to 71,000 (Zhang et al.). Despite the significant decreases led by the federal guidelines of the late 70s, nearly four in ten Americans still live in places where they are exposed to unhealthy air (American Lung Association).</p>
-<p>The EPA developed the Air Quality Index (AQI) in 1999, creating an easily understood measurement for the quality of the air we breathe. The AQI measures the level of air pollution on a scale from 0 to 500. It is divided into six categories, with 0 to 50 representing good air quality which poses little or no risk to those breathing it in. On the other hand, a score above 300 signifies emergency conditions, an extremely high risk which impacts everyone. This measurement is mainly derived from five major pollutants: Ozone, Particle pollution (2.5μm and 10μm), Carbon Monoxide, Nitrogen Dioxide, and Sulphur Dioxide (Airnow.gov). Poor air quality has been linked to a variety of diseases including respiratory infections, stroke, heart disease, lung cancer, and chronic obstructive pulmonary disease among others (World Health Organization). An estimated seven million premature deaths annually can be attributed to air pollution, or a global mean loss of life expectancy of 2.9 years, quantifying it as the largest environmental risk factor for disease and premature death (Fuller, Landrigan, Balakrishnan, et. al.). Thus, it is important to understand factors that contribute to poor air quality, and outcomes that can be attributed to the state of the AQI.</p>
-</section>
-<section id="methods" class="level1">
-<h1>Methods</h1>
-<section id="tools-deployed" class="level2">
-<h2 class="anchored" data-anchor-id="tools-deployed">Tools Deployed</h2>
-<p>Python will be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.</p>
-<p>To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.</p>
-<p>We will address data inconsistencies, missing values and ensure that data is in a tidy format.</p>
-<p>We may need to normalize or standardize data if necessary and create new features through aggregation to enhance the model’s performance.</p>
-</section>
-<section id="what-is-prophet" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-prophet">What is Prophet?</h2>
-<p>Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. We utilized prophet to gain a quick understanding of our AQI patterns, seeking to understand basic trends before conducting a more thorough analysis.</p>
-<p>Key features of Prophet include seasonality detection and holiday incorporation, while providing easy use and understanding for users. We can use this software to get complex understanding from simple applications.</p>
-<p>To conduct this analysis, we prepare data into a two column table, date and AQI. Prophet uses the trends of past data to highlight similarities over days of the year, weeks, months, and seasons. From this, prophet is able to generate its predictions, cross validate, and give performance metrics such as mean absolute percentage error to quantify the accuracy of the results.</p>
-</section>
-<section id="what-is-sarimax-algorithm" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-sarimax-algorithm">What is SARIMAX algorithm?​​​​​​​​​​​​​​​</h2>
-<p>The most common method used in time series forecasting is known as the ARIMA model. We will use an extended version called SARIMAX (<em>Seasonal Auto Regressive Integrated Moving Averages with exogenous factor</em>)</p>
-<ul>
-<li>The SARIMAX model is used when the data sets have seasonal cycles.</li>
-<li>In the dataset concerning the air quality/AQI there is a seasonal pattern which we have explained in the above section.</li>
-<li>SARIMAX is a model that can be fitted to time series data in order to better understand or predict future points in the time series</li>
-<li>SARIMAX is particularly useful for forecasting time series data that exhibits both trends and seasonality.</li>
-</ul>
-<p>Here’s a breakdown of its components:</p>
-<p>There are three distinct integers (p,d,q) that are used to parametrize SARIMAX models. Because of that, ARIMA models are denoted with the notation SARIMAX(p,d,q).</p>
-<p>Together these three parameters account for seasonality, trend, and noise in datasets:</p>
-<ol type="1">
-<li><em>Seasonality (S)</em>: Accounts for recurring patterns or cycles in the data.</li>
-<li><em>AutoRegressive (AR)</em>: Uses past values to predict future values.</li>
-<li><em>Integrated (I)</em>: Applies differencing to make the time series stationary.</li>
-<li><em>Moving Average (MA)</em>: Uses past forecast errors in the prediction.</li>
-<li><em>eXogenous factors (X)</em>: Incorporates external variables that may influence the forecast.</li>
-</ol>
-<p>We are trying to find the right p, d, q hyperparameters to correctly forecast and predict the AQI values.</p>
-</section>
-</section>
-<section id="common-techniques-to-evaluate-the-performance-of-machine-model" class="level1">
-<h1>Common Techniques to Evaluate the Performance of Machine Model</h1>
-<section id="train-test-split" class="level2">
-<h2 class="anchored" data-anchor-id="train-test-split">1. Train-Test Split</h2>
-<ul>
-<li><strong>Description</strong>: Split the dataset into training and testing subsets.</li>
-<li><strong>Purpose</strong>: Assess the model’s performance on unseen data to detect overfitting and ensure generalizability.</li>
-</ul>
-</section>
-<section id="cross-validation" class="level2">
-<h2 class="anchored" data-anchor-id="cross-validation">2. Cross-Validation</h2>
-<ul>
-<li><strong>Description</strong>: Divide the data into k subsets and train the model k times, each time using a different subset as the test set and the remaining as the training set.</li>
-<li><strong>Purpose</strong>: Provides a more robust estimate of model performance by averaging results over multiple splits.</li>
-</ul>
-</section>
-<section id="confusion-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="confusion-matrix">3. Confusion Matrix</h2>
-<ul>
-<li><strong>Description</strong>: A table used to describe the performance of a classification model by comparing predicted and actual values.</li>
-<li><strong>Metrics</strong>: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN).</li>
-</ul>
-</section>
-<section id="accuracy" class="level2">
-<h2 class="anchored" data-anchor-id="accuracy">4. Accuracy</h2>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted instances to the total instances.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}\)</span></li>
-</ul>
-</section>
-<section id="precision-recall-and-f1-score" class="level2">
-<h2 class="anchored" data-anchor-id="precision-recall-and-f1-score">5. Precision, Recall, and F1-Score</h2>
-<section id="precision" class="level3">
-<h3 class="anchored" data-anchor-id="precision">Precision</h3>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted positive observations to the total predicted positives.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Precision} = \frac{TP}{TP + FP}\)</span></li>
-</ul>
-</section>
-<section id="recall-sensitivity" class="level3">
-<h3 class="anchored" data-anchor-id="recall-sensitivity">Recall (Sensitivity)</h3>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted positive observations to all observations in the actual class.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Recall} = \frac{TP}{TP + FN}\)</span></li>
-</ul>
-</section>
-<section id="f1-score" class="level3">
-<h3 class="anchored" data-anchor-id="f1-score">F1-Score</h3>
-<ul>
-<li><strong>Description</strong>: The harmonic mean of Precision and Recall.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></li>
-</ul>
-</section>
-</section>
-<section id="roc-curve-and-auc-area-under-the-curve" class="level2">
-<h2 class="anchored" data-anchor-id="roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve)</h2>
-<ul>
-<li><strong>ROC Curve</strong>: A graphical representation of the true positive rate vs.&nbsp;false positive rate at various threshold settings.</li>
-<li><strong>AUC</strong>: Measures the entire two-dimensional area underneath the ROC curve. Higher AUC indicates better model performance.</li>
-</ul>
-</section>
-<section id="mean-absolute-error-mae" class="level2">
-<h2 class="anchored" data-anchor-id="mean-absolute-error-mae">7. Mean Absolute Error (MAE)</h2>
-<ul>
-<li><strong>Description</strong>: The average of the absolute differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\)</span></li>
-</ul>
-</section>
-<section id="mean-squared-error-mse-and-root-mean-squared-error-rmse" class="level2">
-<h2 class="anchored" data-anchor-id="mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)</h2>
-<section id="mse" class="level3">
-<h3 class="anchored" data-anchor-id="mse">MSE</h3>
-<ul>
-<li><strong>Description</strong>: The average of the squared differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></li>
-</ul>
-</section>
-<section id="rmse" class="level3">
-<h3 class="anchored" data-anchor-id="rmse">RMSE</h3>
-<ul>
-<li><strong>Description</strong>: The square root of MSE.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}}\)</span></li>
-</ul>
-</section>
-</section>
-<section id="r-squared-coefficient-of-determination" class="level2">
-<h2 class="anchored" data-anchor-id="r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</h2>
-<ul>
-<li><strong>Description</strong>: The proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></li>
-</ul>
-</section>
-<section id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="level2">
-<h2 class="anchored" data-anchor-id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC)</h2>
-<section id="aic" class="level3">
-<h3 class="anchored" data-anchor-id="aic">AIC</h3>
-<ul>
-<li><strong>Description</strong>: Measures the relative quality of a statistical model for a given set of data.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{AIC} = 2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is the number of parameters and <span class="math inline">\(L\)</span> is the likelihood.</li>
-</ul>
-</section>
-<section id="bic" class="level3">
-<h3 class="anchored" data-anchor-id="bic">BIC</h3>
-<ul>
-<li><strong>Description</strong>: Similar to AIC but includes a penalty term for the number of parameters.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{BIC} = k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is the number of observations.</li>
-</ul>
-</section>
-</section>
-</section>
-<section id="machine-learning-aqi-time-series" class="level1">
-<h1>Machine Learning AQI Time Series</h1>
-<section id="how-can-we-use-akaike-information-criteria-aic" class="level2">
-<h2 class="anchored" data-anchor-id="how-can-we-use-akaike-information-criteria-aic">How can we use Akaike Information Criteria (AIC)?</h2>
-<p>Used to measure of a statistical model, it quantifies:</p>
-<ul>
-<li>The goodness of fit</li>
-<li>The simplicity of the model into a single statistic</li>
-<li>When comparing two models, the one with the lower AIC is generally “better”</li>
-</ul>
-<p>The Akaike Information Criterion (AIC) is a measure used to compare different statistical models. It helps in model selection by balancing the goodness of fit and the complexity of the model. Here’s how to interpret the AIC value:</p>
-<ul>
-<li><em>Lower AIC is Better</em>: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.</li>
-<li><em>Comparative Measure</em>: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.</li>
-<li><em>Penalty for Complexity</em>: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.</li>
-</ul>
-</section>
-</section>
-<section id="data" class="level1">
-<h1>Data</h1>
+<p>title: “Data” subtitle: “Analysis of Portland Air Quality (AQI)” date: “2024-07-30” format: html: smooth-scroll: true toc: true toc-title: Contents number-sections: false other-links: - text: Airnow Open Data href: https://www.airnow.gov code-links: - text: Data Import Code icon: file-code href: data-import.py html-math-method: mathjax css: styles.css execute: echo: false jupyter: python3</p>
+<hr>
 <section id="data-explaination" class="level2">
 <h2 class="anchored" data-anchor-id="data-explaination">Data Explaination</h2>
 <p>The data for this project was initially scattered across multiple sources and required significant organization and compilation. The focus of this project is on the air quality in Portland, Oregon, so various data sources were aggregated and processed to compare a variety of air quality indicators.</p>
@@ -386,7 +138,6 @@ window.Quarto = {
 <section id="population-data" class="level2">
 <h2 class="anchored" data-anchor-id="population-data">Population Data:</h2>
 <p>Data on population and population density sourced from the Simplemaps United States Cities database, which is built from multiple sources including the U.S. Geological Survey and the U.S. Census Bureau. Data is updated as of May 6, 2024, reflecting very up to date information.</p>
-</section>
 </section>
 <section id="data-processing" class="level1">
 <h1>Data Processing</h1>
@@ -415,7 +166,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="capstone_files/figure-html/plot-aqi-output-1.png" id="plot-aqi" width="829" height="523" class="figure-img"></p>
+<p><img src="capstone_files/figure-html/plot-aqi-output-1.png" id="plot-aqi" width="832" height="529" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -447,7 +198,7 @@ window.Quarto = {
 <div id="sweetvis-report" class="cell" data-execution_count="10">
 <div id="sweetvis-report-1" class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"a7a662e83b7544d48f0b7ca4e08f6ccd","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"ac88c1954dfc4b459b741fcabf758340","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div id="sweetvis-report-2" class="cell-output cell-output-display">
@@ -19824,7 +19575,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 </main>
 <!-- /main column -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"05670ad95caa45a69d9c9b2e50bbe019":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_dc536dc5403d4f2fafaaab1dbaf274e1","placeholder":"​","style":"IPY_MODEL_6701833377e44df392a06635e17405a5","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"1d1988a5221144ecb506e366b67fc29f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"22790b1280114656b15c476422e8c940":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_1d1988a5221144ecb506e366b67fc29f","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_4530a591599346268e208a5a0626e795","tabbable":null,"tooltip":null,"value":1}},"4530a591599346268e208a5a0626e795":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"4cf4aa57d68f4944b518862b9fc2451c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"6701833377e44df392a06635e17405a5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"6a63086ac9494eaa8e77646c7031d552":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"81c39d89ec0b4e0986fd8eba9b119492":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"a7a662e83b7544d48f0b7ca4e08f6ccd":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_05670ad95caa45a69d9c9b2e50bbe019","IPY_MODEL_22790b1280114656b15c476422e8c940","IPY_MODEL_e2c25310aa0044079413f27a75efdc79"],"layout":"IPY_MODEL_81c39d89ec0b4e0986fd8eba9b119492","tabbable":null,"tooltip":null}},"dc536dc5403d4f2fafaaab1dbaf274e1":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"e2c25310aa0044079413f27a75efdc79":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_6a63086ac9494eaa8e77646c7031d552","placeholder":"​","style":"IPY_MODEL_4cf4aa57d68f4944b518862b9fc2451c","tabbable":null,"tooltip":null,"value":" [100%]   00:02 -&gt; (00:00 left)"}}},"version_major":2,"version_minor":0}
+{"state":{"05670ad95caa45a69d9c9b2e50bbe019":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_dc536dc5403d4f2fafaaab1dbaf274e1","placeholder":"​","style":"IPY_MODEL_6701833377e44df392a06635e17405a5","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"1d1988a5221144ecb506e366b67fc29f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"22790b1280114656b15c476422e8c940":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_1d1988a5221144ecb506e366b67fc29f","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_4530a591599346268e208a5a0626e795","tabbable":null,"tooltip":null,"value":1}},"3428a3976f2846df88405bf2b6c9410d":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_9bfb555cc7cf4868bba6563513b687c7","placeholder":"​","style":"IPY_MODEL_a53d09e315ae452bbabd2d6d233e363a","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"38c9ddf3f62d4e1cb129ead6fb746168":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_7043c52f69574f229260c9604c1eb47a","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_c2331da830ae449bacf7536c8b408532","tabbable":null,"tooltip":null,"value":1}},"4530a591599346268e208a5a0626e795":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"4cf4aa57d68f4944b518862b9fc2451c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"520f78add9514fd49d437b5adb3b36f2":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"529c7bd960f24ae987e71c3d904df8b9":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_520f78add9514fd49d437b5adb3b36f2","placeholder":"​","style":"IPY_MODEL_eb3a3437ed914aa29ead8d1f20a94373","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"6701833377e44df392a06635e17405a5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"6a63086ac9494eaa8e77646c7031d552":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"7043c52f69574f229260c9604c1eb47a":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"81c39d89ec0b4e0986fd8eba9b119492":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"9bfb555cc7cf4868bba6563513b687c7":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"a53d09e315ae452bbabd2d6d233e363a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"a7a662e83b7544d48f0b7ca4e08f6ccd":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_05670ad95caa45a69d9c9b2e50bbe019","IPY_MODEL_22790b1280114656b15c476422e8c940","IPY_MODEL_e2c25310aa0044079413f27a75efdc79"],"layout":"IPY_MODEL_81c39d89ec0b4e0986fd8eba9b119492","tabbable":null,"tooltip":null}},"ac88c1954dfc4b459b741fcabf758340":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_3428a3976f2846df88405bf2b6c9410d","IPY_MODEL_38c9ddf3f62d4e1cb129ead6fb746168","IPY_MODEL_529c7bd960f24ae987e71c3d904df8b9"],"layout":"IPY_MODEL_b096226f18f2448892a8fbcab9c32117","tabbable":null,"tooltip":null}},"b096226f18f2448892a8fbcab9c32117":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"c2331da830ae449bacf7536c8b408532":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"dc536dc5403d4f2fafaaab1dbaf274e1":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"e2c25310aa0044079413f27a75efdc79":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_6a63086ac9494eaa8e77646c7031d552","placeholder":"​","style":"IPY_MODEL_4cf4aa57d68f4944b518862b9fc2451c","tabbable":null,"tooltip":null,"value":" [100%]   00:02 -&gt; (00:00 left)"}},"eb3a3437ed914aa29ead8d1f20a94373":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
