@@ -40,6 +40,35 @@ ul.task-list li input[type="checkbox"] {
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 <script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -52,7 +81,68 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Contents</h2>
    
   <ul>
-  <li><a href="#advanced-exploratory-data-analysis" id="toc-advanced-exploratory-data-analysis" class="nav-link active" data-scroll-target="#advanced-exploratory-data-analysis">Advanced Exploratory Data Analysis</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#tools-deployed" id="toc-tools-deployed" class="nav-link" data-scroll-target="#tools-deployed">Tools Deployed</a></li>
+  <li><a href="#what-is-prophet" id="toc-what-is-prophet" class="nav-link" data-scroll-target="#what-is-prophet">What is Prophet?</a></li>
+  <li><a href="#what-is-sarimax-algorithm" id="toc-what-is-sarimax-algorithm" class="nav-link" data-scroll-target="#what-is-sarimax-algorithm">What is SARIMAX algorithm?​​​​​​​​​​​​​​​</a></li>
+  </ul></li>
+  <li><a href="#common-techniques-to-evaluate-the-performance-of-machine-model" id="toc-common-techniques-to-evaluate-the-performance-of-machine-model" class="nav-link" data-scroll-target="#common-techniques-to-evaluate-the-performance-of-machine-model">Common Techniques to Evaluate the Performance of Machine Model</a>
+  <ul class="collapse">
+  <li><a href="#train-test-split" id="toc-train-test-split" class="nav-link" data-scroll-target="#train-test-split">1. Train-Test Split</a></li>
+  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">2. Cross-Validation</a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">3. Confusion Matrix</a></li>
+  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy">4. Accuracy</a></li>
+  <li><a href="#precision-recall-and-f1-score" id="toc-precision-recall-and-f1-score" class="nav-link" data-scroll-target="#precision-recall-and-f1-score">5. Precision, Recall, and F1-Score</a>
+  <ul class="collapse">
+  <li><a href="#precision" id="toc-precision" class="nav-link" data-scroll-target="#precision">Precision</a></li>
+  <li><a href="#recall-sensitivity" id="toc-recall-sensitivity" class="nav-link" data-scroll-target="#recall-sensitivity">Recall (Sensitivity)</a></li>
+  <li><a href="#f1-score" id="toc-f1-score" class="nav-link" data-scroll-target="#f1-score">F1-Score</a></li>
+  </ul></li>
+  <li><a href="#roc-curve-and-auc-area-under-the-curve" id="toc-roc-curve-and-auc-area-under-the-curve" class="nav-link" data-scroll-target="#roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve)</a></li>
+  <li><a href="#mean-absolute-error-mae" id="toc-mean-absolute-error-mae" class="nav-link" data-scroll-target="#mean-absolute-error-mae">7. Mean Absolute Error (MAE)</a></li>
+  <li><a href="#mean-squared-error-mse-and-root-mean-squared-error-rmse" id="toc-mean-squared-error-mse-and-root-mean-squared-error-rmse" class="nav-link" data-scroll-target="#mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)</a>
+  <ul class="collapse">
+  <li><a href="#mse" id="toc-mse" class="nav-link" data-scroll-target="#mse">MSE</a></li>
+  <li><a href="#rmse" id="toc-rmse" class="nav-link" data-scroll-target="#rmse">RMSE</a></li>
+  </ul></li>
+  <li><a href="#r-squared-coefficient-of-determination" id="toc-r-squared-coefficient-of-determination" class="nav-link" data-scroll-target="#r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</a></li>
+  <li><a href="#akaike-information-criterion-aic-and-bayesian-information-criterion-bic" id="toc-akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="nav-link" data-scroll-target="#akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC)</a>
+  <ul class="collapse">
+  <li><a href="#aic" id="toc-aic" class="nav-link" data-scroll-target="#aic">AIC</a></li>
+  <li><a href="#bic" id="toc-bic" class="nav-link" data-scroll-target="#bic">BIC</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#machine-learning-aqi-time-series" id="toc-machine-learning-aqi-time-series" class="nav-link" data-scroll-target="#machine-learning-aqi-time-series">Machine Learning AQI Time Series</a>
+  <ul class="collapse">
+  <li><a href="#how-can-we-use-akaike-information-criteria-aic" id="toc-how-can-we-use-akaike-information-criteria-aic" class="nav-link" data-scroll-target="#how-can-we-use-akaike-information-criteria-aic">How can we use Akaike Information Criteria (AIC)?</a></li>
+  </ul></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a>
+  <ul class="collapse">
+  <li><a href="#data-explaination" id="toc-data-explaination" class="nav-link" data-scroll-target="#data-explaination">Data Explaination</a></li>
+  <li><a href="#air-quality-data" id="toc-air-quality-data" class="nav-link" data-scroll-target="#air-quality-data">Air Quality Data:</a></li>
+  <li><a href="#meteorological-data" id="toc-meteorological-data" class="nav-link" data-scroll-target="#meteorological-data">Meteorological Data:</a></li>
+  <li><a href="#pollution-source-data" id="toc-pollution-source-data" class="nav-link" data-scroll-target="#pollution-source-data">Pollution Source Data:</a></li>
+  <li><a href="#transit-data" id="toc-transit-data" class="nav-link" data-scroll-target="#transit-data">Transit Data:</a></li>
+  <li><a href="#population-data" id="toc-population-data" class="nav-link" data-scroll-target="#population-data">Population Data:</a></li>
+  </ul></li>
+  <li><a href="#data-processing" id="toc-data-processing" class="nav-link" data-scroll-target="#data-processing">Data Processing</a>
+  <ul class="collapse">
+  <li><a href="#data-organization" id="toc-data-organization" class="nav-link" data-scroll-target="#data-organization">Data Organization</a></li>
+  <li><a href="#initial-exploratory-data-analysis-eda" id="toc-initial-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#initial-exploratory-data-analysis-eda">Initial Exploratory Data Analysis (EDA)</a></li>
+  <li><a href="#visualization-aqi-distribution" id="toc-visualization-aqi-distribution" class="nav-link" data-scroll-target="#visualization-aqi-distribution">Visualization AQI Distribution</a></li>
+  <li><a href="#dataframe-shape" id="toc-dataframe-shape" class="nav-link" data-scroll-target="#dataframe-shape">Dataframe Shape</a></li>
+  </ul></li>
+  <li><a href="#exploring-oregon-state" id="toc-exploring-oregon-state" class="nav-link" data-scroll-target="#exploring-oregon-state">Exploring Oregon State:</a></li>
+  <li><a href="#features-engineering" id="toc-features-engineering" class="nav-link" data-scroll-target="#features-engineering">Features Engineering</a>
+  <ul class="collapse">
+  <li><a href="#we-convert-our-date-column-to-datetime-object" id="toc-we-convert-our-date-column-to-datetime-object" class="nav-link" data-scroll-target="#we-convert-our-date-column-to-datetime-object">We convert our date column to datetime object</a></li>
+  <li><a href="#validating-data-range" id="toc-validating-data-range" class="nav-link" data-scroll-target="#validating-data-range">Validating Data Range</a></li>
+  </ul></li>
+  <li><a href="#sweetviz-data-report" id="toc-sweetviz-data-report" class="nav-link" data-scroll-target="#sweetviz-data-report">Sweetviz Data Report</a></li>
+  <li><a href="#advanced-exploratory-data-analysis" id="toc-advanced-exploratory-data-analysis" class="nav-link" data-scroll-target="#advanced-exploratory-data-analysis">Advanced Exploratory Data Analysis</a></li>
   <li><a href="#time-series-visualization-for-co-pollutant-wind-and-aqi" id="toc-time-series-visualization-for-co-pollutant-wind-and-aqi" class="nav-link" data-scroll-target="#time-series-visualization-for-co-pollutant-wind-and-aqi">Time Series Visualization for CO Pollutant, Wind and AQI</a></li>
   <li><a href="#time-series-visualization-for-so2-no2-and-ozone" id="toc-time-series-visualization-for-so2-no2-and-ozone" class="nav-link" data-scroll-target="#time-series-visualization-for-so2-no2-and-ozone">Time Series Visualization for SO2, NO2 and Ozone</a></li>
   <li><a href="#jakes-conclusion" id="toc-jakes-conclusion" class="nav-link" data-scroll-target="#jakes-conclusion">Jake’s conclusion</a></li>
@@ -92,127 +182,274 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>execute: echo: false jupyter: python3</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 5%">
-</colgroup>
-<tbody>
-<tr class="odd">
-<td># Data</td>
-</tr>
-<tr class="even">
-<td>## Data Explaination The data for this project was initially scattered across multiple sources and required significant organization and compilation. The focus of this project is on the air quality in Portland, Oregon, so various data sources were aggregated and processed to compare a variety of air quality indicators.</td>
-</tr>
-<tr class="odd">
-<td>## Air Quality Data: Air quality data, specifically AQI values, were obtained from the United States Environmental Protection Agency (EPA) pre-generated data files. The AQI values are calculated daily, based on a variety of factors including criteria gasses and measured pollutant concentrations, and measures how harmful breathing the air is. AQI is classified into one of six categories from ‘good’ to ‘hazardous’, each having long term health effects associated with it. The files were given daily on a county wide basis, separated into different files by year.</td>
-</tr>
-<tr class="even">
-<td>## Meteorological Data: Historical weather data was also sourced from the EPA database, measured by thousands of weather stations across the country. Measurements tracked include temperature, wind speed, air pressure, and humidity. Temperature is measured in degrees fahrenheit. Wind speed is measured in knots, which are defined as one nautical mile per hour (equivalent to approximately 1.15mph). Wind speed is important in air quality as winds can blow different pollutants around and move and spread wildfires. Pressure is measured in millibars, where 1013.25 millibars is the standard atmospheric pressure (Earth’s pressure at mean sea level). Finally, humidity is measured in percent relative humidity. This is the amount of water vapor in the air as a percentage of the maximum amount of water vapor possible at a given temperature. Humidity can make it more difficult to breathe and sweat, make the air feel hotter than it is, and prevent air pollutants from dispersing as easily. Indoors, high humidity can trap air, leading to the growth of mold and harmful bacteria. This data was given daily by city, separated into different files by year. Measurements were taken hourly, but pre-calculated in the source database, giving an average value over the twenty four hours and a maximum value.</td>
-</tr>
-<tr class="odd">
-<td>## Pollution Source Data: Pollution data was again sourced from the EPA database, separated by criteria gasses (CO, NO2, O3, SO2), Toxins (lead), and particulate matter (PM2.5 and PM10). Criteria gas Carbon Monoxide is measured in parts per million, and is especially dangerous as it is both colorless and odorless. CO binds to hemoglobin in the blood, making the transportation of oxygen around the body more difficult. Nitrogen Dioxide is dangerous to breathe in at high levels. It can cause swelling in the throat, burning, reduced oxygenation of body tissues, and fluid build up in the lungs. It is released in many common combustion reactions including in cars, coal plants, and cigarettes. It is measured in parts per billion. Ozone can harm our ability to breathe, especially in older people, children, and people with asthma. It is measured in parts per million. Sulfur Dioxide, measured in parts per billion, can irritate the eyes, mucous membranes, skin, and respiratory tract. Lead is a toxin which can increase the risk of high blood pressure, cardiovascular problems, and complications during pregnancy. While exposure has gone down significantly in the recent decades after use in gasoline, it still remains a dangerous toxin to breathe in. It is measured in micrograms per cubic meter. PM2.5 and PM10 are particulate matter, small inhalable particles with diameters of 2.5 microns or smaller, and 10 microns or smaller respectively. PM2.5 includes all sorts of common particles, metals, and organic compounds. PM10 includes dust, pollen, molds, and other larger (but still very small) particles. Due to the variability of particles included in the PM classification, there are a wide range of negative health impacts that come from breathing in these particles. PM2.5 and PM10 are measured in micrograms per cubic meter.</td>
-</tr>
-<tr class="even">
-<td>This data was given daily by city, separated into different files by year. They are sourced from thousands of individual sources, which measure various selections of these pollution sources. Because of the variety of different pollutants being measured, there was a significant amount of missing data, especially from small towns. Measurements were taken hourly, pre-compiled into a daily average and maximum.</td>
-</tr>
-<tr class="odd">
-<td>## Transit Data: Information on motor buses taken from the National Transit Database, produced by the Federal Transit Administration. Includes information of bus systems and ridership by city, separated by year. Data is recorded yearly, encompassing annual totals for information such as number of buses, total revenue, passengers, and miles driven for the respective city transit systems. Information was given in yearly CSVs, separated by the city transit system. For cities with multiple systems, data was combined. Only motorbus data was used, which may not be reflective of cities with other large methods of public transportation, such as the New York subway system.</td>
-</tr>
-<tr class="even">
-<td>## Population Data: Data on population and population density sourced from the Simplemaps United States Cities database, which is built from multiple sources including the U.S. Geological Survey and the U.S. Census Bureau. Data is updated as of May 6, 2024, reflecting very up to date information.</td>
-</tr>
-<tr class="odd">
-<td># Data Processing The data was downloaded in R. For information given in yearly CSV files, data was stacked vertically to include all years in our time frame. In all tables, relevant columns were selected and renamed, reducing the information being brought into our initial SQL database. R was connected and imported to PostgreSQL using the RPostgres package, and used to read, stack, select columns, and rename columns before being written into a PostgreSQL database.</td>
-</tr>
-<tr class="even">
-<td>## Data Organization Given the raw data available, the table structure was simplified compared to the original data sources. Data was organized in a star schema centered on the air_quality fact table. This table tracks AQI, pollutant, weather and toxin data daily for each location. The first dimension table is the dates table, a serialized list of dates from January 1st, 2015 to December 31st, 2022. Next, we have a locations dimension table, a serialized list of over 1400 cities and towns from around the country. These are labeled by the state, county, and city name, as well as the population and population density, allowing connection to information based on what is given. The aqi_category dimension table is a short list of AQI value categories (Good, Unhealthy, Hazardous, etc.) with their respective AQI value range as minimum and maximum values.</td>
-</tr>
-<tr class="odd">
-<td>Finally, the yearly_transit dimension table gives the information for the transit system of the respective city during the specified year attached in the fact table. This table seems counterproductive to not include the location or year of the specified line or even a reference id, but in keeping with star schema, it was decided that this was the best way to reference this information. Understanding the context of a specified line requires joining the table back to the fact table, and joining the location and date tables to that as well.</td>
-</tr>
-<tr class="even">
-<td>Each table has a unique serialized primary key, and all dimension tables are connected via foreign key. Several additional indexes are included on columns that will be queried often. Finally, constraints have been added to limit unusual or impossible data.</td>
-</tr>
-<tr class="odd">
-<td>Tracking these identifiers independently allows for accurate analysis of changes over time and across different areas, and allows adding new information should we need to update the database. (Figure 1) illustrates the resulting ERD structure using drawSQL.</td>
-</tr>
-<tr class="even">
-<td>Figure 1.</td>
-</tr>
-<tr class="odd">
-<td><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/aqi_erd_final.png?raw=true" class="img-fluid" alt="ERD Diagram"></td>
-</tr>
-<tr class="even">
-<td>## Initial Exploratory Data Analysis (EDA) We have a new dataset named metro_1mil.csv. This file was created using a SQL statement that joins all relevant tables, filtering for metropolitan areas with populations less than or equal to 1 million. This approach limits our EDA to mid-sized metropolitan cities, such as Portland, Oregon.</td>
-</tr>
-<tr class="odd">
-<td>## DataFrame Head</td>
-</tr>
-<tr class="even">
-<td>## Visualization AQI Distribution</td>
-</tr>
-<tr class="odd">
-<td>::: {#cell-plot-aqi .cell execution_count=4}</td>
-</tr>
-<tr class="even">
-<td>::: {.cell-output .cell-output-display} <img src="capstone_files/figure-html/plot-aqi-output-1.png" id="plot-aqi" width="829" height="523"> ::: :::</td>
-</tr>
-<tr class="odd">
-<td>## Dataframe Shape</td>
-</tr>
-<tr class="even">
-<td>The DataFrame contains 147039 rows and 44 columns.</td>
-</tr>
-<tr class="odd">
-<td># Exploring Oregon State:</td>
-</tr>
-<tr class="even">
-<td>By filtering our Dataframe for Oregon state, our DataFrame contains 2922 rows.</td>
-</tr>
-<tr class="odd">
-<td># Features Engineering ## We convert our date column to datetime object</td>
-</tr>
-<tr class="even">
-<td>## Validating Data Range</td>
-</tr>
-<tr class="odd">
-<td>The data range is from Timestamp(‘2015-01-01 00:00:00’) to Timestamp(‘2022-12-31 00:00:00’).</td>
-</tr>
-<tr class="even">
-<td>## Verifying Data Types</td>
-</tr>
-<tr class="odd">
-<td>::: {#date-info .cell execution_count=9}</td>
-</tr>
-<tr class="even">
-<td>::: {.cell-output .cell-output-stdout} ``` &lt;class ‘pandas.core.series.Series’&gt; Index: 2922 entries, 33 to 146989 Series name: date Non-Null Count Dtype</td>
-</tr>
-</tbody>
-</table>
-<p>2922 non-null datetime64[ns] dtypes: datetime64<a href="1">ns</a> memory usage: 45.7 KB None</p>
-<pre><code>:::
-:::
-
-
-The date column is a proper pandas.core.series.Series object.
-
-
-
-
-
-We have addressed Missing Values (NaN) through Imputation techniques using the mean() method.
-
-# Comprehensive Data Overview
-
-::: {#sweetvis-report .cell execution_count=12}
-
-::: {#sweetvis-report-1 .cell-output .cell-output-display}
-```{=html}
-&lt;script type="application/vnd.jupyter.widget-view+json"&gt;
-{"model_id":"4424dfd1ef82411f8248f812c1025a53","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
-&lt;/script&gt;</code></pre>
-<p>:::</p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>On October 30, 1948, the Donora High School Football team pushed through a dense smog to complete the game with hundreds of fans in the audience, despite very poor visibility. The team, backed by a sense of resilience, took pride in playing through poor conditions, a testament to the high spirit of the small town. Soon after, calls to the town’s medical offices began rushing in, complaining of difficulty breathing and respiratory issues. Donora, Pennsylvania, was a town of metalworks, built by the American Steel and Wire company and the Donora Zinc Works company, which made up the largest parts of the town’s economy. The heavy smog and pollution clouds that covered the sky were a sign of prosperity. Only twelve hours later, seventeen people would be dead, 1440 seriously affected, and 4470 with mild to moderate conditions, almost half the town’s working population (Jacobs, Burgess, Abbott). This event, the Donora Smog of 1948, would lead the country into taking a close look at the negative impacts of air pollution. Widespread debate surrounding the event would lead to the first legislation regarding the regulation of the air within the United States, ushering in a new era of tracking, combatting, and reversing ill effects of poor air quality.</p>
+<p>The quality of air we breathe has direct impacts on our health. We must understand the factors that contribute to poor air quality and how we personally and collectively contribute to the changes. Until we are able to visualize the impact we have on our atmosphere, we will continue behavior that negatively impacts the air around us.</p>
+<p>In this project, we will be focusing on the key factors contributing to Portland, Oregon’s air quality. We aim to shed light on the complex interplay between various environmental and human-made factors that contribute to high air pollution levels. Initially, we were surprised to learn that Portland, the city we reside in, has some of the best air quality for a city of its size within the United States. This ultimately led us to narrow our focus on the factors that impact and lead to these outcomes within this city.</p>
+<p>This project aims to develop and validate machine learning models for use in analysis of the various factors that influence air quality. By focusing on Portland in comparison to other large US cities, we hope to find things Portland does that lead to the greater AQI outcomes. Our approach will consider a range of variables, including meteorological conditions, pollution sources, and transit systems. Through this analysis, we aim to provide actionable insights and recommendations for sustaining and enhancing air quality. By examining both the contributors to clean air and the potential causes of pollution, we can understand air quality factors more accurately and develop comprehensive strategies for improvement.</p>
+</section>
+<section id="background" class="level1">
+<h1>Background</h1>
+<p>Federal regulation of air quality in the United States began in 1955 with the Air Pollution Control Act. This new piece of legislation provided the funds for initial research in air quality and pollution in the US. Using this and privately funded research, congress passed the Clean Air Act of 1963, putting into law the first federal regulation regarding control of air pollution. This established a new federal program within the US Public Health Service, dedicated to the monitoring and control of air quality. In 1967, congress passed the Air Quality Act, giving more federal oversight and enforcement policies. With this act, the government conducted extensive monitoring on interstate air pollution. This all led to the passing of the 1970 Clean Air Act, meant to restrict and regulate emissions, measure and reduce pollutant particles, and address upcoming pollution threats (Environmental Protection Agency).</p>
+<p>Also created in 1970, the Environmental Protection Agency (EPA) implemented and monitored the requirements established by these rulings. These would affect not just federal lands and roads, but all companies operating within the United States. Enforcement authority was expanded to allow upholding these established standards, and prevent companies from circumventing the law. Much of the turnaround in the quality of air in the US over the past fifty years can be attributed to these regulations. In 1990, when deaths due to air quality were first measured, an estimated 135,000 Americans died. By 2010 that number had dropped to 71,000 (Zhang et al.). Despite the significant decreases led by the federal guidelines of the late 70s, nearly four in ten Americans still live in places where they are exposed to unhealthy air (American Lung Association).</p>
+<p>The EPA developed the Air Quality Index (AQI) in 1999, creating an easily understood measurement for the quality of the air we breathe. The AQI measures the level of air pollution on a scale from 0 to 500. It is divided into six categories, with 0 to 50 representing good air quality which poses little or no risk to those breathing it in. On the other hand, a score above 300 signifies emergency conditions, an extremely high risk which impacts everyone. This measurement is mainly derived from five major pollutants: Ozone, Particle pollution (2.5μm and 10μm), Carbon Monoxide, Nitrogen Dioxide, and Sulphur Dioxide (Airnow.gov). Poor air quality has been linked to a variety of diseases including respiratory infections, stroke, heart disease, lung cancer, and chronic obstructive pulmonary disease among others (World Health Organization). An estimated seven million premature deaths annually can be attributed to air pollution, or a global mean loss of life expectancy of 2.9 years, quantifying it as the largest environmental risk factor for disease and premature death (Fuller, Landrigan, Balakrishnan, et. al.). Thus, it is important to understand factors that contribute to poor air quality, and outcomes that can be attributed to the state of the AQI.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="tools-deployed" class="level2">
+<h2 class="anchored" data-anchor-id="tools-deployed">Tools Deployed</h2>
+<p>Python will be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.</p>
+<p>To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.</p>
+<p>We will address data inconsistencies, missing values and ensure that data is in a tidy format.</p>
+<p>We may need to normalize or standardize data if necessary and create new features through aggregation to enhance the model’s performance.</p>
+</section>
+<section id="what-is-prophet" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-prophet">What is Prophet?</h2>
+<p>Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. We utilized prophet to gain a quick understanding of our AQI patterns, seeking to understand basic trends before conducting a more thorough analysis.</p>
+<p>Key features of Prophet include seasonality detection and holiday incorporation, while providing easy use and understanding for users. We can use this software to get complex understanding from simple applications.</p>
+<p>To conduct this analysis, we prepare data into a two column table, date and AQI. Prophet uses the trends of past data to highlight similarities over days of the year, weeks, months, and seasons. From this, prophet is able to generate its predictions, cross validate, and give performance metrics such as mean absolute percentage error to quantify the accuracy of the results.</p>
+</section>
+<section id="what-is-sarimax-algorithm" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-sarimax-algorithm">What is SARIMAX algorithm?​​​​​​​​​​​​​​​</h2>
+<p>The most common method used in time series forecasting is known as the ARIMA model. We will use an extended version called SARIMAX (<em>Seasonal Auto Regressive Integrated Moving Averages with exogenous factor</em>)</p>
+<ul>
+<li>The SARIMAX model is used when the data sets have seasonal cycles.</li>
+<li>In the dataset concerning the air quality/AQI there is a seasonal pattern which we have explained in the above section.</li>
+<li>SARIMAX is a model that can be fitted to time series data in order to better understand or predict future points in the time series</li>
+<li>SARIMAX is particularly useful for forecasting time series data that exhibits both trends and seasonality.</li>
+</ul>
+<p>Here’s a breakdown of its components:</p>
+<p>There are three distinct integers (p,d,q) that are used to parametrize SARIMAX models. Because of that, ARIMA models are denoted with the notation SARIMAX(p,d,q).</p>
+<p>Together these three parameters account for seasonality, trend, and noise in datasets:</p>
+<ol type="1">
+<li><em>Seasonality (S)</em>: Accounts for recurring patterns or cycles in the data.</li>
+<li><em>AutoRegressive (AR)</em>: Uses past values to predict future values.</li>
+<li><em>Integrated (I)</em>: Applies differencing to make the time series stationary.</li>
+<li><em>Moving Average (MA)</em>: Uses past forecast errors in the prediction.</li>
+<li><em>eXogenous factors (X)</em>: Incorporates external variables that may influence the forecast.</li>
+</ol>
+<p>We are trying to find the right p, d, q hyperparameters to correctly forecast and predict the AQI values.</p>
+</section>
+</section>
+<section id="common-techniques-to-evaluate-the-performance-of-machine-model" class="level1">
+<h1>Common Techniques to Evaluate the Performance of Machine Model</h1>
+<section id="train-test-split" class="level2">
+<h2 class="anchored" data-anchor-id="train-test-split">1. Train-Test Split</h2>
+<ul>
+<li><strong>Description</strong>: Split the dataset into training and testing subsets.</li>
+<li><strong>Purpose</strong>: Assess the model’s performance on unseen data to detect overfitting and ensure generalizability.</li>
+</ul>
+</section>
+<section id="cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation">2. Cross-Validation</h2>
+<ul>
+<li><strong>Description</strong>: Divide the data into k subsets and train the model k times, each time using a different subset as the test set and the remaining as the training set.</li>
+<li><strong>Purpose</strong>: Provides a more robust estimate of model performance by averaging results over multiple splits.</li>
+</ul>
+</section>
+<section id="confusion-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="confusion-matrix">3. Confusion Matrix</h2>
+<ul>
+<li><strong>Description</strong>: A table used to describe the performance of a classification model by comparing predicted and actual values.</li>
+<li><strong>Metrics</strong>: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN).</li>
+</ul>
+</section>
+<section id="accuracy" class="level2">
+<h2 class="anchored" data-anchor-id="accuracy">4. Accuracy</h2>
+<ul>
+<li><strong>Description</strong>: The ratio of correctly predicted instances to the total instances.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}\)</span></li>
+</ul>
+</section>
+<section id="precision-recall-and-f1-score" class="level2">
+<h2 class="anchored" data-anchor-id="precision-recall-and-f1-score">5. Precision, Recall, and F1-Score</h2>
+<section id="precision" class="level3">
+<h3 class="anchored" data-anchor-id="precision">Precision</h3>
+<ul>
+<li><strong>Description</strong>: The ratio of correctly predicted positive observations to the total predicted positives.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Precision} = \frac{TP}{TP + FP}\)</span></li>
+</ul>
+</section>
+<section id="recall-sensitivity" class="level3">
+<h3 class="anchored" data-anchor-id="recall-sensitivity">Recall (Sensitivity)</h3>
+<ul>
+<li><strong>Description</strong>: The ratio of correctly predicted positive observations to all observations in the actual class.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{Recall} = \frac{TP}{TP + FN}\)</span></li>
+</ul>
+</section>
+<section id="f1-score" class="level3">
+<h3 class="anchored" data-anchor-id="f1-score">F1-Score</h3>
+<ul>
+<li><strong>Description</strong>: The harmonic mean of Precision and Recall.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></li>
+</ul>
+</section>
+</section>
+<section id="roc-curve-and-auc-area-under-the-curve" class="level2">
+<h2 class="anchored" data-anchor-id="roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve)</h2>
+<ul>
+<li><strong>ROC Curve</strong>: A graphical representation of the true positive rate vs.&nbsp;false positive rate at various threshold settings.</li>
+<li><strong>AUC</strong>: Measures the entire two-dimensional area underneath the ROC curve. Higher AUC indicates better model performance.</li>
+</ul>
+</section>
+<section id="mean-absolute-error-mae" class="level2">
+<h2 class="anchored" data-anchor-id="mean-absolute-error-mae">7. Mean Absolute Error (MAE)</h2>
+<ul>
+<li><strong>Description</strong>: The average of the absolute differences between predicted and actual values.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\)</span></li>
+</ul>
+</section>
+<section id="mean-squared-error-mse-and-root-mean-squared-error-rmse" class="level2">
+<h2 class="anchored" data-anchor-id="mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)</h2>
+<section id="mse" class="level3">
+<h3 class="anchored" data-anchor-id="mse">MSE</h3>
+<ul>
+<li><strong>Description</strong>: The average of the squared differences between predicted and actual values.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></li>
+</ul>
+</section>
+<section id="rmse" class="level3">
+<h3 class="anchored" data-anchor-id="rmse">RMSE</h3>
+<ul>
+<li><strong>Description</strong>: The square root of MSE.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}}\)</span></li>
+</ul>
+</section>
+</section>
+<section id="r-squared-coefficient-of-determination" class="level2">
+<h2 class="anchored" data-anchor-id="r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</h2>
+<ul>
+<li><strong>Description</strong>: The proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></li>
+</ul>
+</section>
+<section id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="level2">
+<h2 class="anchored" data-anchor-id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC)</h2>
+<section id="aic" class="level3">
+<h3 class="anchored" data-anchor-id="aic">AIC</h3>
+<ul>
+<li><strong>Description</strong>: Measures the relative quality of a statistical model for a given set of data.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{AIC} = 2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is the number of parameters and <span class="math inline">\(L\)</span> is the likelihood.</li>
+</ul>
+</section>
+<section id="bic" class="level3">
+<h3 class="anchored" data-anchor-id="bic">BIC</h3>
+<ul>
+<li><strong>Description</strong>: Similar to AIC but includes a penalty term for the number of parameters.</li>
+<li><strong>Formula</strong>: <span class="math inline">\(\text{BIC} = k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is the number of observations.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="machine-learning-aqi-time-series" class="level1">
+<h1>Machine Learning AQI Time Series</h1>
+<section id="how-can-we-use-akaike-information-criteria-aic" class="level2">
+<h2 class="anchored" data-anchor-id="how-can-we-use-akaike-information-criteria-aic">How can we use Akaike Information Criteria (AIC)?</h2>
+<p>Used to measure of a statistical model, it quantifies:</p>
+<ul>
+<li>The goodness of fit</li>
+<li>The simplicity of the model into a single statistic</li>
+<li>When comparing two models, the one with the lower AIC is generally “better”</li>
+</ul>
+<p>The Akaike Information Criterion (AIC) is a measure used to compare different statistical models. It helps in model selection by balancing the goodness of fit and the complexity of the model. Here’s how to interpret the AIC value:</p>
+<ul>
+<li><em>Lower AIC is Better</em>: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.</li>
+<li><em>Comparative Measure</em>: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.</li>
+<li><em>Penalty for Complexity</em>: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.</li>
+</ul>
+</section>
+</section>
+<section id="data" class="level1">
+<h1>Data</h1>
+<section id="data-explaination" class="level2">
+<h2 class="anchored" data-anchor-id="data-explaination">Data Explaination</h2>
+<p>The data for this project was initially scattered across multiple sources and required significant organization and compilation. The focus of this project is on the air quality in Portland, Oregon, so various data sources were aggregated and processed to compare a variety of air quality indicators.</p>
+</section>
+<section id="air-quality-data" class="level2">
+<h2 class="anchored" data-anchor-id="air-quality-data">Air Quality Data:</h2>
+<p>Air quality data, specifically AQI values, were obtained from the United States Environmental Protection Agency (EPA) pre-generated data files. The AQI values are calculated daily, based on a variety of factors including criteria gasses and measured pollutant concentrations, and measures how harmful breathing the air is. AQI is classified into one of six categories from ‘good’ to ‘hazardous’, each having long term health effects associated with it. The files were given daily on a county wide basis, separated into different files by year.</p>
+</section>
+<section id="meteorological-data" class="level2">
+<h2 class="anchored" data-anchor-id="meteorological-data">Meteorological Data:</h2>
+<p>Historical weather data was also sourced from the EPA database, measured by thousands of weather stations across the country. Measurements tracked include temperature, wind speed, air pressure, and humidity. Temperature is measured in degrees fahrenheit. Wind speed is measured in knots, which are defined as one nautical mile per hour (equivalent to approximately 1.15mph). Wind speed is important in air quality as winds can blow different pollutants around and move and spread wildfires. Pressure is measured in millibars, where 1013.25 millibars is the standard atmospheric pressure (Earth’s pressure at mean sea level). Finally, humidity is measured in percent relative humidity. This is the amount of water vapor in the air as a percentage of the maximum amount of water vapor possible at a given temperature. Humidity can make it more difficult to breathe and sweat, make the air feel hotter than it is, and prevent air pollutants from dispersing as easily. Indoors, high humidity can trap air, leading to the growth of mold and harmful bacteria. This data was given daily by city, separated into different files by year. Measurements were taken hourly, but pre-calculated in the source database, giving an average value over the twenty four hours and a maximum value.</p>
+</section>
+<section id="pollution-source-data" class="level2">
+<h2 class="anchored" data-anchor-id="pollution-source-data">Pollution Source Data:</h2>
+<p>Pollution data was again sourced from the EPA database, separated by criteria gasses (CO, NO2, O3, SO2), Toxins (lead), and particulate matter (PM2.5 and PM10). Criteria gas Carbon Monoxide is measured in parts per million, and is especially dangerous as it is both colorless and odorless. CO binds to hemoglobin in the blood, making the transportation of oxygen around the body more difficult. Nitrogen Dioxide is dangerous to breathe in at high levels. It can cause swelling in the throat, burning, reduced oxygenation of body tissues, and fluid build up in the lungs. It is released in many common combustion reactions including in cars, coal plants, and cigarettes. It is measured in parts per billion. Ozone can harm our ability to breathe, especially in older people, children, and people with asthma. It is measured in parts per million. Sulfur Dioxide, measured in parts per billion, can irritate the eyes, mucous membranes, skin, and respiratory tract. Lead is a toxin which can increase the risk of high blood pressure, cardiovascular problems, and complications during pregnancy. While exposure has gone down significantly in the recent decades after use in gasoline, it still remains a dangerous toxin to breathe in. It is measured in micrograms per cubic meter. PM2.5 and PM10 are particulate matter, small inhalable particles with diameters of 2.5 microns or smaller, and 10 microns or smaller respectively. PM2.5 includes all sorts of common particles, metals, and organic compounds. PM10 includes dust, pollen, molds, and other larger (but still very small) particles. Due to the variability of particles included in the PM classification, there are a wide range of negative health impacts that come from breathing in these particles. PM2.5 and PM10 are measured in micrograms per cubic meter.</p>
+<p>This data was given daily by city, separated into different files by year. They are sourced from thousands of individual sources, which measure various selections of these pollution sources. Because of the variety of different pollutants being measured, there was a significant amount of missing data, especially from small towns. Measurements were taken hourly, pre-compiled into a daily average and maximum.</p>
+</section>
+<section id="transit-data" class="level2">
+<h2 class="anchored" data-anchor-id="transit-data">Transit Data:</h2>
+<p>Information on motor buses taken from the National Transit Database, produced by the Federal Transit Administration. Includes information of bus systems and ridership by city, separated by year. Data is recorded yearly, encompassing annual totals for information such as number of buses, total revenue, passengers, and miles driven for the respective city transit systems. Information was given in yearly CSVs, separated by the city transit system. For cities with multiple systems, data was combined. Only motorbus data was used, which may not be reflective of cities with other large methods of public transportation, such as the New York subway system.</p>
+</section>
+<section id="population-data" class="level2">
+<h2 class="anchored" data-anchor-id="population-data">Population Data:</h2>
+<p>Data on population and population density sourced from the Simplemaps United States Cities database, which is built from multiple sources including the U.S. Geological Survey and the U.S. Census Bureau. Data is updated as of May 6, 2024, reflecting very up to date information.</p>
+</section>
+</section>
+<section id="data-processing" class="level1">
+<h1>Data Processing</h1>
+<p>The data was downloaded in R. For information given in yearly CSV files, data was stacked vertically to include all years in our time frame. In all tables, relevant columns were selected and renamed, reducing the information being brought into our initial SQL database. R was connected and imported to PostgreSQL using the RPostgres package, and used to read, stack, select columns, and rename columns before being written into a PostgreSQL database.</p>
+<section id="data-organization" class="level2">
+<h2 class="anchored" data-anchor-id="data-organization">Data Organization</h2>
+<p>Given the raw data available, the table structure was simplified compared to the original data sources. Data was organized in a star schema centered on the air_quality fact table. This table tracks AQI, pollutant, weather and toxin data daily for each location. The first dimension table is the dates table, a serialized list of dates from January 1st, 2015 to December 31st, 2022. Next, we have a locations dimension table, a serialized list of over 1400 cities and towns from around the country. These are labeled by the state, county, and city name, as well as the population and population density, allowing connection to information based on what is given. The aqi_category dimension table is a short list of AQI value categories (Good, Unhealthy, Hazardous, etc.) with their respective AQI value range as minimum and maximum values.</p>
+<p>Finally, the yearly_transit dimension table gives the information for the transit system of the respective city during the specified year attached in the fact table. This table seems counterproductive to not include the location or year of the specified line or even a reference id, but in keeping with star schema, it was decided that this was the best way to reference this information. Understanding the context of a specified line requires joining the table back to the fact table, and joining the location and date tables to that as well.</p>
+<p>Each table has a unique serialized primary key, and all dimension tables are connected via foreign key. Several additional indexes are included on columns that will be queried often. Finally, constraints have been added to limit unusual or impossible data.</p>
+<p>Tracking these identifiers independently allows for accurate analysis of changes over time and across different areas, and allows adding new information should we need to update the database. (Figure 1) illustrates the resulting ERD structure using drawSQL.</p>
+<p>Figure 1.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/aqi_erd_final.png?raw=true" class="img-fluid figure-img"></p>
+<figcaption>ERD Diagram</figcaption>
+</figure>
+</div>
+</section>
+<section id="initial-exploratory-data-analysis-eda" class="level2">
+<h2 class="anchored" data-anchor-id="initial-exploratory-data-analysis-eda">Initial Exploratory Data Analysis (EDA)</h2>
+<p>We have a new dataset named metro_1mil.csv. This file was created using a SQL statement that joins all relevant tables, filtering for metropolitan areas with populations less than or equal to 1 million. This approach limits our EDA to mid-sized metropolitan cities, such as Portland, Oregon.</p>
+</section>
+<section id="visualization-aqi-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-aqi-distribution">Visualization AQI Distribution</h2>
+<div id="cell-plot-aqi" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="capstone_files/figure-html/plot-aqi-output-1.png" id="plot-aqi" width="829" height="523" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="dataframe-shape" class="level2">
+<h2 class="anchored" data-anchor-id="dataframe-shape">Dataframe Shape</h2>
+<p>The DataFrame contains 147039 rows and 44 columns.</p>
+</section>
+</section>
+<section id="exploring-oregon-state" class="level1">
+<h1>Exploring Oregon State:</h1>
+<p>By filtering our Dataframe for Oregon state, our DataFrame contains 2922 rows.</p>
+</section>
+<section id="features-engineering" class="level1">
+<h1>Features Engineering</h1>
+<section id="we-convert-our-date-column-to-datetime-object" class="level2">
+<h2 class="anchored" data-anchor-id="we-convert-our-date-column-to-datetime-object">We convert our date column to datetime object</h2>
+</section>
+<section id="validating-data-range" class="level2">
+<h2 class="anchored" data-anchor-id="validating-data-range">Validating Data Range</h2>
+<p>The data range is from Timestamp(‘2015-01-01 00:00:00’) to Timestamp(‘2022-12-31 00:00:00’).</p>
+<p>We have removed columns not required for the analysis.</p>
+<p>We have addressed Missing Values (NaN) through Imputation techniques using the mean() method.</p>
+</section>
+</section>
+<section id="sweetviz-data-report" class="level1">
+<h1>Sweetviz Data Report</h1>
+<div id="sweetvis-report" class="cell" data-execution_count="10">
+<div id="sweetvis-report-1" class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"a7a662e83b7544d48f0b7ca4e08f6ccd","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
 <div id="sweetvis-report-2" class="cell-output cell-output-display">
  <iframe width="100%" height="750" srcdoc="<!doctype html>
 <html lang=&quot;en&quot;>
@@ -19427,11 +19664,12 @@ button
 </body>
 </html>" frameborder="0" allowfullscreen=""></iframe>
 </div>
-<p>:::</p>
-<p>We have generated a complete statistical summary with Sweetviz Python package.</p>
+</div>
+<p>We have generated a complete statistical report confirming the quality of EDA steps.</p>
+</section>
 <section id="advanced-exploratory-data-analysis" class="level1">
 <h1>Advanced Exploratory Data Analysis</h1>
-<p>We’re employed the ydata-profiling package, a powerful Time Series Analysis EDA package that offers more detailed analysis than Sweetviz.</p>
+<p>We have also employed the ydata-profiling package, a powerful Time Series Analysis EDA package that offers more detailed analysis.</p>
 <p>We have unlocked time series-specific features using ydata-profiling: - Set tsmode=True when creating the ProfileReport - Ensure our DataFrame is sorted or specify the sortby parameter - Time Series Feature Identification</p>
 <p>The ydata identifies time-dependent features using autocorrelation analysis.<br>
 For recognized time series features: - Histograms are replaced with line plots - Feature details include new autocorrelation and partial autocorrelation plots - Two additional warnings may appear: <code>NON STATIONARY</code> and <code>SEASONAL</code></p>
@@ -19465,7 +19703,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 <li>Slightly less dense than air</li>
 <li>Highly flammable</li>
 </ul>
-<div id="ts-wind-co-aqi" class="cell" data-execution_count="17">
+<div id="ts-wind-co-aqi" class="cell" data-execution_count="15">
 <div id="ts-wind-co-aqi-1" class="cell-output cell-output-display">
 <pre><code>&lt;Figure size 1000x1800 with 0 Axes&gt;</code></pre>
 </div>
@@ -19492,7 +19730,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 <li>Colorless to pale blue gas with a distinctive smell</li>
 <li>Highly reactive molecule composed of three oxygen atoms</li>
 </ul>
-<div id="ts-so2-no2-ozone" class="cell" data-execution_count="18">
+<div id="ts-so2-no2-ozone" class="cell" data-execution_count="16">
 <div id="ts-so2-no2-ozone-1" class="cell-output cell-output-display">
 <pre><code>&lt;Figure size 1500x2000 with 0 Axes&gt;</code></pre>
 </div>
@@ -19504,7 +19742,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 </div>
 </div>
 </div>
-<p>EDA is completed.</p>
+<p>The EDA is completed.</p>
 </section>
 <section id="jakes-conclusion" class="level1">
 <h1>Jake’s conclusion</h1>
@@ -19586,7 +19824,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 </main>
 <!-- /main column -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"011277ab4d6f4b1fb1a2387351206cd1":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"172d26f0cc8b43408bb74308a14ead82":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"4424dfd1ef82411f8248f812c1025a53":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_9c9ccdcc16de48fc921a90c77f7f1790","IPY_MODEL_97fd0321aff44579a5da03675791f200","IPY_MODEL_e5e9f32d2d6d4df09b57a7ef57c30a36"],"layout":"IPY_MODEL_c01e6ea9f3f84248bb4d458c5eb293a8","tabbable":null,"tooltip":null}},"457827688d0f426fbefc2d59da4f9851":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"4de0d43e8ae54294a1fef5a7bdd79c2f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"97fd0321aff44579a5da03675791f200":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_457827688d0f426fbefc2d59da4f9851","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_cfdcf95775fb484a82f7d2cdaaf63625","tabbable":null,"tooltip":null,"value":1}},"9c9ccdcc16de48fc921a90c77f7f1790":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_011277ab4d6f4b1fb1a2387351206cd1","placeholder":"​","style":"IPY_MODEL_a8b515d56c4e4e70990884eaa3b9155c","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"a8b515d56c4e4e70990884eaa3b9155c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"c01e6ea9f3f84248bb4d458c5eb293a8":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"cfdcf95775fb484a82f7d2cdaaf63625":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"e5e9f32d2d6d4df09b57a7ef57c30a36":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_4de0d43e8ae54294a1fef5a7bdd79c2f","placeholder":"​","style":"IPY_MODEL_172d26f0cc8b43408bb74308a14ead82","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}}},"version_major":2,"version_minor":0}
+{"state":{"05670ad95caa45a69d9c9b2e50bbe019":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_dc536dc5403d4f2fafaaab1dbaf274e1","placeholder":"​","style":"IPY_MODEL_6701833377e44df392a06635e17405a5","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"1d1988a5221144ecb506e366b67fc29f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"22790b1280114656b15c476422e8c940":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_1d1988a5221144ecb506e366b67fc29f","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_4530a591599346268e208a5a0626e795","tabbable":null,"tooltip":null,"value":1}},"4530a591599346268e208a5a0626e795":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"4cf4aa57d68f4944b518862b9fc2451c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"6701833377e44df392a06635e17405a5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"6a63086ac9494eaa8e77646c7031d552":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"81c39d89ec0b4e0986fd8eba9b119492":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"a7a662e83b7544d48f0b7ca4e08f6ccd":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_05670ad95caa45a69d9c9b2e50bbe019","IPY_MODEL_22790b1280114656b15c476422e8c940","IPY_MODEL_e2c25310aa0044079413f27a75efdc79"],"layout":"IPY_MODEL_81c39d89ec0b4e0986fd8eba9b119492","tabbable":null,"tooltip":null}},"dc536dc5403d4f2fafaaab1dbaf274e1":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"e2c25310aa0044079413f27a75efdc79":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_6a63086ac9494eaa8e77646c7031d552","placeholder":"​","style":"IPY_MODEL_4cf4aa57d68f4944b518862b9fc2451c","tabbable":null,"tooltip":null,"value":" [100%]   00:02 -&gt; (00:00 left)"}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
