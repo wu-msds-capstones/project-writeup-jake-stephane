@@ -4,6 +4,11 @@ subtitle: "Analysis of Portland Air Quality (AQI)"
 date: "2024-07-30"
 format:
   html:
+    code-fold: true
+    code-tools:
+      source: repo
+      toggle: true
+      caption: none
     smooth-scroll: true
     toc: true
     toc-title: Contents
@@ -14,16 +19,18 @@ format:
     code-links:
       - text: Sweetviz Analysis Report
         icon: file-code
-        href: data-import.py
+        href: SWEETVIZ_REPORT.html
     html-math-method: mathjax
     css: styles.css
 execute:
   echo: false
+  warning: false
 jupyter: python3
 ---
 {{< include _01_intro.qmd >}}
 {{< include _02_background.qmd >}}
 {{< include _03_methods.qmd >}}
 {{< include _04_data.qmd >}}
+{{< include _05b_results_Machine_Learning.qmd >}}
 {{< include _06_conclusions.qmd >}}
 {{< include _07_bibliography.qmd >}}
