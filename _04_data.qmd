@@ -62,6 +62,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Qualit
 ```
 
 ## Visualization AQI Distribution
+Let's plot the AQI data distribution
 ```{python}
 #| label: plot-aqi
 plt.figure(figsize=(10, 6))
@@ -393,4 +394,4 @@ plt.subplots_adjust(top=0.9)
 g.fig.suptitle('Mean SO2, NO2, and Ozone Resampled by Year, Month, and Day')
 plt.show()
 ```
-The EDA is completed.
+We finally completed the exploratory data analysis.

@@ -1,5 +1,33 @@
-#  ML Time Series with SARIMAX
-## Decomposing the Time Series Additive Method
+---
+format:
+  html:
+    code-fold: true
+    code-tools:
+      source: repo
+      #toggle: true
+      caption: "Python"
+    smooth-scroll: true
+    toc: true
+    toc-title: Contents
+    number-sections: false
+    html-math-method: mathjax
+    #css: styles.css
+execute:
+  echo: false
+  warning: false
+jupyter: python3
+---
+# ML Time Series with SARIMAX Model
+
+```{python}
+#| label: import-lib
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import pandas as pd
+```
+
 ```{python}
 #| label: read-data2
 import pandas as pd
@@ -8,28 +36,28 @@ df = pd.read_pickle('/data/df.pkl')
 
 ```{python}
 #| label: define-df_aqi
+sns.set_theme(style="darkgrid")
 df_aqi = df[['date','aqi']]
 df_aqi = df_aqi.set_index('date')
 
 df_aqi = df_aqi.resample('ME').mean()
 df_aqi.ffill(inplace=True)
-df_aqi.plot(figsize=(15, 6))
+#df_aqi.plot(figsize=(15,8))
 ```
 
+# Decomposing the Time Series Additive Method
 ```{python}
 #| label: additive-decomp
-from matplotlib import pyplot as plt
-import statsmodels.api as sm
+sns.set_theme(style="darkgrid")
 decomposition = sm.tsa.seasonal_decompose(df_aqi, model='additive')
 fig = decomposition.plot()
 plt.show()
 ```
 
-## Decomposing the Time Series Multiplicative Method
+# Decomposing the Time Series Multiplicative Method
 ```{python}
 #| label: multiplicative-decomp
-from matplotlib import pyplot as plt
-import statsmodels.api as sm
+sns.set_theme(style="darkgrid")
 decomposition = sm.tsa.seasonal_decompose(df_aqi, model='multiplicative')
 fig = decomposition.plot()
 plt.show()
@@ -38,7 +66,6 @@ plt.show()
 ## Time Series Prediction
 ```{python}
 #| label: grid-search
-import statsmodels.api as sm
 import itertools
 
 # Define the p, d, q parameters to take any value between 0 and 2
@@ -64,7 +91,7 @@ for param in pdq:
             continue
 ```
 
-
+# Let's print the summary of SARIMAX
 ```{python}
 #| label: mod-fit
 mod = sm.tsa.statespace.SARIMAX(df_aqi,order=(1, 1, 1),seasonal_order=(0,1, 1, 12),enforce_stationarity=False,enforce_invertibility=False)
@@ -72,27 +99,26 @@ results = mod.fit()
 print(results.summary().tables[1])
 ```
 
+# How Fit the SARIMAX model
+## Print the summary which includes AIC
 ```{python}
 #| label: fit-summary-AIC
-import statsmodels.api as sm
-
-# Fit the SARIMAX model
 mod = sm.tsa.statespace.SARIMAX(df_aqi, order=(1, 1, 1), seasonal_order=(0, 1, 1, 12), enforce_stationarity=False, enforce_invertibility=False)
 results = mod.fit()
-
-# Print the summary which includes AIC
 print(results.summary())
-
-# Extract AIC value
-aic_value = results.aic
-print(f"AIC: {aic_value}")
-
-# Additional performance metrics can be calculated as needed
 ```
 
 ```{python}
+#| label: Extract-AIC-value
+aic_value = results.aic
+print(f"The AIC value is: {aic_value}")
+# Additional performance metrics can be calculated as needed
+```
+
+# Plot Diagnostics
+```{python}
 #| label: plot-diag
-results.plot_diagnostics(figsize=(15, 12))
+results.plot_diagnostics(figsize=(12, 10))
 ```
 
 # Train and Test
@@ -100,24 +126,25 @@ Rigorous validation is paramount to establishing the model's reliability and pra
 
 By partitioning the dataset, we can:
 
-    Evaluate performance: Measure the model's accuracy on unseen data.
-    Detect overfitting: Identify discrepancies between training and testing performance.
-    Assess generalization: Determine the model's ability to handle new data.
-    Quantify reliability: Calculate confidence intervals for prediction accuracy.
-    Iteratively improve: Use insights to refine the model.
+- Evaluate performance: Measure the model's accuracy on unseen data.
+- Detect overfitting: Identify discrepancies between training and testing performance.
+- Assess generalization: Determine the model's ability to handle new data.
+- Quantify reliability: Calculate confidence intervals for prediction accuracy.
+- Iteratively improve: Use insights to refine the model.
 
 This rigorous process underpins the credibility and utility of our research findings.
 
-To split the data, we follow the recommended 70:30 ratio, 70% of the data is the training data, and 30% of the data is the testing data.
+To split the data, we follow the recommended `70:30` ratio, 70% of the data is the training data, and 30% of the data is the testing data.
+
 ```{python}
 #| label: check-min-date
 # Check the minimum date in the 'date' column
-print(f"Start date of the data:", df_aqi.index.min())
+#print(f"Start date of the data:", df_aqi.index.min())
 ```
 
 ```{python}
 #| label: check-max-date
-print(f"End date of the data:", df_aqi.index.max())
+#print(f"End date of the data:", df_aqi.index.max())
 ```
 
 Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input
@@ -152,6 +179,7 @@ y_truth = df_aqi['2022-12-31 00:00:00':]
 To evaluate model performance, we calculate the MSE
 ```{python}
 #| label: calculate-mse
+import numpy as np
 from sklearn.metrics import mean_squared_error
 mse = np.sqrt(mean_squared_error(y_truth, y_forecasted))   
 print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
