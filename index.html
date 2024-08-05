@@ -142,11 +142,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#import-the-data" id="toc-import-the-data" class="nav-link" data-scroll-target="#import-the-data">Import the Data</a></li>
   </ul></li>
-  <li><a href="#jakes-conclusion" id="toc-jakes-conclusion" class="nav-link" data-scroll-target="#jakes-conclusion">Jake’s conclusion</a></li>
-  <li><a href="#stephanes-conclusion" id="toc-stephanes-conclusion" class="nav-link" data-scroll-target="#stephanes-conclusion">Stephane’s conclusion</a>
-  <ul class="collapse">
-  <li><a href="#insights-and-limitations-of-air-quality-forecasting" id="toc-insights-and-limitations-of-air-quality-forecasting" class="nav-link" data-scroll-target="#insights-and-limitations-of-air-quality-forecasting">Insights and Limitations of Air Quality Forecasting</a></li>
-  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">Bibliography</a></li>
   </ul>
 <div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://www.airnow.gov"><i class="bi bi-link-45deg"></i>Airnow Open Data</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="SWEETVIZ_REPORT.html"><i class="bi bi-file-code"></i>Sweetviz Analysis Report</a></li></ul></div></nav>
@@ -181,16 +177,18 @@ window.Quarto = {
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>On October 30, 1948, the Donora High School Football team pushed through a dense smog to complete the game with hundreds of fans in the audience, despite very poor visibility. The team, backed by a sense of resilience, took pride in playing through poor conditions, a testament to the high spirit of the small town. Soon after, calls to the town’s medical offices began rushing in, complaining of difficulty breathing and respiratory issues. Donora, Pennsylvania, was a town of metalworks, built by the American Steel and Wire company and the Donora Zinc Works company, which made up the largest parts of the town’s economy. The heavy smog and pollution clouds that covered the sky were a sign of prosperity. Only twelve hours later, seventeen people would be dead, 1440 seriously affected, and 4470 with mild to moderate conditions, almost half the town’s working population (Jacobs, Burgess, Abbott). This event, the Donora Smog of 1948, would lead the country into taking a close look at the negative impacts of air pollution. Widespread debate surrounding the event would lead to the first legislation regarding the regulation of the air within the United States, ushering in a new era of tracking, combatting, and reversing ill effects of poor air quality.</p>
-<p>The quality of air we breathe has direct impacts on our health. We must understand the factors that contribute to poor air quality and how we personally and collectively contribute to the changes. Until we are able to visualize the impact we have on our atmosphere, we will continue behavior that negatively impacts the air around us.</p>
-<p>In this project, we will be focusing on the key factors contributing to Portland, Oregon’s air quality. We aim to shed light on the complex interplay between various environmental and human-made factors that contribute to high air pollution levels. Initially, we were surprised to learn that Portland, the city we reside in, has some of the best air quality for a city of its size within the United States. This ultimately led us to narrow our focus on the factors that impact and lead to these outcomes within this city.</p>
-<p>This project aims to develop and validate machine learning models for use in analysis of the various factors that influence air quality. By focusing on Portland in comparison to other large US cities, we hope to find things Portland does that lead to the greater AQI outcomes. Our approach will consider a range of variables, including meteorological conditions, pollution sources, and transit systems. Through this analysis, we aim to provide actionable insights and recommendations for sustaining and enhancing air quality. By examining both the contributors to clean air and the potential causes of pollution, we can understand air quality factors more accurately and develop comprehensive strategies for improvement.</p>
+<p>On October 30, 1948, the Donora High School Football team played through a dense smog to complete the game with hundreds of fans in the audience, despite very poor visibility. The team, fueled by resilience, took pride in playing through poor conditions, a testament to the high spirit of the small town. Soon after, calls to the town’s medical offices began flooding in, complaining of difficulty breathing and respiratory issues. Donora, Pennsylvania, was a town of metalworks, built by the American Steel and Wire company and the Donora Zinc Works company, which made up major parts of the town’s economy. The heavy smog and pollution clouds that covered the sky had been viewed as a sign of prosperity, owing to the industrial might that powered their economy. Within just twelve hours, seventeen people would be dead, 1440 seriously affected, and 4470 with mild to moderate conditions—almost half the town’s working population (Jacobs, Burgess, Abbott).</p>
+<p>This event, known as the Donora Smog of 1948, prompted the country into taking a closer look at the negative impacts of air pollution. Widespread debate surrounding the event led to the first legislation aimed at regulating the air quality within the United States, ushering in a new era of tracking, combatting, and reversing the ill effects of poor air quality.</p>
+<p>The quality of air we breathe has direct impacts on our health. We must understand the factors that contribute to poor air quality and how we individually and collectively contribute to these changes. Until we can visualize the impact we have on our atmosphere, we will continue behavior that negatively impacts the air around us.</p>
+<p>In this project, we will focus on the key factors influencing air quality in Portland, Oregon. We aim to understand the complex interplay between various environmental and human-made factors that contribute to high air pollution levels. Initially, we were surprised to discover that Portland, the city we reside in, has some of the best air quality for a city of its size in the United States. This led us to narrow our focus to understanding the factors that contribute to these favorable outcomes in this city.</p>
+<p>Our project aims to develop and validate machine learning models to analyze the various factors influencing air quality. By focusing on Portland in comparison to other large US cities, we hope to find things Portland does that lead to the greater AQI outcomes. Our approach will consider a range of variables, including meteorological conditions, pollution sources, and transit systems. Through this analysis, we aim to provide actionable insights and recommendations for sustaining and improving air quality. By examining both the contributors to clean air and the sources of pollution, we can understand the factors affecting air quality and develop comprehensive strategies for enhancement.</p>
 </section>
 <section id="background" class="level1">
 <h1>Background</h1>
-<p>Federal regulation of air quality in the United States began in 1955 with the Air Pollution Control Act. This new piece of legislation provided the funds for initial research in air quality and pollution in the US. Using this and privately funded research, congress passed the Clean Air Act of 1963, putting into law the first federal regulation regarding control of air pollution. This established a new federal program within the US Public Health Service, dedicated to the monitoring and control of air quality. In 1967, congress passed the Air Quality Act, giving more federal oversight and enforcement policies. With this act, the government conducted extensive monitoring on interstate air pollution. This all led to the passing of the 1970 Clean Air Act, meant to restrict and regulate emissions, measure and reduce pollutant particles, and address upcoming pollution threats (Environmental Protection Agency).</p>
-<p>Also created in 1970, the Environmental Protection Agency (EPA) implemented and monitored the requirements established by these rulings. These would affect not just federal lands and roads, but all companies operating within the United States. Enforcement authority was expanded to allow upholding these established standards, and prevent companies from circumventing the law. Much of the turnaround in the quality of air in the US over the past fifty years can be attributed to these regulations. In 1990, when deaths due to air quality were first measured, an estimated 135,000 Americans died. By 2010 that number had dropped to 71,000 (Zhang et al.). Despite the significant decreases led by the federal guidelines of the late 70s, nearly four in ten Americans still live in places where they are exposed to unhealthy air (American Lung Association).</p>
-<p>The EPA developed the Air Quality Index (AQI) in 1999, creating an easily understood measurement for the quality of the air we breathe. The AQI measures the level of air pollution on a scale from 0 to 500. It is divided into six categories, with 0 to 50 representing good air quality which poses little or no risk to those breathing it in. On the other hand, a score above 300 signifies emergency conditions, an extremely high risk which impacts everyone. This measurement is mainly derived from five major pollutants: Ozone, Particle pollution (2.5μm and 10μm), Carbon Monoxide, Nitrogen Dioxide, and Sulphur Dioxide (Airnow.gov). Poor air quality has been linked to a variety of diseases including respiratory infections, stroke, heart disease, lung cancer, and chronic obstructive pulmonary disease among others (World Health Organization). An estimated seven million premature deaths annually can be attributed to air pollution, or a global mean loss of life expectancy of 2.9 years, quantifying it as the largest environmental risk factor for disease and premature death (Fuller, Landrigan, Balakrishnan, et. al.). Thus, it is important to understand factors that contribute to poor air quality, and outcomes that can be attributed to the state of the AQI.</p>
+<p>Federal regulation of air quality in the United States began in 1955 with the Air Pollution Control Act. This new piece of legislation provided funding for initial research into air quality and pollution in the US. Building off this and privately funded research, Congress passed the Clean Air Act of 1963, establishing the first federal regulation for controlling air pollution. This act established a new federal program within the US Public Health Service, dedicated to the monitoring and control of air quality. In 1967, Congress passed the Air Quality Act, which introduced more federal oversight and enforcement policies, allowing extensive monitoring of interstate air pollution. This all led to the passage of the 1970 Clean Air Act, aimed at restricting and regulating emissions, measuring and reducing pollutant particles, and addressing upcoming pollution threats (Environmental Protection Agency).</p>
+<p>Also established in 1970, the Environmental Protection Agency (EPA) implemented and monitored the requirements established by these rulings. The EPA’s authority extended beyond federal lands and roads to include all companies operating within the United States. Enforcement authority was expanded to allow upholding these established standards, and prevent companies from circumventing the law. Much of the improvement in the quality of air in the US over the past fifty years can be attributed to these regulations. In 1990, when deaths due to air quality were first measured, an estimated 135,000 Americans died. By 2010, that number had dropped to 71,000 (Zhang et al.). Despite the significant improvements led by the federal guidelines of the late 70s, nearly four in ten Americans still live in places where they are exposed to unhealthy air (American Lung Association).</p>
+<p>In 1999, the EPA developed the Air Quality Index (AQI), creating an easily understood measurement of air quality. The AQI measures air pollution levels on a scale from 0 to 500, divided into six categories. A score of 0 to 50 represents good air quality which poses little or no risk to those breathing it in, while a score above 300 signifies emergency conditions, an extremely high risk which impacts everyone. This measurement is mainly derived from five major pollutants: ozone, particulate matter (2.5μm and 10μm), carbon monoxide, nitrogen dioxide, and sulfur dioxide (Airnow.gov). Poor air quality has been linked to a variety of diseases including respiratory infections, stroke, heart disease, lung cancer, and chronic obstructive pulmonary disease, among others (World Health Organization). An estimated seven million premature deaths annually can be attributed to air pollution, which equates to a global mean loss of life expectancy of 2.9 years, making it the largest environmental risk factor for disease and premature death (Fuller, Landrigan, Balakrishnan, et. al.). Thus, it is important to understand factors that contribute to poor air quality, and outcomes that can be attributed to the state of the AQI.</p>
+<p>These harmful factors can originate from a variety of sources. Anything that releases a foreign substance into the air can lower the quality of the air. This includes smoking, vehicle exhaust, combustion processes for production and manufacturing, household cleaning products, appliances, central air and heating systems, agriculture pesticides, livestock, shipping and transportation, and much more. Individually, we can reduce our individual contributions by lowering our reliance on personal vehicles, watching our power usage, supporting companies that monitor and address their emissions, and more. However, there are many factors beyond our control. Larger pollutant sources, such as manufacturing and transportation, are often regulated to some extent but may still release significant amounts of pollutants into the atmosphere which we as individuals have no say over (Manisalidis, Stavropoulou, Stavropoulos, Bezirtzoglou). It is challenging to restrict and watch our personal contributions to the polluting of the environment without worrying about what others are doing. Measuring and analyzing the impact these pollutants have on air quality is a crucial step towards addressing these issues.</p>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
@@ -405,6 +403,7 @@ window.Quarto = {
 </section>
 <section id="visualization-aqi-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="visualization-aqi-distribution">Visualization AQI Distribution</h2>
+<p>Let’s plot the AQI data distribution</p>
 <div id="cell-plot-aqi" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
@@ -465,7 +464,7 @@ window.Quarto = {
 <div id="cell-sweetvis-report" class="cell" data-execution_count="9">
 <div id="sweetvis-report" class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"1ea2d6fefd8d4a8384e540bf2bad2602","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"fdcc90420a164305971dc29a58c764fa","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -548,7 +547,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 </div>
 </div>
 </div>
-<p>The EDA is completed.</p>
+<p>We finally completed the exploratory data analysis.</p>
 </section>
 <section id="machine-learning-using-sklearn" class="level1">
 <h1>Machine Learning using SKlearn</h1>
@@ -1624,8 +1623,8 @@ Accuracy:  0.4518236254763201
 
 
 Model:  Tree
-Cohen Kappa Score:  0.3955237031807135
-Accuracy:  0.5253130103429504
+Cohen Kappa Score:  0.38414321515154604
+Accuracy:  0.517691888949374
 
 
 Model:  Random Forest
@@ -1648,8 +1647,8 @@ Accuracy:  0.04899292324442025
 <p>Running a basic Random Forest model gives us the following cohen kappa score and accuracy. This will serve as the baseline to be compared to.</p>
 <div id="cell-def-best-model" class="cell" data-execution_count="39">
 <div class="cell-output cell-output-stdout">
-<pre><code>cohen kappa score:  0.4714175417699352
-accuracy:  0.5944474686989657</code></pre>
+<pre><code>cohen kappa score:  0.4763274559330172
+accuracy:  0.5982580293957539</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -2180,7 +2179,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <div id="def-parameters" class="cell theorem definition" data-execution_count="42">
 <p><span class="theorem-title"><strong>Definition 2</strong></span> &nbsp;</p>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.6295825771324864</code></pre>
+<pre><code>0.6208711433756806</code></pre>
 </div>
 </div>
 <p>We can see which hyperparameters are selected.</p>
@@ -2190,8 +2189,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
  'steps': [('aqi_transformer',
    ColumnTransformer(transformers=[('categories',
                                     OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                  max_categories=27,
-                                                  min_frequency=14,
+                                                  max_categories=12,
+                                                  min_frequency=6,
                                                   sparse_output=False),
                                     ['city']),
                                    ('scaled_air_quality', StandardScaler(),
@@ -2199,46 +2198,44 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
                                      'pm100', 'pm25'])],
                      verbose_feature_names_out=False)),
   ('RF_model',
-   RandomForestClassifier(bootstrap=False, max_depth=23, max_features='log2',
-                          min_samples_leaf=4, min_samples_split=7,
-                          n_estimators=121))],
+   RandomForestClassifier(bootstrap=False, max_depth=19, min_samples_leaf=4,
+                          min_samples_split=8, n_estimators=99))],
  'verbose': False,
  'aqi_transformer': ColumnTransformer(transformers=[('categories',
                                   OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                max_categories=27,
-                                                min_frequency=14,
+                                                max_categories=12,
+                                                min_frequency=6,
                                                 sparse_output=False),
                                   ['city']),
                                  ('scaled_air_quality', StandardScaler(),
                                   ['temp', 'humidity', 'co', 'no2', 'o3',
                                    'pm100', 'pm25'])],
                    verbose_feature_names_out=False),
- 'RF_model': RandomForestClassifier(bootstrap=False, max_depth=23, max_features='log2',
-                        min_samples_leaf=4, min_samples_split=7,
-                        n_estimators=121),
+ 'RF_model': RandomForestClassifier(bootstrap=False, max_depth=19, min_samples_leaf=4,
+                        min_samples_split=8, n_estimators=99),
  'aqi_transformer__n_jobs': None,
  'aqi_transformer__remainder': 'drop',
  'aqi_transformer__sparse_threshold': 0.3,
  'aqi_transformer__transformer_weights': None,
  'aqi_transformer__transformers': [('categories',
-   OneHotEncoder(handle_unknown='infrequent_if_exist', max_categories=27,
-                 min_frequency=14, sparse_output=False),
+   OneHotEncoder(handle_unknown='infrequent_if_exist', max_categories=12,
+                 min_frequency=6, sparse_output=False),
    ['city']),
   ('scaled_air_quality',
    StandardScaler(),
    ['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25'])],
  'aqi_transformer__verbose': False,
  'aqi_transformer__verbose_feature_names_out': False,
- 'aqi_transformer__categories': OneHotEncoder(handle_unknown='infrequent_if_exist', max_categories=27,
-               min_frequency=14, sparse_output=False),
+ 'aqi_transformer__categories': OneHotEncoder(handle_unknown='infrequent_if_exist', max_categories=12,
+               min_frequency=6, sparse_output=False),
  'aqi_transformer__scaled_air_quality': StandardScaler(),
  'aqi_transformer__categories__categories': 'auto',
  'aqi_transformer__categories__drop': None,
  'aqi_transformer__categories__dtype': numpy.float64,
  'aqi_transformer__categories__feature_name_combiner': 'concat',
  'aqi_transformer__categories__handle_unknown': 'infrequent_if_exist',
- 'aqi_transformer__categories__max_categories': 27,
- 'aqi_transformer__categories__min_frequency': 14,
+ 'aqi_transformer__categories__max_categories': 12,
+ 'aqi_transformer__categories__min_frequency': 6,
  'aqi_transformer__categories__sparse_output': False,
  'aqi_transformer__scaled_air_quality__copy': True,
  'aqi_transformer__scaled_air_quality__with_mean': True,
@@ -2247,16 +2244,16 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
  'RF_model__ccp_alpha': 0.0,
  'RF_model__class_weight': None,
  'RF_model__criterion': 'gini',
- 'RF_model__max_depth': 23,
- 'RF_model__max_features': 'log2',
+ 'RF_model__max_depth': 19,
+ 'RF_model__max_features': 'sqrt',
  'RF_model__max_leaf_nodes': None,
  'RF_model__max_samples': None,
  'RF_model__min_impurity_decrease': 0.0,
  'RF_model__min_samples_leaf': 4,
- 'RF_model__min_samples_split': 7,
+ 'RF_model__min_samples_split': 8,
  'RF_model__min_weight_fraction_leaf': 0.0,
  'RF_model__monotonic_cst': None,
- 'RF_model__n_estimators': 121,
+ 'RF_model__n_estimators': 99,
  'RF_model__n_jobs': None,
  'RF_model__oob_score': False,
  'RF_model__random_state': None,
@@ -2267,8 +2264,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
 <div id="cell-predict-X_test" class="cell" data-execution_count="44">
 <div class="cell-output cell-output-stdout">
-<pre><code>cohen kappa score:  0.5098336683270704
-accuracy:  0.6260206859009254</code></pre>
+<pre><code>cohen kappa score:  0.49871815842740097
+accuracy:  0.6167664670658682</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -2281,23 +2278,10 @@ accuracy:  0.6260206859009254</code></pre>
 <p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>
 </section>
 </section>
-<section id="jakes-conclusion" class="level1">
-<h1>Jake’s conclusion</h1>
-<p>After conducting our thorough research, we have landed on these specific recommendations. First, we found there are high seasonal trends where late summer/early fall tends to have the worst air quality. These numbers consistently show up each year, exasperated by the dry heat and lack of rainfall. As climate change raises temperatures and water sources dry up, wildfire season will continue to get worse over time. We must be aware of the nature of air quality and how it differs at different parts of the year. We should understand how the AQI works, and avoid being outside for too long when it reaches more dangerous levels.</p>
-<p>Next, we should focus on the variables that have the greatest impact on the AQI. These are city, temperature, humidity, CO, NO2, O3, PM10, and PM2.5. City, temperature, and humidity for the most part are out of our control. That leaves us with three criteria gasses and all particulate matter. The largest source of carbon monoxide, nitrogen dioxide, and ozone is the cars, trucks, and other vehicles we use daily (Environmental Protection Agency). We can lower our reliance on personal vehicles by utilizing public transportation, carpooling, walking, biking, increasing work from home to lower commutes when available, and overall be more considerate about if driving a car is necessary. We often drive unnecessarily, out of convenience or impatience. For many Americans, personal vehicles are required. Many urban and suburban areas lack proper public transportation, or existing public transportation systems are inadequate, unreliable, and infrequent. Many towns and cities in the United States were designed for cars instead of for people. Fixing this will require a substantial overhaul, necessitating millions or billions of dollars in spending. This is not to say that we shouldn’t bother, any investment that increases the public transportation system’s usage decreases the amount of cars on the road. A small step to start is better than not changing anything.</p>
-<p>Industrial manufacturing processes, transport, and agriculture are significant polluters of the environment. We should decrease our reliance on these by purchasing more locally made products, lowering transportation distances. We should invest in the research of more environmentally friendly manufacturing methods, working with materials that require less combustion, or are recyclable. Agricultural reduction starts with less of a reliance on red meat and the dairy industry, mainstays of the American diet. This will be a huge shift, taking combined efforts of the citizens, government, and food industry. As red meat and dairy consumption goes down, possibly due to the replacement with artificial or lab grown meat, less livestock will need to be kept, and less feeding crops will need to be grown (Congressional Budget Office). It will be a difficult transition but a necessary one.</p>
-<p>Wildfires not only increase the particle matter in the air, but burn forests, causing long term damage to the soil. Particulate matter in the air makes it more difficult to breathe, which is reflected by the increased AQI levels. Not all forest fires are started by man made sources, but many are. Therefore, when in the woods, one should always obey fire restrictions, especially in the middle of the summer when it’s most dry. If fires are allowed, they should always be watched and never left unattended. They must always be properly extinguished and all embers must be cool to the touch before leaving. Campsites should be properly cleaned, and all tools used correctly. One should also stay on marked trails, avoiding trampling vegetation which can increase the risk of wildfire spreading (Oregon Wildfire Response and Recovery).</p>
-<p>Ultimately, we have a responsibility to take care of our planet and combat climate change. The worse climate conditions get, the more wildfires will spread, and the worse the air quality will become. As time goes on, with worsening air conditions, more people will catch and even die from preventable conditions sparked by poor air quality. Water, pollution, food, and financial problems will get worse. One should look at what they can do to make a difference, support those who vouch to make larger changes, and encourage people they know to do the same. It can get much worse, but it can also get much better.</p>
-</section>
-<section id="stephanes-conclusion" class="level1">
-<h1>Stephane’s conclusion</h1>
-<section id="insights-and-limitations-of-air-quality-forecasting" class="level2">
-<h2 class="anchored" data-anchor-id="insights-and-limitations-of-air-quality-forecasting">Insights and Limitations of Air Quality Forecasting</h2>
-<p>Our capstone project has provided valuable experience in long-term air quality forecasting. However, it’s crucial to acknowledge several key factors that influence the accuracy and reliability of these predictions:</p>
-<ol type="1">
-<li><p><strong>Impact of Uncontrollable Environmental Factors</strong></p>
-<ul>
-<li>Air quality is significantly affected by various natural and unpredictable elements, including:
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>After conducting our thorough research, we have landed on these specific recommendations. We found there are high seasonal trends where late summer/early fall tends to have the worst air quality. These numbers consistently show up each year, exasperated by the dry heat and lack of rainfall. As climate change raises temperatures and water sources dry up, wildfire season will continue to get worse over time. We must be aware of the nature of air quality and how it differs at different parts of the year. We should understand how the AQI works, and avoid being outside for too long when it reaches more dangerous levels.</p>
+<p>Air quality is significantly affected by various natural and unpredictable elements, including:</p>
 <ul>
 <li>Weather conditions</li>
 <li>Wind speed and direction</li>
@@ -2305,34 +2289,28 @@ accuracy:  0.6260206859009254</code></pre>
 <li>Humidity levels</li>
 <li>Atmospheric pressure</li>
 <li>Solar radiation intensity</li>
-</ul></li>
 </ul>
-<p>Our analysis revealed correlations between these variables, as illustrated in the following correlation matrix:</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/Correlation%20Matrix.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption>Correlation Matrix</figcaption>
-</figure>
-</div>
-<p>Despite these complexities, our forecasts can provide a general trend of air quality fluctuations.</p></li>
-<li><p><strong>Algorithm Dependence</strong></p>
-<ul>
-<li>The reliability of forecasts is inherently tied to the chosen predictive algorithms.</li>
-<li>Different models may yield varying results, emphasizing the importance of algorithm selection and validation.</li>
-</ul></li>
-<li><p><strong>Geographical Considerations</strong></p>
-<ul>
-<li>Our data analysis couldn’t fully quantify the unique geographical features of Portland and the broader Willamette Valley region:
+<p>With multiple factors we have no control over, it is important to do what we can for those factors we can impact.</p>
+<p>We must focus on the variables that have the greatest impact on the AQI. These are city, temperature, humidity, CO, NO2, O3, PM10, and PM2.5. City, temperature, and humidity for the most part are out of our control. That leaves us with three criteria gasses and all particulate matter. The largest source of carbon monoxide, nitrogen dioxide, and ozone is the cars, trucks, and other vehicles we use daily (Environmental Protection Agency). We can lower our reliance on personal vehicles by utilizing public transportation, carpooling, walking, biking, increasing work from home to lower commutes when available, and overall be more considerate about if driving a car is necessary. We often drive unnecessarily, out of convenience or impatience.</p>
+<p>For many Americans, personal vehicles are required. Many urban and suburban areas lack proper public transportation, or existing public transportation systems are inadequate, unreliable, and infrequent. Many towns and cities in the United States were designed for cars instead of for people. Fixing this will require a substantial overhaul, necessitating millions or billions of dollars in spending. This is not to say that we shouldn’t bother—any investment that increases the public transportation system’s usage decreases the amount of cars on the road. A small change is the first step in addressing the personal vehicle issue.</p>
+<p>Industrial manufacturing processes and agriculture are significant polluters of the environment. We should invest in the research of more environmentally friendly manufacturing methods, working with materials that require less combustion, or are recyclable. Agricultural reduction starts with less of a reliance on red meat and the dairy industry, mainstays of the American diet. This will be a huge shift, taking combined efforts of the citizens, government, and food industry. As red meat and dairy consumption goes down, possibly due to the replacement with artificial or lab grown meat, less livestock will need to be kept, and less feeding crops will need to be grown (Congressional Budget Office). It will be a difficult transition but a necessary one.</p>
+<p>Wildfires not only increase the particle matter in the air, but burn forests, causing long term damage to the soil. Particulate matter in the air makes it more difficult to breathe, which is reflected by the increased AQI levels. Not all forest fires are started by man made sources, but many are. Therefore, when in the woods, one should always obey fire restrictions, especially in the middle of the summer when it’s most dry. If fires are allowed, they should always be watched and never left unattended. They must always be properly extinguished and all embers must be cool to the touch before leaving. Campsites should be properly cleaned, and all tools used correctly. One should also stay on marked trails, avoiding trampling vegetation which can increase the risk of wildfire spreading (Oregon Wildfire Response and Recovery).</p>
+<p>One of the largest limitations is Algorithm Dependence. This is the reliability of forecasts which are inherently tied to the chosen predictive algorithms. Different models may yield varying results, emphasizing the importance of algorithm selection and validation.</p>
+<p>We must also be wary of geographical considerations. Our data analysis couldn’t fully quantify the unique geographical features of Portland and the broader Willamette Valley region. In further analysis we should seek to understand:</p>
 <ul>
 <li>The protective influence of surrounding mountain ranges</li>
 <li>The impact on wind patterns and air circulation</li>
 <li>The potential effects of wildfires on air quality</li>
-</ul></li>
 </ul>
-<p>These geographical factors play a significant role in local air quality dynamics but were beyond the scope of our current data set. <img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirNow-Map.png?raw=true" class="img-fluid" alt="AirNow Map"></p></li>
-</ol>
+<p>These geographical factors play a significant role in local air quality dynamics but were beyond the scope of our current data set. The impact of the geological features can be seen in the image below (figure 1414)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirNow-Map.png?raw=true" class="img-fluid figure-img"></p>
+<figcaption>AirNow Map</figcaption>
+</figure>
+</div>
 <p>By recognizing these limitations, we can better interpret and apply our forecasting results, while also identifying areas for future research and data collection to enhance prediction accuracy.</p>
-</section>
+<p>Ultimately, we have a responsibility to take care of our planet and combat climate change. The worse climate conditions get, the more wildfires will spread, and the worse the air quality will become. As time goes on, with worsening air conditions, more people will catch and even die from preventable conditions sparked by poor air quality. Water, pollution, food, and financial problems will get worse. One should look at what they can do to make a difference, support those who vouch to make larger changes, and encourage people they know to do the same. While the situation may seem dire, there is hope for progress through concerted and informed efforts.</p>
 </section>
 <section id="bibliography" class="level1">
 <h1>Bibliography</h1>
@@ -2361,7 +2339,7 @@ accuracy:  0.6260206859009254</code></pre>
 </main>
 <!-- /main column -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"1ea2d6fefd8d4a8384e540bf2bad2602":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_784ac8472d78424999a8136ba8c8862f","IPY_MODEL_3f5009de7ca54efca11f347537eb2df6","IPY_MODEL_76854c87ab784da1a6eb599039e07c10"],"layout":"IPY_MODEL_b9496305d8f84b9cbf6c7b89faedd770","tabbable":null,"tooltip":null}},"3f5009de7ca54efca11f347537eb2df6":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_be4f150ebe7d45d18768bda0c0958620","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_4c81e6301293424f87095535784c9463","tabbable":null,"tooltip":null,"value":1}},"4c81e6301293424f87095535784c9463":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"5bb658f2243a42a39a12244c43042886":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"6ae03dcddcde4230bb20d95a11d21465":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"76854c87ab784da1a6eb599039e07c10":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_5bb658f2243a42a39a12244c43042886","placeholder":"​","style":"IPY_MODEL_6ae03dcddcde4230bb20d95a11d21465","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"784ac8472d78424999a8136ba8c8862f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_b04e0273498b400eabb387793f68e2cc","placeholder":"​","style":"IPY_MODEL_b453effb09da410e91b7724dca756e52","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"b04e0273498b400eabb387793f68e2cc":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"b453effb09da410e91b7724dca756e52":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"b9496305d8f84b9cbf6c7b89faedd770":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"be4f150ebe7d45d18768bda0c0958620":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
+{"state":{"053f7f3ffc474471bf5fc95acac311f0":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"23a9199e05394469827987e1e5ee2c35":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"3d606d543041412bae6eba0fc0ee35a4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"55c741bb64db4e4e838150aced002609":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_b9ffa18d6fa94b06a65c31d1e34a876c","placeholder":"​","style":"IPY_MODEL_c6a898e112b241998bb50cc92e9879ae","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"629426e524c548f7b38a72b1790145c4":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_23a9199e05394469827987e1e5ee2c35","placeholder":"​","style":"IPY_MODEL_053f7f3ffc474471bf5fc95acac311f0","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"b9ffa18d6fa94b06a65c31d1e34a876c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"bd7274ae092345a0af2b5b2d7371bde2":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"c163e01cc77c405d93c85da3e6497c27":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_3d606d543041412bae6eba0fc0ee35a4","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_c5b8619a61e146d793f9947b574feb60","tabbable":null,"tooltip":null,"value":1}},"c5b8619a61e146d793f9947b574feb60":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"c6a898e112b241998bb50cc92e9879ae":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"fdcc90420a164305971dc29a58c764fa":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_55c741bb64db4e4e838150aced002609","IPY_MODEL_c163e01cc77c405d93c85da3e6497c27","IPY_MODEL_629426e524c548f7b38a72b1790145c4"],"layout":"IPY_MODEL_bd7274ae092345a0af2b5b2d7371bde2","tabbable":null,"tooltip":null}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
