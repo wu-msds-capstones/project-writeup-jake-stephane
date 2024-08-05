@@ -2,6 +2,9 @@
 title-block-banner: true
 title: "Unveiling the Drivers of Clean Air"
 subtitle: "Analysis of Portland Air Quality (AQI)"
+author:
+  - name: Stéphane Berhault
+  - name: Jake Warmflasch
 date: "2024-07-30"
 format:
   html:

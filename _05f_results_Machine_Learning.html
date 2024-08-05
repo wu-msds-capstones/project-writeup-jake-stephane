@@ -249,8 +249,8 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>Tree</td>
-<td>0.390234</td>
-<td>0.520958</td>
+<td>0.386391</td>
+<td>0.517692</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
@@ -310,7 +310,7 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>RF_model__max_depth</td>
-<td>29</td>
+<td>18</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
@@ -320,27 +320,27 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>RF_model__min_samples_leaf</td>
-<td>2</td>
+<td>4</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>RF_model__min_samples_split</td>
-<td>7</td>
+<td>4</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>RF_model__n_estimators</td>
-<td>184</td>
+<td>82</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
 <td>aqi_transformer__categories__max_categories</td>
-<td>19</td>
+<td>20</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
 <td>aqi_transformer__categories__min_frequency</td>
-<td>6</td>
+<td>14</td>
 </tr>
 </tbody>
 </table>
@@ -349,18 +349,17 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
-<div id="cell-predict-X_test" class="cell" data-execution_count="28">
+<div id="predict-x_test" class="cell" data-execution_count="28">
 <div class="cell-output cell-output-stdout">
-<pre><code>Cohen Kappa Score:  0.5403224714794634
-Accuracy:  0.6477953184540011</code></pre>
+<pre><code>Cohen Kappa Score:  0.5273951712416474
+Accuracy:  0.6390854654327708</code></pre>
 </div>
-<div class="cell-output cell-output-display">
-<div>
+</div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="_05f_results_Machine_Learning_files/figure-html/predict-x_test-output-2.png" id="predict-x_test" width="551" height="475" class="figure-img"></p>
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true" class="img-fluid figure-img"></p>
+<figcaption>AirQuality Confusion Matrix</figcaption>
 </figure>
-</div>
-</div>
 </div>
 <p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>
 </section>
