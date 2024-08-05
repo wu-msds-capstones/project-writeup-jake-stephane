@@ -40,7 +40,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -145,9 +144,18 @@ window.Quarto = {
   <li><a href="#advanced-exploratory-data-analysis" id="toc-advanced-exploratory-data-analysis" class="nav-link" data-scroll-target="#advanced-exploratory-data-analysis">Advanced Exploratory Data Analysis</a></li>
   <li><a href="#time-series-visualization-for-co-pollutant-wind-and-aqi" id="toc-time-series-visualization-for-co-pollutant-wind-and-aqi" class="nav-link" data-scroll-target="#time-series-visualization-for-co-pollutant-wind-and-aqi">Time Series Visualization for CO Pollutant, Wind and AQI</a></li>
   <li><a href="#time-series-visualization-for-so2-no2-and-ozone" id="toc-time-series-visualization-for-so2-no2-and-ozone" class="nav-link" data-scroll-target="#time-series-visualization-for-so2-no2-and-ozone">Time Series Visualization for SO2, NO2 and Ozone</a></li>
-  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
+  <li><a href="#prophet-aqi-trend-forecasting-and-hypothesis-testing" id="toc-prophet-aqi-trend-forecasting-and-hypothesis-testing" class="nav-link" data-scroll-target="#prophet-aqi-trend-forecasting-and-hypothesis-testing">Prophet AQI Trend Forecasting and Hypothesis Testing</a></li>
+  <li><a href="#prophet-data-forecasting" id="toc-prophet-data-forecasting" class="nav-link" data-scroll-target="#prophet-data-forecasting">Prophet Data Forecasting</a>
   <ul class="collapse">
-  <li><a href="#sci-kit-learn-machine-learning" id="toc-sci-kit-learn-machine-learning" class="nav-link" data-scroll-target="#sci-kit-learn-machine-learning">Sci-Kit Learn Machine Learning</a></li>
+  <li><a href="#data-forecasting" id="toc-data-forecasting" class="nav-link" data-scroll-target="#data-forecasting">Data Forecasting</a></li>
+  <li><a href="#wildfires" id="toc-wildfires" class="nav-link" data-scroll-target="#wildfires">2020 Wildfires</a></li>
+  <li><a href="#aqi-trends" id="toc-aqi-trends" class="nav-link" data-scroll-target="#aqi-trends">AQI Trends</a></li>
+  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">Cross Validation</a></li>
+  <li><a href="#portlands-transit-system" id="toc-portlands-transit-system" class="nav-link" data-scroll-target="#portlands-transit-system">Portland’s Transit System</a></li>
+  </ul></li>
+  <li><a href="#machine-learning-using-sklearn" id="toc-machine-learning-using-sklearn" class="nav-link" data-scroll-target="#machine-learning-using-sklearn">Machine Learning using SKlearn</a>
+  <ul class="collapse">
+  <li><a href="#import-the-data" id="toc-import-the-data" class="nav-link" data-scroll-target="#import-the-data">Import the Data</a></li>
   </ul></li>
   <li><a href="#ml-time-series-with-sarimax-model" id="toc-ml-time-series-with-sarimax-model" class="nav-link" data-scroll-target="#ml-time-series-with-sarimax-model">ML Time Series with SARIMAX Model</a></li>
   <li><a href="#decomposing-the-time-series-with-additive-method" id="toc-decomposing-the-time-series-with-additive-method" class="nav-link" data-scroll-target="#decomposing-the-time-series-with-additive-method">Decomposing the Time Series With Additive Method</a>
@@ -395,35 +403,75 @@ window.Quarto = {
 <figcaption>ERD Diagram</figcaption>
 </figure>
 </div>
+<pre class="{python}"><code>#| label: import-package
+from sqlalchemy import create_engine, text
+import dotenv
+import datetime
+import time
+import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import pandas as pd
+import missingno as msno
+from summarytools import dfSummary
+import sweetviz as sv
+from ydata_profiling import ProfileReport</code></pre>
 </section>
 <section id="initial-exploratory-data-analysis-eda" class="level2">
 <h2 class="anchored" data-anchor-id="initial-exploratory-data-analysis-eda">Initial Exploratory Data Analysis (EDA)</h2>
 <p>We have a new dataset named metro_1mil.csv. This file was created using a SQL statement that joins all relevant tables, filtering for metropolitan areas with populations less than or equal to 1 million. This approach limits our EDA to mid-sized metropolitan cities, such as Portland, Oregon.</p>
+<pre class="{python}"><code>#| label: read-data
+df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')</code></pre>
 </section>
 <section id="visualization-aqi-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="visualization-aqi-distribution">Visualization AQI Distribution</h2>
 <p>Let’s plot the AQI data distribution</p>
-<div id="cell-plot-aqi" class="cell" data-execution_count="3">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/plot-aqi-output-1.png" id="plot-aqi" width="829" height="523" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<pre class="{python}"><code>#| label: plot-aqi
+plt.figure(figsize=(10, 6))
+sns.histplot(df['aqi'], kde=True)
+
+plt.title('Distribution of Air Quality Index')
+plt.xlabel('AQI')
+plt.show()</code></pre>
 </section>
 <section id="dataframe-shape" class="level2">
 <h2 class="anchored" data-anchor-id="dataframe-shape">Dataframe Shape</h2>
-<p>The DataFrame contains 147039 rows and 44 columns.</p>
+<pre class="{python}"><code>#| label: describe-shape
+num_rows, num_columns = df.shape</code></pre>
+<p>The DataFrame contains <code>{python} num_rows</code> rows and <code>{python} num_columns</code> columns.</p>
 </section>
 </section>
 <section id="exploring-oregon-state" class="level1">
 <h1>Exploring Oregon State:</h1>
-<p>By filtering our Dataframe for Oregon state, our DataFrame contains 2922 rows.</p>
+<pre class="{python}"><code>#| label: filter-df
+df = df[df['state'] == 'Oregon']
+num_rows_oregon = df.shape[0]</code></pre>
+<p>By filtering our Dataframe for Oregon state, our DataFrame contains <code>{python} num_rows_oregon</code> rows.</p>
 </section>
 <section id="features-engineering" class="level1">
 <h1>Features Engineering</h1>
+<pre class="{python}"><code>#| label: convert-dt
+df['date'] = pd.to_datetime(df['date'])</code></pre>
+<pre class="{python}"><code>#| label: df-drop-col
+df = df.drop(['aqi_range', 'st_abbv'], axis=1)
+df = df.drop(['mean_lead_micrograms_per_cubic_meter', 'max_lead_micrograms_per_cubic_meter'], axis=1)
+df = df.drop(['mean_pm100_micrograms_per_cubic_meter', 'max_pm100_micrograms_per_cubic_meter'], axis=1)
+df = df.drop(['mean_pm25_micrograms_per_cubic_meter', 'max_pm25_micrograms_per_cubic_meter'], axis=1)</code></pre>
+<pre class="{python}"><code>#| label: df-ampute
+columns_to_impute = [
+    'mean_temperature_fahrenheit', 'max_temperature_fahrenheit',
+    'mean_pressure_millibars', 'max_pressure_millibars',
+    'mean_humidity_percent_relative_humidity', 'max_humidity_percent_relative_humidity',
+    'mean_wind_knots', 'max_wind_knots',
+    'mean_co_ppm', 'max_co_ppm',
+    'mean_no2_ppb', 'max_no2_ppb',
+    'mean_ozone_ppm', 'max_ozone_ppm',
+    'mean_so2_ppb', 'max_so2_ppb'
+]
+
+means = {col: df[col].mean() for col in columns_to_impute}
+df = df.assign(**{col: df[col].fillna(means[col]) for col in columns_to_impute})</code></pre>
 <p>Date Column Preprocessing:</p>
 <ul>
 <li>Converted the date column to DateTime objects for easier manipulation and analysis.</li>
@@ -460,16 +508,9 @@ window.Quarto = {
 </section>
 <section id="sweetviz-data-report" class="level1">
 <h1>Sweetviz Data Report</h1>
-<div id="cell-sweetvis-report" class="cell" data-execution_count="9">
-<div id="sweetvis-report" class="cell-output cell-output-display">
-<script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"5a08de3d89ec410d81cf4989e3287a29","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
-</script>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Report SWEETVIZ_REPORT.html was generated! NOTEBOOK/COLAB USERS: the web browser MAY not pop up, regardless, the report IS saved in your notebook/colab files.</code></pre>
-</div>
-</div>
+<pre class="{python}"><code>#| label: sweetvis-report
+my_report = sv.analyze(df)
+my_report.show_html()</code></pre>
 <p>We have generated a complete statistical report confirming the quality of EDA steps.</p>
 </section>
 <section id="advanced-exploratory-data-analysis" class="level1">
@@ -483,6 +524,27 @@ For recognized time series features: - Histograms are replaced with line plots -
 <li>Each pollutants represents a distinct time series</li>
 <li>For optimal analysis, we filter and profile each pollutant separately</li>
 </ul>
+<pre class="{python}"><code>#| label: ydata-report
+#for group in df.groupby("category_id"):
+#    # Running 1 profile per station
+#    profile = ProfileReport(
+#        group[1],
+#        minimal=True,
+#        sortby="date",
+#        # title=f"Air Quality profiling - Site Num: {group[0]}"
+#    )
+
+ #   profile.to_file(f"Ts_Profile_{group[0]}.html")</code></pre>
+<pre class="{python}"><code>#| label: ydata-render
+#profile = ProfileReport(
+#    group[1],
+#    tsmode=True,
+#    sortby="date",
+#    # title=f"Air Quality profiling - Site Num: {group[0]}"
+#)
+#profile.to_file("your_report2.html")</code></pre>
+<pre class="{python}"><code>#| label: quarto-cross-ref pickle
+#df.to_pickle('/data/df.pkl')</code></pre>
 <p>Our exploratory data analysis (EDA) process consisted of two complementary approaches:</p>
 <ul>
 <li><p><em>Manual Investigation</em>: We conducted an in-depth, hands-on examination of the dataset.</p></li>
@@ -498,6 +560,9 @@ For recognized time series features: - Histograms are replaced with line plots -
 <li>Potential time-series characteristics</li>
 </ul>
 <p>This multi-faceted approach ensures a robust understanding of our dataset’s structure, quality, and potential challenges before proceeding with further analysis.</p>
+<pre class="{python}"><code>#| label: df-aqi
+df_aqi = df[['date', 'aqi']]
+df_aqi = df_aqi.set_index('date')</code></pre>
 </section>
 <section id="time-series-visualization-for-co-pollutant-wind-and-aqi" class="level1">
 <h1>Time Series Visualization for CO Pollutant, Wind and AQI</h1>
@@ -507,18 +572,66 @@ For recognized time series features: - Histograms are replaced with line plots -
 <li>Slightly less dense than air</li>
 <li>Highly flammable</li>
 </ul>
-<div id="ts-wind-co-aqi" class="cell" data-execution_count="14">
-<div id="ts-wind-co-aqi-1" class="cell-output cell-output-display">
-<pre><code>&lt;Figure size 1000x1800 with 0 Axes&gt;</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/ts-wind-co-aqi-output-2.png" id="ts-wind-co-aqi-2" width="3689" height="1179" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<pre class="{python}"><code>#| label: ts-wind-co-aqi
+sns.set_theme(style="darkgrid")
+
+# Prepare wind data
+df_wind = df[['date', 'mean_wind_knots', 'max_wind_knots']]
+df_wind = df_wind.set_index('date')
+
+df_wind_year = df_wind.resample('YE').mean().assign(Resample='Year')
+df_wind_month = df_wind.resample('ME').mean().assign(Resample='Month')
+df_wind_day = df_wind.resample('D').mean().assign(Resample='Day')
+
+df_wind_combined = pd.concat([df_wind_year, df_wind_month, df_wind_day])
+df_wind_combined.ffill(inplace=True)
+df_wind_combined.reset_index(inplace=True)
+
+# Prepare CO data
+df_co = df[['date', 'mean_co_ppm', 'max_co_ppm']]
+df_co = df_co.set_index('date')
+
+df_co_year = df_co.resample('YE').mean().assign(Resample='Year')
+df_co_month = df_co.resample('ME').mean().assign(Resample='Month')
+df_co_day = df_co.resample('D').mean().assign(Resample='Day')
+
+df_co_combined = pd.concat([df_co_year, df_co_month, df_co_day])
+df_co_combined.ffill(inplace=True)
+df_co_combined.reset_index(inplace=True)
+
+# Prepare AQI data
+df_aqi = df[['date','aqi']]
+df_aqi = df_aqi.set_index('date')
+
+df_aqi_year = df_aqi.resample('YE').mean().assign(Resample='Year')
+df_aqi_month = df_aqi.resample('ME').mean().assign(Resample='Month')
+df_aqi_day = df_aqi.resample('D').mean().assign(Resample='Day')
+
+df_aqi_combined = pd.concat([df_aqi_year, df_aqi_month, df_aqi_day])
+df_aqi_combined.ffill(inplace=True)
+df_aqi_combined.reset_index(inplace=True)
+
+# Merge the three DataFrames
+df_combined = pd.merge(df_wind_combined, df_co_combined, on=['date', 'Resample'], suffixes=('_wind', '_co'))
+df_combined = pd.merge(df_combined, df_aqi_combined, on=['date', 'Resample'])
+
+# Melt the DataFrame for FacetGrid
+df_melted = df_combined.melt(id_vars=['date', 'Resample'], value_vars=['mean_wind_knots', 'mean_co_ppm', 'aqi'], 
+                             var_name='Variable', value_name='Value')
+
+# Set the figure size
+plt.figure(figsize=(10, 18))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_melted, row='Resample', col='Variable', hue='Resample', sharex=True, sharey=False, height=4, aspect=3)
+g.map(sns.lineplot, 'date', 'Value')
+
+# Adjust the plot
+g.add_legend()
+g.set_axis_labels('Date', 'Value')
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('Mean Wind Knots, CO PPM, and AQI Resampled by Year, Month, and Day')
+plt.show()</code></pre>
 </section>
 <section id="time-series-visualization-for-so2-no2-and-ozone" class="level1">
 <h1>Time Series Visualization for SO2, NO2 and Ozone</h1>
@@ -534,323 +647,667 @@ For recognized time series features: - Histograms are replaced with line plots -
 <li>Colorless to pale blue gas with a distinctive smell</li>
 <li>Highly reactive molecule composed of three oxygen atoms</li>
 </ul>
-<div id="ts-so2-no2-ozone" class="cell" data-execution_count="15">
-<div id="ts-so2-no2-ozone-1" class="cell-output cell-output-display">
-<pre><code>&lt;Figure size 1500x2000 with 0 Axes&gt;</code></pre>
-</div>
+<pre class="{python}"><code>#| label: ts-so2-no2-ozone
+#| warning: false
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.set_theme(style="darkgrid")
+
+# Filter and resample SO2 data
+df_so2 = df[['date', 'mean_so2_ppb', 'max_so2_ppb']]
+df_so2 = df_so2.set_index('date')
+
+df_so2_year = df_so2.resample('YE').mean().assign(Resample='Year')
+df_so2_month = df_so2.resample('ME').mean().assign(Resample='Month')
+df_so2_day = df_so2.resample('D').mean().assign(Resample='Day')
+
+df_so2_combined = pd.concat([df_so2_year, df_so2_month, df_so2_day])
+df_so2_combined.ffill(inplace=True)
+df_so2_combined.reset_index(inplace=True)
+
+# Filter and resample NO2 data
+df_no2 = df[['date', 'mean_no2_ppb', 'max_no2_ppb']]
+df_no2 = df_no2.set_index('date')
+
+df_no2_year = df_no2.resample('YE').mean().assign(Resample='Year')
+df_no2_month = df_no2.resample('ME').mean().assign(Resample='Month')
+df_no2_day = df_no2.resample('D').mean().assign(Resample='Day')
+
+df_no2_combined = pd.concat([df_no2_year, df_no2_month, df_no2_day])
+df_no2_combined.ffill(inplace=True)
+df_no2_combined.reset_index(inplace=True)
+
+# Filter and resample ozone data
+df_ozone = df[['date', 'mean_ozone_ppm', 'max_ozone_ppm']]
+df_ozone = df_ozone.set_index('date')
+
+df_ozone_year = df_ozone.resample('YE').mean().assign(Resample='Year')
+df_ozone_month = df_ozone.resample('ME').mean().assign(Resample='Month')
+df_ozone_day = df_ozone.resample('D').mean().assign(Resample='Day')
+
+df_ozone_combined = pd.concat([df_ozone_year, df_ozone_month, df_ozone_day])
+df_ozone_combined.ffill(inplace=True)
+df_ozone_combined.reset_index(inplace=True)
+
+# Merge the three DataFrames
+df_combined = pd.merge(df_so2_combined, df_no2_combined, on=['date', 'Resample'], suffixes=('_so2', '_no2'))
+df_combined = pd.merge(df_combined, df_ozone_combined, on=['date', 'Resample'])
+
+# Melt the DataFrame for FacetGrid
+df_melted = df_combined.melt(id_vars=['date', 'Resample'], 
+                             value_vars=['mean_so2_ppb', 'mean_no2_ppb', 'mean_ozone_ppm'], 
+                             var_name='Variable', value_name='Value')
+
+# Set the figure size
+plt.figure(figsize=(15, 20))
+
+# Plot using seaborn
+g = sns.FacetGrid(df_melted, row='Resample', col='Variable', hue='Resample',sharex=True, sharey=False, height=6, aspect=2)
+g.map(sns.lineplot, 'date', 'Value')
+
+# Adjust the plot
+g.add_legend()
+#g.set_axis_labels('Date', 'Value (PPB/PPM)')
+plt.subplots_adjust(top=0.9)
+g.fig.suptitle('Mean SO2, NO2, and Ozone Resampled by Year, Month, and Day')
+plt.show()</code></pre>
+<p>We finally completed the exploratory data analysis.</p>
+</section>
+<section id="prophet-aqi-trend-forecasting-and-hypothesis-testing" class="level1">
+<h1>Prophet AQI Trend Forecasting and Hypothesis Testing</h1>
+<p>To gain an understanding of how Portland’s AQI differs from other large cities, we can start by running a hypothesis test to determine the significance.</p>
+<p>Initially we can run a two sample t-test to show that Portland’s AQI average is statistically greater than the average AQI of all large metropolitan areas within the US. We compare the sample of Portland AQI datapoints in the time period with the sample of all metropolitan areas with a population greater than one million.</p>
+<p><strong>Null Hypothesis</strong>: The Portland AQI is greater than or equal to the AQI of all large metro cities in the US.</p>
+<p><strong>Alternate Hypothesis</strong>: The Portland AQI is less than the AQI of all large metro cities in the US.</p>
+<p><strong>Assumptions</strong>:</p>
+<ol type="1">
+<li><p>Simple Random Sample: Data is a simple random sample. We have selected 10% of values from each population set.</p></li>
+<li><p>Independence: AQI in Portland does not affect AQI in the rest of the country. However, the dataset for the large metro areas does include Portland, so Portland AQI will be repeated within both population groups. Both groups are largely independent, though this should be noted.</p></li>
+<li><p>Normal Distribution:</p></li>
+</ol>
+<div id="4d4598e4" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="capstone_files/figure-html/ts-so2-no2-ozone-output-2.png" id="ts-so2-no2-ozone-2" width="3689" height="1767" class="figure-img"></p>
+<p><img src="capstone_files/figure-html/cell-5-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>We finally completed the exploratory data analysis.</p>
+<p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. They have long tails to the right. However, since the tails have such low frequencies and the samples are very large, this likely will not impact the results.</p>
+<p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
+<p><strong>Two Sample T Test Portland AQI vs Large Metro Areas AQI</strong></p>
+<div id="8bb40b88" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pdx_aqi_sample and lmaqi_sample
+t = -9.7378, df = 307.93, p-value &lt; 2.2e-16
+alternative hypothesis: true difference in means is less than 0
+95 percent confidence interval:
+      -Inf -9.519879
+sample estimates:
+mean of x mean of y 
+ 37.27055  48.73233 </code></pre>
+</div>
+</div>
+<p>Based on the low P-value of &lt; 2.2*10^-16, we can safely reject the null hypothesis. We conclude that Portland’s AQI mean is not greater than or equal to the AQI of all large metropolitan areas. This agrees with our initial observations on the greater AQI outcomes of Portland, and specifies the significance of this statistically.</p>
 </section>
-<section id="results" class="level1">
-<h1>Results</h1>
-<section id="sci-kit-learn-machine-learning" class="level2">
-<h2 class="anchored" data-anchor-id="sci-kit-learn-machine-learning">Sci-Kit Learn Machine Learning</h2>
-<p>Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm.</p>
-<p>First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped.</p>
-<p>Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.</p>
-<p>The data collected has separate information for the city of New York City. NYC is divided into five boroughs, each within its own county. These values are grouped and averaged out to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York boroughs but not others. Likewise, Kansas City spans two states and two counties, so those values are grouped together.</p>
-<p>After this data cleaning, we are left with a total of eighteen cities across the country with a total metropolitan area population of greater than one million. The table below (figure 24324) shows all eighteen cities being used in the prediction algorithm and their respective row counts.</p>
-<div id="cell-count-cities" class="cell" data-execution_count="28">
-<div id="count-cities" class="cell-output cell-output-display" data-execution_count="28">
+<section id="prophet-data-forecasting" class="level1">
+<h1>Prophet Data Forecasting</h1>
+<p>Prophet by Meta is used as time series prediction to estimate and map trends based on our data. We use this to see how AQI trends vary by day, month, and year. It is also able to give us a forecast for a given period after the end of our data which we can analyze and use to anticipate future AQI values.</p>
+<section id="data-forecasting" class="level2">
+<h2 class="anchored" data-anchor-id="data-forecasting">Data Forecasting</h2>
+<p>To use the package, data must be in the format of a two column graph, with the first column being the date data, and the second being the variable being mapped and predicted. In this case, this predicted variable is AQI.</p>
+<p>The package allows a future period to be generated, which can be specified and added to the end of the time data. It can then predict future AQI values for the new data period.</p>
+<p>The graph below (figure 4324), shows the supplied data with the future prediction over the future period. The actual values are shown with the black datapoints, and the blue line represents the prediction. The upper and lower bounds of the error are represented with the transparent blue area. Each year, the data spikes during the late summer to early fall. Even more significant is the large spike in September 2020. What caused it? How significant was it?</p>
+<div id="3ab43cff" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display">
 <div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">city</th>
-<th data-quarto-table-cell-role="th">count</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>Boston</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Charlotte</td>
-<td>418</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>Cincinnati</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Cleveland</td>
-<td>418</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>Dallas</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>Detroit</td>
-<td>418</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>Houston</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>Kansas City</td>
-<td>241</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>Los Angeles</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>Memphis</td>
-<td>418</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
-<td>New York City</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
-<td>Phoenix</td>
-<td>418</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">12</td>
-<td>Pittsburgh</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">13</td>
-<td>Portland</td>
-<td>418</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">14</td>
-<td>Raleigh</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">15</td>
-<td>Seattle</td>
-<td>418</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">16</td>
-<td>St. Louis</td>
-<td>418</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">17</td>
-<td>Washington</td>
-<td>418</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are:</p>
-<ul>
-<li>0-30</li>
-<li>31-40</li>
-<li>41-50</li>
-<li>51-60</li>
-<li>61-70</li>
-<li>71-80</li>
-<li>81-90</li>
-<li>91-100</li>
-<li>101-150</li>
-<li>151+</li>
-</ul>
-<p>A feature selector is run on the set of all variables. This chooses the best predictors of the dependent variable AQI.</p>
-<p>The following tools are used:</p>
-<ul>
-<li>Train Test Split</li>
-<li>One Hot Encoder</li>
-<li>Transformer</li>
-<li>Pipeline</li>
-<li>Standard Scaler</li>
-</ul>
-<p>Feature selection is done on the data. From this we are given the following variables:</p>
-<ul>
-<li>City</li>
-<li>Temperature</li>
-<li>Humidity</li>
-<li>Carbon Monoxide</li>
-<li>Nitrogen Dioxide</li>
-<li>Ozone</li>
-<li>PM10</li>
-<li>PM2.5</li>
-</ul>
-<p>These features are used in the final model.</p>
-<p>With these features, we test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models tested are:</p>
-<ul>
-<li>K nearest neighbors</li>
-<li>Tree model</li>
-<li>Random Forest model</li>
-<li>Logistic Regression</li>
-<li>Naive Bayes</li>
-</ul>
-<p>Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.</p>
-<div id="cell-model-select" class="cell" data-execution_count="37">
-<div id="model-select" class="cell-output cell-output-display">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Model</th>
-<th data-quarto-table-cell-role="th">Cohen Kappa Score</th>
-<th data-quarto-table-cell-role="th">Accuracy</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>KNN</td>
-<td>0.279682</td>
-<td>0.451824</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Tree</td>
-<td>0.380131</td>
-<td>0.513337</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>Random Forest</td>
-<td>0.481175</td>
-<td>0.602069</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Logistic</td>
-<td>0.312286</td>
-<td>0.485574</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>naive Bayes</td>
-<td>0.003825</td>
-<td>0.048993</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>Hyperparameter optimization will be done to further improve the model. A randomized search is run with 100 iterations. The following hyperparameters are optimized:</p>
-<ul>
-<li>Max Categories</li>
-<li>Min Frequency</li>
-<li>Max Depth</li>
-<li>Max Features</li>
-<li>Min Samples Leaf</li>
-<li>Min Samples Split</li>
-<li>Num Estimators</li>
-<li>Bootstrap</li>
-</ul>
-<p>Figure 242442 below shows the selected hyperparameters.</p>
-<div id="cell-randsearch-get-params" class="cell" data-execution_count="42">
-<div id="randsearch-get-params" class="cell-output cell-output-display">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Parameter</th>
-<th data-quarto-table-cell-role="th">Value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>RF_model__bootstrap</td>
-<td>False</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>RF_model__max_depth</td>
-<td>21</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>RF_model__max_features</td>
-<td>log2</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>RF_model__min_samples_leaf</td>
-<td>3</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>RF_model__min_samples_split</td>
-<td>6</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>RF_model__n_estimators</td>
-<td>119</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>aqi_transformer__categories__max_categories</td>
-<td>16</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>aqi_transformer__categories__min_frequency</td>
-<td>7</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
-<div id="predict-x_test" class="cell" data-execution_count="43">
-<div class="cell-output cell-output-stdout">
-<pre><code>Cohen Kappa Score:  0.5191545169945465
-Accuracy:  0.6325530756668482</code></pre>
-</div>
-</div>
-<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption>AirQuality Confusion Matrix</figcaption>
+<p><img src="capstone_files/figure-html/cell-11-output-1.png" width="420" height="420" class="figure-img"></p>
 </figure>
 </div>
+</div>
+</div>
+</section>
+<section id="wildfires" class="level2">
+<h2 class="anchored" data-anchor-id="wildfires">2020 Wildfires</h2>
+<p>In September 2020, a wildfire ravaged the state of Oregon, as well as many other areas of the United States and Canada. The fires burned more than one million acres of land, destroying thousands of homes, and killing 11 people. 500,000 Oregonians were on evacuation alert, and 40,000 were actually forced to leave (Oregon Department of Emergency Management). Anyone around during that time will recall the orange skies, thick atmosphere, and strong smoke smell, but how unusual was this period actually?</p>
+<p>To understand, we will conduct a two sample t-test to see whether or not this month had greater than usual AQI.</p>
+<p><strong>Null Hypothesis</strong>: September 2020 AQI less than or equal to AQI of entire period in Portland</p>
+<p><strong>Alternate Hypothesis</strong>: September 2020 AQI greater AQI of entire period in Portland</p>
+<p><strong>Assumptions</strong>:</p>
+<ol type="1">
+<li><p>Simple Random Sample: Data is not a simple random sample. Since there are so few datapoints for the September 2020 population (30 datapoints), taking a 10% sample may not be suitable to accurately capture the variance of this month. Thus, it was decided to use the entire population as the sample. A 10% sample will be taken of the entire Portland data population.</p></li>
+<li><p>Independence: AQI in September 2020 does not affect AQI in the rest of the timeframe.</p></li>
+<li><p>Normal Distribution:</p></li>
+</ol>
+<div id="60a7e240" class="cell" data-execution_count="11">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="capstone_files/figure-html/cell-12-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. They have long tails to the right, and the September 2020 dataset is oddly shaped due to lack of data.</p>
+<p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
+<p><strong>Two Sample T Test September 2020 vs Full Period of Portland AQI</strong></p>
+<div id="d5f5caea" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pdx_sep_20_aqi and pdx_data_sample
+t = 3.1936, df = 29.148, p-value = 0.00168
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ 39.66001      Inf
+sample estimates:
+mean of x mean of y 
+122.66667  37.93151 </code></pre>
+</div>
+</div>
+<p>Based on the low p value, we reject the null. We conclude that the September AQI in Portland is not less than or equal to the AQI for the entire period. The wildfire had a significant effect on the air quality, making it much more difficult to breathe. This aligns with the observation of the large spike during this period. We must do more to address and combat the wildfires that not only harm the air we breathe, but cause long lasting damage to the local environment.</p>
+</section>
+<section id="aqi-trends" class="level2">
+<h2 class="anchored" data-anchor-id="aqi-trends">AQI Trends</h2>
+<p>Prophet’s plot component function allows us to see specific trends including the total (entire eight years), weekly, and yearly trends in figure 21111. This allows us to see how AQI changes by day. In the top full time span graph, it shows the potential spread of data for the predicted period with the transparent blue area. We can also see that day of the week tends to have very little impact on the trend(it may look significant but it is only moving up and down less than 1.5 AQI between days). Finally, from the yearly graph we cab see the consistent increase during the late summer to mid fall each year.</p>
+<div id="b20b0b48" class="cell" data-execution_count="13">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="capstone_files/figure-html/cell-14-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cross-validation" class="level2">
+<h2 class="anchored" data-anchor-id="cross-validation">Cross Validation</h2>
+<p>How accurate are these predictions? A cross validation predicts over the period from the cutoff date up to specified date in the ds column date.</p>
+<p>Cross validating the predictions allows us to create many estimates from a starting date up to an end date within out timeframe. In this instance, the tool predicts using start dates every half a year. It will predict AQI for that date to every day up to a year after the start date, giving us 365 estimates per start date. We then compare all estimations seeing how accurate the prediction is for a number of days after the start date as shown in figure 348483 below.</p>
+<p>The tool allows us to measure the difference in predicted y and actual y with a variety of different measurements. In the figure below, we have selected mean absolute percent error, to show how if the error on average increased as the prediction got further from the starting point.</p>
+<div id="9cd2beb0" class="cell" data-execution_count="16">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="capstone_files/figure-html/cell-17-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The light grey datapoints represent the mean absolute percent error. A datapoint with a x value 200 and y value 1 means it was predicted for a period of 200 days after the cutoff date, and was 1% off the actual value. We can see that most predictions are under 1%, making this a pretty decent estimation. The fact that they do not increase over time allows us to have a certain degree of confidence in the prediction even a year out. The blue line shows the mean of these datapoints.</p>
+</section>
+<section id="portlands-transit-system" class="level2">
+<h2 class="anchored" data-anchor-id="portlands-transit-system">Portland’s Transit System</h2>
+<p>As shown in the graphs and tests above, Portland has greater than normal AQI outcomes when compared with other cities of high populations. The AQI follows certain yearly trends, with the notable exception in September 2020 due to the large wildfires. Using Prophet, we are able to predict AQI up to a year out of the final datapoint in the time period. What exactly is the reason for these outcomes in this city?</p>
+<p>One hypothesis for Portland’s better air quality outcomes is due to the increased focus on public transportation. Portland has placed high emphasis on utilizing public transit, with rates comparable to larger cities and higher than most other cities of its size. We will run a two sample t test to see how Portland’s rate of ridership compares with other large cites.</p>
+<p>We have standardized rates by passenger miles ridden per person. This is the total amount of miles ridden in a given year divided by the population. This allows us to properly compare cities with different population sizes.</p>
+<p><strong>Null Hypothesis</strong>: Transit ridership in Portland is less than or equal to transit ridership across the country (large metro areas only).</p>
+<p><strong>Alternate Hypothesis</strong>: Transit ridership in Portland is greater than transit ridership across the country (large metro areas only).</p>
+<p><strong>Assumptions</strong>:</p>
+<ol type="1">
+<li><p>Simple Random Sample: Data is not a simple random sample. Since there are so few datapoints for the Portland transit ridership population (8 datapoints), taking a 10% sample may not be suitable to accurately capture the variance of this month. Thus, it was decided to use the entire population as the sample. A 10% sample will be taken of the large cities transit population.</p></li>
+<li><p>Independence: Transit ridership in Portland does not affect transit ridership in the rest of the country.</p></li>
+<li><p>Normal Distribution:</p></li>
+</ol>
+<div id="1c82923d" class="cell" data-execution_count="17">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="capstone_files/figure-html/cell-18-output-1.png" width="420" height="420" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. The Portland data has so few datapoints that it is hard to tell if it has a normal distribution or not. The large city transit data seems normal with the exception of one datapoint.</p>
+<p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
+<p><strong>Two Sample T Test Portland Transit Ridership vs Large Metro Area Ridership</strong></p>
+<div id="abfc0739" class="cell" data-execution_count="18">
+<div class="cell-output cell-output-display">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pdx_transit$pass_miles_per_person and large_metro_transit_sample
+t = 1.7196, df = 26.282, p-value = 0.04863
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ 0.2885565       Inf
+sample estimates:
+mean of x mean of y 
+ 95.90601  61.96918 </code></pre>
+</div>
+</div>
+<p>Based on the low p value, we reject the null. Portland transit ridership is not less than or equal to the average transit ridership of large metro areas across the country. Portland’s higher transit numbers could be an influence in the better air outcomes of the city. However, because transit ridership is better in some other cites such as Baltimore and New York but not reflected in their AQI outcomes, this leads us to believe that transit ridership does not have very significant influence in the air quality. We will explore which features have a greater effect on AQI in the upcoming Machine Learning section.</p>
+</section>
+</section>
+<section id="machine-learning-using-sklearn" class="level1">
+<h1>Machine Learning using SKlearn</h1>
+<p>Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm.</p>
+<pre class="{python}"><code>#| label: import-packages
+#| #| include: false
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import tree
+from sklearn.metrics import cohen_kappa_score
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import confusion_matrix
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import SelectKBest
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import RandomizedSearchCV
+from scipy.stats import randint</code></pre>
+<p>First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped.</p>
+<section id="import-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="import-the-data">Import the Data</h2>
+<pre class="{python}"><code>#| label: read-csv
+#| #| include: false
+#| cache: true
+df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
+len(df)</code></pre>
+<pre class="{python}"><code>#| label: check-len
+#| #| include: false
+</code></pre>
+<p>Here we can see all the missing data in each column. There are some very large numbers we must address. The entire dataset is only 147039 rows long. Some columnshave more than half the data missing.</p>
+<pre class="{python}"><code>#| label: check-isna
+df.isna().sum()</code></pre>
+<p>The first steps to addressing the missing data will be to drop the columns that will definitely not be needed. This includes the id columns used for joining within the SQL database, as well as the maximum columns as we already have the mean data. We also rename the columns to make it easier to understand and reference.</p>
+<pre class="{python}"><code>#| label: met-dataframe
+met = df[[
+    'date',
+    'state',
+    'county',
+    'city',
+    'population',
+    'density',
+    'aqi',
+    'category',
+    'mean_temperature_fahrenheit',
+    'mean_pressure_millibars',
+    'mean_humidity_percent_relative_humidity',
+    'mean_wind_knots',
+    'mean_co_ppm',
+    'mean_no2_ppb',
+    'mean_ozone_ppm',
+    'mean_so2_ppb',
+    'mean_pm100_micrograms_per_cubic_meter',
+    'mean_pm25_micrograms_per_cubic_meter',
+    'mean_lead_micrograms_per_cubic_meter',
+    'num_busses',
+    'revenue',
+    'operating_expense',
+    'passenger_trips',
+    'operating_hours',
+    'passenger_miles',
+    'operating_miles'
+    ]]
+
+met = met.rename(columns={'mean_temperature_fahrenheit': 'temp', 
+                          'mean_pressure_millibars': 'pressure', 
+                          'mean_humidity_percent_relative_humidity': 'humidity',
+                          'mean_wind_knots': 'wind_speed', 
+                          'mean_co_ppm': 'co', 
+                          'mean_no2_ppb': 'no2',
+                          'mean_ozone_ppm': 'o3', 
+                          'mean_so2_ppb': 'so2', 
+                          'mean_pm100_micrograms_per_cubic_meter': 'pm100',
+                          'mean_pm25_micrograms_per_cubic_meter': 'pm25', 
+                          'mean_lead_micrograms_per_cubic_meter': 'lead'})</code></pre>
+<p>Now the missing data looks like this, it is a little better, but we can still do so much more.</p>
+<pre class="{python}"><code>#| label: check-NaN
+met.isna().sum()</code></pre>
+<pre class="{python}"><code>#| label: set-index-ts
+met['date'] = pd.to_datetime(met['date'])
+met.set_index('date', inplace=True)
+#group by week, drop lead for too much missing data
+met = met.groupby([pd.Grouper(freq='W'), 'state', 'county', 'city']).agg({
+    'population': 'first',
+    'density': 'first',
+    'aqi': 'mean',
+    'temp': 'mean',
+    'pressure': 'mean',
+    'humidity': 'mean',
+    'wind_speed': 'mean',
+    'co': 'mean',
+    'no2': 'mean',
+    'o3': 'mean',
+    'so2': 'mean',
+    'pm100': 'mean',
+    'pm25': 'mean',
+    'num_busses': 'mean',
+    'revenue': 'mean',
+    'operating_expense': 'mean',
+    'passenger_trips': 'mean',
+    'operating_hours': 'mean',
+    'passenger_miles': 'mean',
+    'operating_miles': 'mean'
+}).reset_index()</code></pre>
+<p>Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.</p>
+<pre class="{python}"><code>#| label: drop-missNaN-col
+met = met[met['city'] != 'Virginia Beach']</code></pre>
+<p>Next, since we will be measuring and predicting AQI, we will drop all rows missing AQI data.</p>
+<pre class="{python}"><code>#| label: drop-null-aqi
+met = met.dropna(subset=['aqi'])</code></pre>
+<pre class="{python}"><code>#| label: check-NaN-again
+met.isna().sum()</code></pre>
+<p>The data collected has separate information for the city of New York City. NYC is divided into five boroughs, each within its own county. These values are grouped and averaged out to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York boroughs but not others. Likewise, Kansas City spans two states and two counties, so those values are grouped together.</p>
+<pre class="{python}"><code>#| label: group-nyc-1-city
+nyc = met[met['city'] == 'New York']
+columns = ['date', 'aqi', 'temp', 'pressure','humidity',
+           'wind_speed','co','no2','o3',
+           'so2','pm100','pm25', 'num_busses',
+           'revenue', 'operating_expense', 
+           'passenger_trips', 'operating_hours', 
+           'passenger_miles', 'operating_miles']
+
+nyc = nyc[columns].groupby('date').mean().reset_index()
+
+#Add data that was dropped
+nyc['state'] = 'New York'
+nyc['county'] = 'Multiple'
+nyc['city'] = 'New York City'
+nyc['population'] = 18908608
+nyc['density'] = 11080.3
+
+nyc = nyc[['date', 'state', 'county', 'city', 'population', 
+     'density', 'aqi', 'temp', 'pressure','humidity',
+     'wind_speed','co','no2','o3', 'so2','pm100',
+     'pm25', 'num_busses', 'revenue', 'operating_expense', 
+     'passenger_trips', 'operating_hours', 
+     'passenger_miles', 'operating_miles']]
+
+print(nyc)</code></pre>
+<pre class="{python}"><code>#| label: replace-nyc-in-met
+met = met[met['city'] != 'New York']
+met = pd.concat([met, nyc], ignore_index=True)</code></pre>
+<pre class="{python}"><code>#| label: dataframe-Kansas-City
+#Do same with Kansas City
+kc = met[met['city'] == 'Kansas City']
+columns = ['date', 'aqi', 'temp', 'pressure','humidity',
+           'wind_speed','co','no2','o3',
+           'so2','pm100','pm25', 'num_busses',
+           'revenue', 'operating_expense', 
+           'passenger_trips', 'operating_hours', 
+           'passenger_miles', 'operating_miles']
+
+kc = kc[columns].groupby('date').mean().reset_index()
+
+columns = ['temp', 'pressure','humidity',
+           'wind_speed','co','no2','o3',
+           'so2','pm100','pm25', 'num_busses',
+           'revenue', 'operating_expense', 
+           'passenger_trips', 'operating_hours', 
+           'passenger_miles', 'operating_miles']
+met[columns] = met[columns].fillna(met.groupby('city')[columns].transform('mean'))
+
+kc['state'] = 'Missouri'
+kc['county'] = 'Multiple'
+kc['city'] = 'Kansas City'
+kc['population'] = 1689556
+kc['density'] = 620.7
+
+kc = kc[['date', 'state', 'county', 'city', 'population', 
+     'density', 'aqi', 'temp', 'pressure','humidity',
+     'wind_speed','co','no2','o3', 'so2','pm100',
+     'pm25', 'num_busses', 'revenue', 'operating_expense', 
+     'passenger_trips', 'operating_hours', 
+     'passenger_miles', 'operating_miles']]
+
+met = met[met['city'] != 'Kansas City']
+met = pd.concat([met, kc], ignore_index=True)</code></pre>
+<p>After doing this, we drop the rest of the rows with missing data, leaving us with a total of 17 cities with metropolitan area populations greater than one million.</p>
+<pre class="{python}"><code>#| label: count-cities
+#count cities after dropping na rows, left with 17 cities
+ds = met.dropna()
+ds.groupby('city').size().reset_index(name='count')</code></pre>
+<p>To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are shown below:</p>
+<pre class="{python}"><code>#| label: AQI-bin-ML
+#bin AQI data for ML
+bins = [0, 30, 40, 50, 60, 70, 80, 90, 100, 150, 500]
+
+labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
+ds.loc[:,'aqi_discrete'] = pd.cut(ds['aqi'], bins=bins, labels=labels, right=True)
+
+ds.head()</code></pre>
+<pre class="{python}"><code>#| label: label-bin
+labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
+ds.loc[:,'aqi_discrete'] = pd.cut(ds['aqi'], bins=bins, labels=labels, right=True)
+
+ds.head()</code></pre>
+<pre class="{python}"><code>#| label: convert-year-month-datetime
+ds.loc[:,'year'] = pd.to_datetime(ds['date']).dt.year
+ds.loc[:,'month'] = pd.to_datetime(ds['date']).dt.month</code></pre>
+<p>To set up the ML prediction, we must specify the variable being predicted (aqi_discrete, the aqi separated into bins), and the independent prediction variables. We will use a feature selector to select the most accurate predictors to try to optimize the model. Therefore, we initially choose every other variable to be our independent variables.</p>
+<pre class="{python}"><code>#| label: aqi-X-y
+#dependent variable aqi, all others (except aqi category) as independent variables
+y = ds['aqi_discrete']
+X = ds[['city',
+        'population',
+        'density',
+        'temp',
+        'pressure',
+        'humidity',
+        'wind_speed',
+        'co',
+        'no2',
+        'o3',
+        'so2',
+        'pm100',
+        'pm25',
+        'num_busses', 
+        'revenue', 
+        'operating_expense', 
+        'passenger_trips', 
+        'operating_hours', 
+        'passenger_miles', 
+        'operating_miles',
+        'year',
+        'month'
+        ]]
+</code></pre>
+<p>We must split the data into training and testing datasets. We also define an encoder to transform the discrete predictors into many binary variables for each category.</p>
+<pre class="{python}"><code>#| label: split-train
+#Split into train and test datasets, define model and encoder
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+encoder = OneHotEncoder(sparse_output=False, min_frequency=5, handle_unknown='infrequent_if_exist')</code></pre>
+<p>A transformer is used to quickly transform variables into the necessary form for modeling.</p>
+<pre class="{python}"><code>#| label: def-transformer
+# define transformer with encoder and standardscaler
+
+transformer = ColumnTransformer(
+        [
+            ('categories', encoder, ['city','year','month']),
+            ('scaled_air_quality', StandardScaler(), [
+                'population',
+                'density',
+                'temp',
+                'pressure',
+                'humidity',
+                'wind_speed',
+                'co',
+                'no2',
+                'o3',
+                'so2',
+                'pm100',
+                'pm25',
+                'num_busses', 
+                'revenue', 
+                'operating_expense', 
+                'passenger_trips', 
+                'operating_hours', 
+                'passenger_miles', 
+                'operating_miles'
+                ]
+            )
+        ],
+        remainder='drop', verbose_feature_names_out=False)
+#fit transformer
+transformer.fit(X_train, y_train)</code></pre>
+<p>Feature selection is done on the data. From this we are given the following variables: City, Temperature, Humidity, Carbon Monoxide, Nitrogen Dioxide, Ozone, PM10, and PM2.5.</p>
+<pre class="{python}"><code>#| label: feature-select
+#feature selection
+feature_selector = SelectKBest(k=10)
+X_train_trans = transformer.transform(X_train)
+X_train_trans_df = pd.DataFrame(
+    X_train_trans, 
+    columns = transformer.get_feature_names_out(),
+    index = X_train.index)
+feature_selector.fit(X_train_trans_df, y_train)
+feature_selector.get_support()
+feature_selector.scores_[feature_selector.get_support()]
+X_train_trans_df.columns[feature_selector.get_support()]</code></pre>
+<p>Using these selected features, we will run our models.</p>
+<pre class="{python}"><code>#| label: use-features
+#Use selected features
+y = ds['aqi_discrete']
+X = ds[[
+    'city', 'temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25'
+    ]]
+#Create train/test data with selected features
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+X_train_enc = pd.DataFrame(encoder.fit_transform(X_train[['city']]),
+                           columns = encoder.get_feature_names_out(), index = X_train.index)
+X_train_trans = X_train[[
+    'temp', 'humidity', 'co', 'no2','o3', 'pm100', 'pm25'
+    ]].merge(X_train_enc, left_index = True, right_index = True)
+X_test_enc = pd.DataFrame(encoder.fit_transform(X_test[['city']]),
+                           columns = encoder.get_feature_names_out(), index = X_test.index)
+X_test_trans = X_test[[
+    'temp', 'humidity', 'co', 'no2','o3', 'pm100', 'pm25'
+    ]].merge(X_test_enc, left_index = True, right_index = True)</code></pre>
+<p>We will test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models selected are: K nearest neighbors, Tree model, Random Forest model, Logistic Regression, and Naive Bayes.Running the models shows us that the Random Forest model is the most accurate.</p>
+<pre class="{python}"><code>#| label: model-select
+#model selection
+model1 = KNeighborsClassifier(n_neighbors=5)
+model2 = tree.DecisionTreeClassifier()
+model3 = RandomForestClassifier(n_estimators=10, random_state=12)
+model4 = LogisticRegression()
+model5 = GaussianNB()
+
+for model, label in zip([model1, model2, model3, model4, model5], ['KNN', 'Tree', 'Random Forest', 'Logistic', 'naive Bayes']):
+    model.fit(X_train_trans, y_train)
+    y_pred = model.predict(X_test_trans)
+    print("Model: ", label)
+    print("Cohen Kappa Score: ", cohen_kappa_score(y_test, y_pred))
+    print("Accuracy: ", sum(y_test == y_pred)/len(y_test))
+    print("\n")</code></pre>
+<p>Running a basic Random Forest model gives us the following cohen kappa score and accuracy. This will serve as the baseline to be compared to.</p>
+<pre class="{python}"><code>#| label: def-best-model
+#Create model from most accurate, RandomForest
+model = RandomForestClassifier(n_estimators=10)
+model.fit(X_train_trans, y_train)
+
+#predict on test data
+y_pred = model.predict(X_test_trans)
+
+#Print results
+print("cohen kappa score: ", cohen_kappa_score(y_test, y_pred))
+print("accuracy: ", sum(y_test == y_pred)/len(y_test))
+ConfusionMatrixDisplay(
+    confusion_matrix = confusion_matrix(
+        y_test, y_pred, 
+        labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
+        ), 
+        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
+        ).plot(xticks_rotation='vertical')</code></pre>
+<p>We will further simplify this with a transformer to be used in a pipeline.</p>
+<pre class="{python}"><code>#| label: improve-transformer
+#redefined transformer
+transformer = ColumnTransformer(
+        [
+            ('categories', encoder, ['city']),
+            ('scaled_air_quality', StandardScaler(), [
+                'temp',
+                'humidity',
+                'co',
+                'no2',
+                'o3',
+                'pm100',
+                'pm25'
+                ]
+            )
+        ],
+        remainder='drop', verbose_feature_names_out=False)
+#Pipeline for simplification
+
+classification_pipeline = Pipeline([('aqi_transformer', transformer),
+                                    ('RF_model', RandomForestClassifier())
+                                    ])
+classification_pipeline.fit(X_train, y_train)</code></pre>
+<p>Next we will optimize hyperparameters to make the model more accurate.</p>
+<pre class="{python}"><code>#| label: hyper-parameters-optim
+#hyperparameter optimization
+classification_pipeline.get_params()</code></pre>
+<p>The following parameters are selected, each with a range of possible values. A large 100 iterations are run to find the highest score.</p>
+<pre class="{python}"><code>#| label: def-parameters
+parameters = {
+    'aqi_transformer__categories__max_categories': randint(3,30),
+    'aqi_transformer__categories__min_frequency': randint(2,20),
+    'RF_model__max_depth': randint(3, 30),
+    'RF_model__max_features': [None, 'sqrt', 'log2'],
+    'RF_model__min_samples_leaf': randint(2, 10),
+    'RF_model__min_samples_split': randint(2, 10),
+    'RF_model__n_estimators': randint(50, 200),
+    'RF_model__min_samples_split': randint(2, 10),
+    'RF_model__bootstrap': [True, False]
+}
+n_iter_search = 10 # be 100
+random_search = RandomizedSearchCV(classification_pipeline, param_distributions=parameters,
+                                   n_iter=n_iter_search, n_jobs=-1, cv=5)
+random_search.fit(X_train, y_train)
+print(random_search.best_score_)</code></pre>
+<p>We can see which hyperparameters are selected.</p>
+<pre class="{python}"><code>#| label: randsearch-get-params
+random_search.best_estimator_.get_params()</code></pre>
+<p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
+<pre class="{python}"><code>#| label: predict-X_test
+y_pred=random_search.predict(X_test)
+print("cohen kappa score: ", cohen_kappa_score(y_test, y_pred))
+print("accuracy: ", sum(y_pred == y_test)/len(y_test))
+ConfusionMatrixDisplay(
+    confusion_matrix = confusion_matrix(
+        y_test, y_pred, 
+        labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
+        ), 
+        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
+        ).plot(xticks_rotation='vertical')</code></pre>
 <p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>
 </section>
 </section>
 <section id="ml-time-series-with-sarimax-model" class="level1">
 <h1>ML Time Series with SARIMAX Model</h1>
+<pre class="{python}"><code>#| label: import-lib
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import pandas as pd</code></pre>
+<pre class="{python}"><code>#| label: read-data2
+import pandas as pd
+df = pd.read_pickle('/data/df.pkl')</code></pre>
+<pre class="{python}"><code>#| label: define-df_aqi
+sns.set_theme(style="darkgrid")
+df_aqi = df[['date','aqi']]
+df_aqi = df_aqi.set_index('date')
+
+df_aqi = df_aqi.resample('ME').mean()
+df_aqi.ffill(inplace=True)
+#df_aqi.plot(figsize=(15,8))</code></pre>
 <p>Any time series is decomposed of two things:</p>
 <ul>
 <li>Seasonality</li>
@@ -860,15 +1317,11 @@ Accuracy:  0.6325530756668482</code></pre>
 </section>
 <section id="decomposing-the-time-series-with-additive-method" class="level1">
 <h1>Decomposing the Time Series With Additive Method</h1>
-<div id="cell-additive-decomp" class="cell" data-execution_count="48">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/additive-decomp-output-1.png" id="additive-decomp" width="684" height="484" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<pre class="{python}"><code>#| label: additive-decomp
+sns.set_theme(style="darkgrid")
+decomposition = sm.tsa.seasonal_decompose(df_aqi, model='additive')
+fig = decomposition.plot()
+plt.show()</code></pre>
 <p>There are three components to a time series:</p>
 <ol type="1">
 <li><code>Trend</code>: Trend tells you how things are overall changing<br>
@@ -888,150 +1341,66 @@ Accuracy:  0.6325530756668482</code></pre>
 <li><em>q</em> is the moving average part of the model. This allows us to set the error of our model as a linear combination of the error values observed at previous time points in the past.</li>
 </ul>
 <p>We use a tuning technique called <code>grid search method</code> that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.</p>
-<div id="grid-search" class="cell" data-cache="true" data-execution_count="49">
-<div class="cell-output cell-output-stdout">
-<pre><code>ARIMA(0, 0, 0)x(0, 0, 0, 12) - AIC:969.5419650946665
-ARIMA(0, 0, 0)x(0, 0, 1, 12) - AIC:799.0140026908043
-ARIMA(0, 0, 0)x(0, 1, 0, 12) - AIC:701.7072455506197
-ARIMA(0, 0, 0)x(0, 1, 1, 12) - AIC:568.3211239351035
-ARIMA(0, 0, 0)x(1, 0, 0, 12) - AIC:708.2727189545345
-ARIMA(0, 0, 0)x(1, 0, 1, 12) - AIC:660.9171130206936
-ARIMA(0, 0, 0)x(1, 1, 0, 12) - AIC:596.1563221105039
-ARIMA(0, 0, 0)x(1, 1, 1, 12) - AIC:571.8620221843147
-ARIMA(0, 0, 1)x(0, 0, 0, 12) - AIC:888.4893265461405
-ARIMA(0, 0, 1)x(0, 0, 1, 12) - AIC:754.7451219152275
-ARIMA(0, 0, 1)x(0, 1, 0, 12) - AIC:695.0468020327725
-ARIMA(0, 0, 1)x(0, 1, 1, 12) - AIC:563.3526496700842
-ARIMA(0, 0, 1)x(1, 0, 0, 12) - AIC:708.3487691701486
-ARIMA(0, 0, 1)x(1, 0, 1, 12) - AIC:655.8968840891383
-ARIMA(0, 0, 1)x(1, 1, 0, 12) - AIC:598.1490374699148
-ARIMA(0, 0, 1)x(1, 1, 1, 12) - AIC:566.3367865157978
-ARIMA(0, 1, 0)x(0, 0, 0, 12) - AIC:769.1876196189784
-ARIMA(0, 1, 0)x(0, 0, 1, 12) - AIC:681.4253047727481
-ARIMA(0, 1, 0)x(0, 1, 0, 12) - AIC:740.3973501203114
-ARIMA(0, 1, 0)x(0, 1, 1, 12) - AIC:606.0067883430007
-ARIMA(0, 1, 0)x(1, 0, 0, 12) - AIC:688.9276375883021
-ARIMA(0, 1, 0)x(1, 0, 1, 12) - AIC:683.2372837276466
-ARIMA(0, 1, 0)x(1, 1, 0, 12) - AIC:637.9760649104885
-ARIMA(0, 1, 0)x(1, 1, 1, 12) - AIC:607.9989487123431
-ARIMA(0, 1, 1)x(0, 0, 0, 12) - AIC:717.0512101206406
-ARIMA(0, 1, 1)x(0, 0, 1, 12) - AIC:636.373429528529
-ARIMA(0, 1, 1)x(0, 1, 0, 12) - AIC:692.512410906277
-ARIMA(0, 1, 1)x(0, 1, 1, 12) - AIC:559.6920424480529
-ARIMA(0, 1, 1)x(1, 0, 0, 12) - AIC:650.5293595230056
-ARIMA(0, 1, 1)x(1, 0, 1, 12) - AIC:638.1908637932411
-ARIMA(0, 1, 1)x(1, 1, 0, 12) - AIC:594.940391452659
-ARIMA(0, 1, 1)x(1, 1, 1, 12) - AIC:562.5484300875305
-ARIMA(1, 0, 0)x(0, 0, 0, 12) - AIC:775.150570595756
-ARIMA(1, 0, 0)x(0, 0, 1, 12) - AIC:688.1982167211085
-ARIMA(1, 0, 0)x(0, 1, 0, 12) - AIC:702.425519762607
-ARIMA(1, 0, 0)x(0, 1, 1, 12) - AIC:570.1689904036024
-ARIMA(1, 0, 0)x(1, 0, 0, 12) - AIC:688.2931195730088
-ARIMA(1, 0, 0)x(1, 0, 1, 12) - AIC:662.6749372683774
-ARIMA(1, 0, 0)x(1, 1, 0, 12) - AIC:590.7883988000217
-ARIMA(1, 0, 0)x(1, 1, 1, 12) - AIC:573.825547011459
-ARIMA(1, 0, 1)x(0, 0, 0, 12) - AIC:725.2611476282008
-ARIMA(1, 0, 1)x(0, 0, 1, 12) - AIC:644.4595774810737
-ARIMA(1, 0, 1)x(0, 1, 0, 12) - AIC:696.6355146715679
-ARIMA(1, 0, 1)x(0, 1, 1, 12) - AIC:565.337721591011
-ARIMA(1, 0, 1)x(1, 0, 0, 12) - AIC:651.3742765976529
-ARIMA(1, 0, 1)x(1, 0, 1, 12) - AIC:657.7255114881699
-ARIMA(1, 0, 1)x(1, 1, 0, 12) - AIC:592.7702867201957
-ARIMA(1, 0, 1)x(1, 1, 1, 12) - AIC:567.3861300859227
-ARIMA(1, 1, 0)x(0, 0, 0, 12) - AIC:750.4532664961456
-ARIMA(1, 1, 0)x(0, 0, 1, 12) - AIC:665.693748389872
-ARIMA(1, 1, 0)x(0, 1, 0, 12) - AIC:720.7807876037391
-ARIMA(1, 1, 0)x(0, 1, 1, 12) - AIC:588.6301637485213
-ARIMA(1, 1, 0)x(1, 0, 0, 12) - AIC:665.7141239363682
-ARIMA(1, 1, 0)x(1, 0, 1, 12) - AIC:667.6890275833365
-ARIMA(1, 1, 0)x(1, 1, 0, 12) - AIC:611.4437482645567
-ARIMA(1, 1, 0)x(1, 1, 1, 12) - AIC:590.6185673644065
-ARIMA(1, 1, 1)x(0, 0, 0, 12) - AIC:717.3211552781574
-ARIMA(1, 1, 1)x(0, 0, 1, 12) - AIC:636.7110296932944
-ARIMA(1, 1, 1)x(0, 1, 0, 12) - AIC:693.1696490581699
-ARIMA(1, 1, 1)x(0, 1, 1, 12) - AIC:561.5301944999834
-ARIMA(1, 1, 1)x(1, 0, 0, 12) - AIC:643.9735168529521
-ARIMA(1, 1, 1)x(1, 0, 1, 12) - AIC:638.640931561371
-ARIMA(1, 1, 1)x(1, 1, 0, 12) - AIC:588.5992832053371
-ARIMA(1, 1, 1)x(1, 1, 1, 12) - AIC:564.5468753697722</code></pre>
-</div>
-</div>
+<pre class="{python}"><code>#| label: grid-search
+#| cache: true
+import itertools
+
+# Define the p, d, q parameters to take any value between 0 to 1
+p = d = q = range(0, 2)
+pdq = list(itertools.product(p, d, q)) # generate all possible combinations of p,d,q
+
+# This creates combinations of seasonal parameters with a seasonality period of 12 (e.g., monthly data).
+seasonal_pdq = [(x[0], x[1], x[2], 12) for x in pdq] 
+
+# Outer Loop: Iterates over all combinations of pdq.
+# Inner Loop: Iterates over all combinations of seasonal_pdq.
+#  Try Block:
+#  Creates a SARIMAX model with the current combination of parameters.
+#  Fits the model to the data.
+#  Prints the AIC (Akaike Information Criterion) for the model, which is a measure of model quality.
+# Except Block:
+#  Catches and prints any errors that occur during model fitting, allowing the loop to continue with the next set of parameters.
+for param in pdq:
+    for param_seasonal in seasonal_pdq:
+        try:
+            mod = sm.tsa.statespace.SARIMAX(df_aqi,
+                                            order=param,
+                                            seasonal_order=param_seasonal,
+                                            enforce_stationarity=False,
+                                            enforce_invertibility=False)
+            results = mod.fit()
+            print('ARIMA{}x{} - AIC:{}'.format(param, param_seasonal, results.aic))
+        except Exception as e:
+            print(f"Error with parameters {param} and {param_seasonal}: {e}")
+            continue</code></pre>
 <p>We have to find the lowest AIC values which would have the best corresponding p,d,q values to have the best forecast of AQI values.</p>
 </section>
 <section id="summary-of-sarimax" class="level2">
 <h2 class="anchored" data-anchor-id="summary-of-sarimax">Summary of SARIMAX</h2>
-<div id="mod-fit" class="cell" data-execution_count="50">
-<div class="cell-output cell-output-stdout">
-<pre><code>==============================================================================
-                 coef    std err          z      P&gt;|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-ar.L1          0.0483      0.306      0.158      0.875      -0.551       0.648
-ma.L1         -1.0000    924.523     -0.001      0.999   -1813.031    1811.031
-ma.S.L12      -1.0000   2355.498     -0.000      1.000   -4617.692    4615.692
-sigma2       134.1503   3.35e+05      0.000      1.000   -6.57e+05    6.57e+05
-==============================================================================</code></pre>
-</div>
-</div>
+<pre class="{python}"><code>#| label: mod-fit
+mod = sm.tsa.statespace.SARIMAX(df_aqi,order=(1, 1, 1),seasonal_order=(0,1, 1, 12),enforce_stationarity=False,enforce_invertibility=False)
+results = mod.fit()
+print(results.summary().tables[1])</code></pre>
 </section>
 </section>
 <section id="how-fit-the-sarimax-model" class="level1">
 <h1>How Fit the SARIMAX model</h1>
 <section id="print-the-summary-which-includes-aic" class="level2">
 <h2 class="anchored" data-anchor-id="print-the-summary-which-includes-aic">Print the summary which includes AIC</h2>
-<div id="fit-summary-aic" class="cell" data-execution_count="51">
-<div class="cell-output cell-output-stdout">
-<pre><code>                                     SARIMAX Results                                      
-==========================================================================================
-Dep. Variable:                                aqi   No. Observations:                   96
-Model:             SARIMAX(1, 1, 1)x(0, 1, 1, 12)   Log Likelihood                -276.765
-Date:                            Mon, 05 Aug 2024   AIC                            561.530
-Time:                                    14:42:49   BIC                            570.467
-Sample:                                01-31-2015   HQIC                           565.076
-                                     - 12-31-2022                                         
-Covariance Type:                              opg                                         
-==============================================================================
-                 coef    std err          z      P&gt;|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-ar.L1          0.0483      0.306      0.158      0.875      -0.551       0.648
-ma.L1         -1.0000    924.523     -0.001      0.999   -1813.031    1811.031
-ma.S.L12      -1.0000   2355.498     -0.000      1.000   -4617.692    4615.692
-sigma2       134.1503   3.35e+05      0.000      1.000   -6.57e+05    6.57e+05
-===================================================================================
-Ljung-Box (L1) (Q):                   0.00   Jarque-Bera (JB):              2571.65
-Prob(Q):                              1.00   Prob(JB):                         0.00
-Heteroskedasticity (H):               1.11   Skew:                             4.63
-Prob(H) (two-sided):                  0.81   Kurtosis:                        31.44
-===================================================================================
-
-Warnings:
-[1] Covariance matrix calculated using the outer product of gradients (complex-step).</code></pre>
-</div>
-</div>
-<div id="extract-aic-value" class="cell" data-execution_count="52">
-<div class="cell-output cell-output-stdout">
-<pre><code>The AIC value is: 561.5301944999834</code></pre>
-</div>
-</div>
+<pre class="{python}"><code>#| label: fit-summary-AIC
+mod = sm.tsa.statespace.SARIMAX(df_aqi, order=(1, 1, 1), seasonal_order=(0, 1, 1, 12), enforce_stationarity=False, enforce_invertibility=False)
+results = mod.fit()
+print(results.summary())</code></pre>
+<pre class="{python}"><code>#| label: Extract-AIC-value
+aic_value = results.aic
+print(f"The AIC value is: {aic_value}")
+# Additional performance metrics can be calculated as needed</code></pre>
 </section>
 </section>
 <section id="plot-diagnostics" class="level1">
 <h1>Plot Diagnostics</h1>
-<div id="plot-diag" class="cell" data-execution_count="53">
-<div class="cell-output cell-output-display" data-execution_count="53">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/plot-diag-output-1.png" id="plot-diag-1" width="1001" height="859" class="figure-img"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/plot-diag-output-2.png" id="plot-diag-2" width="1001" height="859" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<pre class="{python}"><code>#| label: plot-diag
+results.plot_diagnostics(figsize=(12, 10))</code></pre>
 </section>
 <section id="train-and-test" class="level1">
 <h1>Train and Test</h1>
@@ -1046,24 +1415,36 @@ Warnings:
 </ul>
 <p>This rigorous process underpins the credibility and utility of our research findings.</p>
 <p>To split the data, we follow the recommended <code>70:30</code> ratio, 70% of the data is the training data, and 30% of the data is the testing data.</p>
+<pre class="{python}"><code>#| label: check-min-date
+# Check the minimum date in the 'date' column
+#print(f"Start date of the data:", df_aqi.index.min())</code></pre>
+<pre class="{python}"><code>#| label: check-max-date
+#print(f"End date of the data:", df_aqi.index.max())</code></pre>
 <p>Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input</p>
+<pre class="{python}"><code>#| label: check-prediction
+pred = results.get_prediction(start=pd.to_datetime('2023-01-01 00:00:00'), dynamic=False)
+pred_ci = pred.conf_int()</code></pre>
 <p>The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model’s performance.</p>
-<div id="cell-plot-prediction" class="cell" data-execution_count="57">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/plot-prediction-output-1.png" id="plot-prediction" width="1181" height="607" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<pre class="{python}"><code>#| label: plot-prediction
+ax = df_aqi['2015-01-31 00:00:00':].plot(label='Observed') # plot the observed data 
+pred.predicted_mean.plot(ax=ax, label='One-step ahead Forecast', alpha=.7, figsize=(14, 7))
+
+ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.2)
+
+ax.set_xlabel('Days')
+ax.set_ylabel('AQI index')
+plt.legend()
+plt.show()</code></pre>
 <p>To facilitate comparison of true and predicted test values, we will create a separate DataFrame. Mean Error Estimation will be used for analysis.</p>
+<pre class="{python}"><code>#| label: define-forecast-truth
+y_forecasted = pred.predicted_mean
+y_truth = df_aqi['2022-12-31 00:00:00':]</code></pre>
 <p>To evaluate model performance, we calculate the MSE</p>
-<div id="calculate-mse" class="cell" data-execution_count="59">
-<div class="cell-output cell-output-stdout">
-<pre><code>The Mean Squared Error of our forecasts is 1.41</code></pre>
-</div>
-</div>
+<pre class="{python}"><code>#| label: calculate-mse
+import numpy as np
+from sklearn.metrics import mean_squared_error
+mse = np.sqrt(mean_squared_error(y_truth, y_forecasted))   
+print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))</code></pre>
 <section id="forecasting-future-values" class="level2">
 <h2 class="anchored" data-anchor-id="forecasting-future-values">Forecasting Future Values</h2>
 <p>As we conclude our modeling process, we generate predictions for the next 7 data points:</p>
@@ -1074,6 +1455,9 @@ Warnings:
 <li><p><strong>Output</strong>: We obtain forecasts for the next 7 time points, representing predicted air quality levels.</p></li>
 </ol>
 <p>This step transforms our analytical work into actionable insights for air quality management.</p>
+<pre class="{python}"><code>#| label: recheck-forecast
+pred_uc = results.get_forecast(steps=7)
+pred_ci = pred_uc.conf_int()</code></pre>
 </section>
 <section id="visualizing-our-results-the-culmination-of-our-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="visualizing-our-results-the-culmination-of-our-analysis">Visualizing Our Results: The Culmination of Our Analysis</h2>
@@ -1100,15 +1484,14 @@ Warnings:
 </ul></li>
 </ol>
 <p>This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.</p>
-<div id="cell-plot-forecast" class="cell" data-execution_count="61">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/plot-forecast-output-1.png" id="plot-forecast" width="1164" height="607" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<pre class="{python}"><code>#| label: plot-forecast
+ax = df_aqi.plot(label='Observed', figsize=(14, 7))
+pred_uc.predicted_mean.plot(ax=ax, label='Forecast')
+ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.25)
+ax.set_xlabel('Days')
+ax.set_ylabel('AQI index')
+plt.legend()
+plt.show()</code></pre>
 </section>
 </section>
 </section>
@@ -1172,9 +1555,6 @@ Warnings:
 
 </main>
 <!-- /main column -->
-<script type="application/vnd.jupyter.widget-state+json">
-{"state":{"03d67d360cef4a27b2bbc0c7d69f6c06":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_621db23520d846878dda386266278eb0","placeholder":"​","style":"IPY_MODEL_60f50b44ce3a4130a3f74955d3d4b4b6","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"29eb7102d667493582aae76d59ae8f5c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"4afc66d37a794ae9942d8e6eedcc3241":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"507cae8a027443f390732d47132750a6":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_af7e8f2886634de99cde72a8e1f7dcd0","placeholder":"​","style":"IPY_MODEL_4afc66d37a794ae9942d8e6eedcc3241","tabbable":null,"tooltip":null,"value":" [100%]   00:03 -&gt; (00:00 left)"}},"5a08de3d89ec410d81cf4989e3287a29":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_03d67d360cef4a27b2bbc0c7d69f6c06","IPY_MODEL_64e6de7b032742e6b836d09c1dc422ef","IPY_MODEL_507cae8a027443f390732d47132750a6"],"layout":"IPY_MODEL_ba5925e294f34a8eb302a747e80085b6","tabbable":null,"tooltip":null}},"60f50b44ce3a4130a3f74955d3d4b4b6":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"621db23520d846878dda386266278eb0":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"64e6de7b032742e6b836d09c1dc422ef":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_cb45744c2d284f8a9ef9db9b585eb48a","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_29eb7102d667493582aae76d59ae8f5c","tabbable":null,"tooltip":null,"value":1}},"af7e8f2886634de99cde72a8e1f7dcd0":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"ba5925e294f34a8eb302a747e80085b6":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"cb45744c2d284f8a9ef9db9b585eb48a":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
-</script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
