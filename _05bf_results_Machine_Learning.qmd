@@ -491,10 +491,16 @@ random_search.best_estimator_.get_params()
 Using these hyperparameters, we reach an accuracy of about 63%.
 
 ```{python}
+#| echo: false
+#| warning: false
 #| label: predict-X_test
 y_pred=random_search.predict(X_test)
 print("cohen kappa score: ", cohen_kappa_score(y_test, y_pred))
 print("accuracy: ", sum(y_pred == y_test)/len(y_test))
+```
+
+```{python}
+#| include: false
 ConfusionMatrixDisplay(
     confusion_matrix = confusion_matrix(
         y_test, y_pred, 
@@ -503,5 +509,7 @@ ConfusionMatrixDisplay(
         display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
         ).plot(xticks_rotation='vertical')
 ```
+
+![AirQuality Confusion Matrix](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true)
 
 We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.
