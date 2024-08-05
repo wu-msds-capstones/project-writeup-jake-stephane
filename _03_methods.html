@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Methods</title>
+<title>methods</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,31 +72,18 @@ window.Quarto = {
 
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Methods</h1>
-</div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="tools-deployed" class="level1">
-<h1>Tools Deployed</h1>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<section id="tools-deployed" class="level2">
+<h2 class="anchored" data-anchor-id="tools-deployed">Tools Deployed</h2>
 <p>Python will be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.</p>
 <p>To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.</p>
 <p>We will address data inconsistencies, missing values and ensure that data is in a tidy format.</p>
 <p>We may need to normalize or standardize data if necessary and create new features through aggregation to enhance the model’s performance.</p>
+</section>
 <section id="what-is-prophet" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-prophet">What is Prophet?</h2>
 <p>Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. We utilized prophet to gain a quick understanding of our AQI patterns, seeking to understand basic trends before conducting a more thorough analysis.</p>
@@ -125,115 +112,110 @@ window.Quarto = {
 <p>We are trying to find the right p, d, q hyperparameters to correctly forecast and predict the AQI values.</p>
 </section>
 </section>
-<section id="common-techniques-to-evaluate-the-performance-of-machine-model" class="level1">
-<h1>Common Techniques to Evaluate the Performance of Machine Model</h1>
-<section id="train-test-split" class="level2">
-<h2 class="anchored" data-anchor-id="train-test-split">1. Train-Test Split</h2>
-<ul>
-<li><strong>Description</strong>: Split the dataset into training and testing subsets.</li>
-<li><strong>Purpose</strong>: Assess the model’s performance on unseen data to detect overfitting and ensure generalizability.</li>
-</ul>
-</section>
-<section id="cross-validation" class="level2">
-<h2 class="anchored" data-anchor-id="cross-validation">2. Cross-Validation</h2>
-<ul>
-<li><strong>Description</strong>: Divide the data into k subsets and train the model k times, each time using a different subset as the test set and the remaining as the training set.</li>
-<li><strong>Purpose</strong>: Provides a more robust estimate of model performance by averaging results over multiple splits.</li>
-</ul>
-</section>
-<section id="confusion-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="confusion-matrix">3. Confusion Matrix</h2>
-<ul>
-<li><strong>Description</strong>: A table used to describe the performance of a classification model by comparing predicted and actual values.</li>
-<li><strong>Metrics</strong>: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN).</li>
-</ul>
-</section>
-<section id="accuracy" class="level2">
-<h2 class="anchored" data-anchor-id="accuracy">4. Accuracy</h2>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted instances to the total instances.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}\)</span></li>
-</ul>
-</section>
-<section id="precision-recall-and-f1-score" class="level2">
-<h2 class="anchored" data-anchor-id="precision-recall-and-f1-score">5. Precision, Recall, and F1-Score</h2>
-<section id="precision" class="level3">
-<h3 class="anchored" data-anchor-id="precision">Precision</h3>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted positive observations to the total predicted positives.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Precision} = \frac{TP}{TP + FP}\)</span></li>
-</ul>
-</section>
-<section id="recall-sensitivity" class="level3">
-<h3 class="anchored" data-anchor-id="recall-sensitivity">Recall (Sensitivity)</h3>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted positive observations to all observations in the actual class.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Recall} = \frac{TP}{TP + FN}\)</span></li>
-</ul>
-</section>
-<section id="f1-score" class="level3">
-<h3 class="anchored" data-anchor-id="f1-score">F1-Score</h3>
-<ul>
-<li><strong>Description</strong>: The harmonic mean of Precision and Recall.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></li>
-</ul>
-</section>
-</section>
-<section id="roc-curve-and-auc-area-under-the-curve" class="level2">
-<h2 class="anchored" data-anchor-id="roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve)</h2>
-<ul>
-<li><strong>ROC Curve</strong>: A graphical representation of the true positive rate vs.&nbsp;false positive rate at various threshold settings.</li>
-<li><strong>AUC</strong>: Measures the entire two-dimensional area underneath the ROC curve. Higher AUC indicates better model performance.</li>
-</ul>
-</section>
-<section id="mean-absolute-error-mae" class="level2">
-<h2 class="anchored" data-anchor-id="mean-absolute-error-mae">7. Mean Absolute Error (MAE)</h2>
-<ul>
-<li><strong>Description</strong>: The average of the absolute differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\)</span></li>
-</ul>
-</section>
-<section id="mean-squared-error-mse-and-root-mean-squared-error-rmse" class="level2">
-<h2 class="anchored" data-anchor-id="mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)</h2>
-<section id="mse" class="level3">
-<h3 class="anchored" data-anchor-id="mse">MSE</h3>
-<ul>
-<li><strong>Description</strong>: The average of the squared differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></li>
-</ul>
-</section>
-<section id="rmse" class="level3">
-<h3 class="anchored" data-anchor-id="rmse">RMSE</h3>
-<ul>
-<li><strong>Description</strong>: The square root of MSE.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}}\)</span></li>
-</ul>
-</section>
-</section>
-<section id="r-squared-coefficient-of-determination" class="level2">
-<h2 class="anchored" data-anchor-id="r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</h2>
-<ul>
-<li><strong>Description</strong>: The proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></li>
-</ul>
-</section>
-<section id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="level2">
-<h2 class="anchored" data-anchor-id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC)</h2>
-<section id="aic" class="level3">
-<h3 class="anchored" data-anchor-id="aic">AIC</h3>
-<ul>
-<li><strong>Description</strong>: Measures the relative quality of a statistical model for a given set of data.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{AIC} = 2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is the number of parameters and <span class="math inline">\(L\)</span> is the likelihood.</li>
-</ul>
-</section>
-<section id="bic" class="level3">
-<h3 class="anchored" data-anchor-id="bic">BIC</h3>
-<ul>
-<li><strong>Description</strong>: Similar to AIC but includes a penalty term for the number of parameters.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{BIC} = k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is the number of observations.</li>
-</ul>
-</section>
-</section>
+<section id="metrics-to-evaluate-machine-model-performance" class="level1">
+<h1>Metrics to Evaluate Machine Model Performance</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 19%">
+<col style="width: 25%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Technique/Metric</th>
+<th>Description</th>
+<th>Purpose/Formula</th>
+<th>Scenario: Cancer prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Train-Test Split</td>
+<td>Split the dataset into training and testing subsets</td>
+<td>Assess model performance on unseen data to detect overfitting and ensure generalizability</td>
+<td>Always used; crucial for unbiased evaluation of model performance</td>
+</tr>
+<tr class="even">
+<td>2. Cross-Validation</td>
+<td>Divide data into k subsets and train the model k times, using a different subset as test set each time</td>
+<td>Provides robust estimate of model performance by averaging results over multiple splits</td>
+<td>Useful for smaller datasets or when data collection is expensive (e.g., rare cancer types)</td>
+</tr>
+<tr class="odd">
+<td>3. Confusion Matrix</td>
+<td>Table comparing predicted and actual values in classification</td>
+<td>Metrics: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN)</td>
+<td>Fundamental for understanding model performance in classification tasks, like cancer detection</td>
+</tr>
+<tr class="even">
+<td>4. Accuracy</td>
+<td>Ratio of correctly predicted instances to total instances</td>
+<td><span class="math inline">\(\frac{TP + TN}{TP + TN + FP + FN}\)</span></td>
+<td>Used when classes are balanced; less suitable for rare cancer detection due to class imbalance</td>
+</tr>
+<tr class="odd">
+<td>5a. Precision</td>
+<td>Ratio of correctly predicted positive observations to total predicted positives</td>
+<td><span class="math inline">\(\frac{TP}{TP + FP}\)</span></td>
+<td>Important when false positives are costly (e.g., unnecessary biopsies or treatments)</td>
+</tr>
+<tr class="even">
+<td>5b. Recall (Sensitivity)</td>
+<td>Ratio of correctly predicted positive observations to all actual positive observations</td>
+<td><span class="math inline">\(\frac{TP}{TP + FN}\)</span></td>
+<td>Critical in cancer detection to minimize false negatives (missed cancer cases)</td>
+</tr>
+<tr class="odd">
+<td>5c. F1-Score</td>
+<td>Harmonic mean of Precision and Recall</td>
+<td><span class="math inline">\(2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></td>
+<td>Balances precision and recall; useful when seeking a compromise between false positives and false negatives</td>
+</tr>
+<tr class="even">
+<td>6. ROC Curve and AUC</td>
+<td>ROC: Graph of true positive rate vs false positive rate at various thresholds. AUC: Area under ROC curve</td>
+<td>Higher AUC indicates better model performance</td>
+<td>Useful for comparing models and choosing optimal threshold, especially in diagnostic tests</td>
+</tr>
+<tr class="odd">
+<td>7. Mean Absolute Error (MAE)</td>
+<td>Average of absolute differences between predicted and actual values</td>
+<td><span class="math inline">\(\frac{1}{n} \sum_{i=1}^{n} \|y_i - \hat{y}_i\|\)</span></td>
+<td>Used in regression tasks, e.g., predicting survival time; less sensitive to outliers than MSE</td>
+</tr>
+<tr class="even">
+<td>8a. Mean Squared Error (MSE)</td>
+<td>Average of squared differences between predicted and actual values</td>
+<td><span class="math inline">\(\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></td>
+<td>Used in regression; penalizes large errors more, suitable when large errors are particularly undesirable</td>
+</tr>
+<tr class="odd">
+<td>8b. Root Mean Squared Error (RMSE)</td>
+<td>Square root of MSE</td>
+<td><span class="math inline">\(\sqrt{\text{MSE}}\)</span></td>
+<td>Same as MSE, but in the original unit of the target variable, making it more interpretable</td>
+</tr>
+<tr class="even">
+<td>9. R-squared</td>
+<td>Proportion of variance in dependent variable predictable from independent variables</td>
+<td><span class="math inline">\(1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></td>
+<td>Used in regression to assess overall fit; indicates how well the model explains the variance in the data</td>
+</tr>
+<tr class="odd">
+<td>10a. Akaike Information Criterion (AIC)</td>
+<td>Measures relative quality of statistical model for given data</td>
+<td><span class="math inline">\(2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is number of parameters and <span class="math inline">\(L\)</span> is likelihood</td>
+<td>Used for model selection; helps prevent overfitting by penalizing complex models</td>
+</tr>
+<tr class="even">
+<td>10b. Bayesian Information Criterion (BIC)</td>
+<td>Similar to AIC but with stronger penalty term for number of parameters</td>
+<td><span class="math inline">\(k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is number of observations</td>
+<td>Also used for model selection; tends to favor simpler models compared to AIC</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="machine-learning-aqi-time-series" class="level1">
 <h1>Machine Learning AQI Time Series</h1>
