@@ -70,12 +70,34 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <div class="quarto-title-block"><div><h1 class="title">Unveiling the Drivers of Clean Air</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="repo"><i class="bi"></i> Python</button></div></div>
+            <p class="subtitle lead">Analysis of Portland Air Quality (AQI)</p>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 30, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Contents</h2>
@@ -89,32 +111,7 @@ window.Quarto = {
   <li><a href="#what-is-prophet" id="toc-what-is-prophet" class="nav-link" data-scroll-target="#what-is-prophet">What is Prophet?</a></li>
   <li><a href="#what-is-sarimax-algorithm" id="toc-what-is-sarimax-algorithm" class="nav-link" data-scroll-target="#what-is-sarimax-algorithm">What is SARIMAX algorithm?​​​​​​​​​​​​​​​</a></li>
   </ul></li>
-  <li><a href="#common-techniques-to-evaluate-the-performance-of-machine-model" id="toc-common-techniques-to-evaluate-the-performance-of-machine-model" class="nav-link" data-scroll-target="#common-techniques-to-evaluate-the-performance-of-machine-model">Common Techniques to Evaluate the Performance of Machine Model</a>
-  <ul class="collapse">
-  <li><a href="#train-test-split" id="toc-train-test-split" class="nav-link" data-scroll-target="#train-test-split">1. Train-Test Split</a></li>
-  <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">2. Cross-Validation</a></li>
-  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix">3. Confusion Matrix</a></li>
-  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy">4. Accuracy</a></li>
-  <li><a href="#precision-recall-and-f1-score" id="toc-precision-recall-and-f1-score" class="nav-link" data-scroll-target="#precision-recall-and-f1-score">5. Precision, Recall, and F1-Score</a>
-  <ul class="collapse">
-  <li><a href="#precision" id="toc-precision" class="nav-link" data-scroll-target="#precision">Precision</a></li>
-  <li><a href="#recall-sensitivity" id="toc-recall-sensitivity" class="nav-link" data-scroll-target="#recall-sensitivity">Recall (Sensitivity)</a></li>
-  <li><a href="#f1-score" id="toc-f1-score" class="nav-link" data-scroll-target="#f1-score">F1-Score</a></li>
-  </ul></li>
-  <li><a href="#roc-curve-and-auc-area-under-the-curve" id="toc-roc-curve-and-auc-area-under-the-curve" class="nav-link" data-scroll-target="#roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve)</a></li>
-  <li><a href="#mean-absolute-error-mae" id="toc-mean-absolute-error-mae" class="nav-link" data-scroll-target="#mean-absolute-error-mae">7. Mean Absolute Error (MAE)</a></li>
-  <li><a href="#mean-squared-error-mse-and-root-mean-squared-error-rmse" id="toc-mean-squared-error-mse-and-root-mean-squared-error-rmse" class="nav-link" data-scroll-target="#mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)</a>
-  <ul class="collapse">
-  <li><a href="#mse" id="toc-mse" class="nav-link" data-scroll-target="#mse">MSE</a></li>
-  <li><a href="#rmse" id="toc-rmse" class="nav-link" data-scroll-target="#rmse">RMSE</a></li>
-  </ul></li>
-  <li><a href="#r-squared-coefficient-of-determination" id="toc-r-squared-coefficient-of-determination" class="nav-link" data-scroll-target="#r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</a></li>
-  <li><a href="#akaike-information-criterion-aic-and-bayesian-information-criterion-bic" id="toc-akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="nav-link" data-scroll-target="#akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC)</a>
-  <ul class="collapse">
-  <li><a href="#aic" id="toc-aic" class="nav-link" data-scroll-target="#aic">AIC</a></li>
-  <li><a href="#bic" id="toc-bic" class="nav-link" data-scroll-target="#bic">BIC</a></li>
-  </ul></li>
-  </ul></li>
+  <li><a href="#metrics-to-evaluate-machine-model-performance" id="toc-metrics-to-evaluate-machine-model-performance" class="nav-link" data-scroll-target="#metrics-to-evaluate-machine-model-performance">Metrics to Evaluate Machine Model Performance</a></li>
   <li><a href="#machine-learning-aqi-time-series" id="toc-machine-learning-aqi-time-series" class="nav-link" data-scroll-target="#machine-learning-aqi-time-series">Machine Learning AQI Time Series</a>
   <ul class="collapse">
   <li><a href="#how-can-we-use-akaike-information-criteria-aic" id="toc-how-can-we-use-akaike-information-criteria-aic" class="nav-link" data-scroll-target="#how-can-we-use-akaike-information-criteria-aic">How can we use Akaike Information Criteria (AIC)?</a></li>
@@ -138,41 +135,24 @@ window.Quarto = {
   <li><a href="#advanced-exploratory-data-analysis" id="toc-advanced-exploratory-data-analysis" class="nav-link" data-scroll-target="#advanced-exploratory-data-analysis">Advanced Exploratory Data Analysis</a></li>
   <li><a href="#time-series-visualization-for-co-pollutant-wind-and-aqi" id="toc-time-series-visualization-for-co-pollutant-wind-and-aqi" class="nav-link" data-scroll-target="#time-series-visualization-for-co-pollutant-wind-and-aqi">Time Series Visualization for CO Pollutant, Wind and AQI</a></li>
   <li><a href="#time-series-visualization-for-so2-no2-and-ozone" id="toc-time-series-visualization-for-so2-no2-and-ozone" class="nav-link" data-scroll-target="#time-series-visualization-for-so2-no2-and-ozone">Time Series Visualization for SO2, NO2 and Ozone</a></li>
-  <li><a href="#machine-learning-using-sklearn" id="toc-machine-learning-using-sklearn" class="nav-link" data-scroll-target="#machine-learning-using-sklearn">Machine Learning using SKlearn</a>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
-  <li><a href="#import-the-data" id="toc-import-the-data" class="nav-link" data-scroll-target="#import-the-data">Import the Data</a></li>
+  <li><a href="#sci-kit-learn-machine-learning" id="toc-sci-kit-learn-machine-learning" class="nav-link" data-scroll-target="#sci-kit-learn-machine-learning">Sci-Kit Learn Machine Learning</a></li>
+  <li><a href="#forecasting-future-values" id="toc-forecasting-future-values" class="nav-link" data-scroll-target="#forecasting-future-values">Forecasting Future Values</a></li>
+  <li><a href="#visualizing-our-results-the-culmination-of-our-analysis" id="toc-visualizing-our-results-the-culmination-of-our-analysis" class="nav-link" data-scroll-target="#visualizing-our-results-the-culmination-of-our-analysis">Visualizing Our Results: The Culmination of Our Analysis</a>
+  <ul class="collapse">
+  <li><a href="#interpreting-the-forecast-plot" id="toc-interpreting-the-forecast-plot" class="nav-link" data-scroll-target="#interpreting-the-forecast-plot">Interpreting the Forecast Plot</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#bibliography" id="toc-bibliography" class="nav-link" data-scroll-target="#bibliography">Bibliography</a></li>
   </ul>
-<div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="https://www.airnow.gov"><i class="bi bi-link-45deg"></i>Airnow Open Data</a></li></ul></div><div class="quarto-code-links"><h2>Code Links</h2><ul><li><a href="SWEETVIZ_REPORT.html"><i class="bi bi-file-code"></i>Sweetviz Analysis Report</a></li></ul></div></nav>
+</nav>
 </div>
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Unveiling the Drivers of Clean Air</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="repo"><i class="bi"></i></button></div></div>
-<p class="subtitle lead">Analysis of Portland Air Quality (AQI)</p>
-</div>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
-<div class="quarto-title-meta">
-
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">July 30, 2024</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <section id="introduction" class="level1">
@@ -227,115 +207,110 @@ window.Quarto = {
 <p>We are trying to find the right p, d, q hyperparameters to correctly forecast and predict the AQI values.</p>
 </section>
 </section>
-<section id="common-techniques-to-evaluate-the-performance-of-machine-model" class="level1">
-<h1>Common Techniques to Evaluate the Performance of Machine Model</h1>
-<section id="train-test-split" class="level2">
-<h2 class="anchored" data-anchor-id="train-test-split">1. Train-Test Split</h2>
-<ul>
-<li><strong>Description</strong>: Split the dataset into training and testing subsets.</li>
-<li><strong>Purpose</strong>: Assess the model’s performance on unseen data to detect overfitting and ensure generalizability.</li>
-</ul>
-</section>
-<section id="cross-validation" class="level2">
-<h2 class="anchored" data-anchor-id="cross-validation">2. Cross-Validation</h2>
-<ul>
-<li><strong>Description</strong>: Divide the data into k subsets and train the model k times, each time using a different subset as the test set and the remaining as the training set.</li>
-<li><strong>Purpose</strong>: Provides a more robust estimate of model performance by averaging results over multiple splits.</li>
-</ul>
-</section>
-<section id="confusion-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="confusion-matrix">3. Confusion Matrix</h2>
-<ul>
-<li><strong>Description</strong>: A table used to describe the performance of a classification model by comparing predicted and actual values.</li>
-<li><strong>Metrics</strong>: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN).</li>
-</ul>
-</section>
-<section id="accuracy" class="level2">
-<h2 class="anchored" data-anchor-id="accuracy">4. Accuracy</h2>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted instances to the total instances.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN}\)</span></li>
-</ul>
-</section>
-<section id="precision-recall-and-f1-score" class="level2">
-<h2 class="anchored" data-anchor-id="precision-recall-and-f1-score">5. Precision, Recall, and F1-Score</h2>
-<section id="precision" class="level3">
-<h3 class="anchored" data-anchor-id="precision">Precision</h3>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted positive observations to the total predicted positives.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Precision} = \frac{TP}{TP + FP}\)</span></li>
-</ul>
-</section>
-<section id="recall-sensitivity" class="level3">
-<h3 class="anchored" data-anchor-id="recall-sensitivity">Recall (Sensitivity)</h3>
-<ul>
-<li><strong>Description</strong>: The ratio of correctly predicted positive observations to all observations in the actual class.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{Recall} = \frac{TP}{TP + FN}\)</span></li>
-</ul>
-</section>
-<section id="f1-score" class="level3">
-<h3 class="anchored" data-anchor-id="f1-score">F1-Score</h3>
-<ul>
-<li><strong>Description</strong>: The harmonic mean of Precision and Recall.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></li>
-</ul>
-</section>
-</section>
-<section id="roc-curve-and-auc-area-under-the-curve" class="level2">
-<h2 class="anchored" data-anchor-id="roc-curve-and-auc-area-under-the-curve">6. ROC Curve and AUC (Area Under the Curve)</h2>
-<ul>
-<li><strong>ROC Curve</strong>: A graphical representation of the true positive rate vs.&nbsp;false positive rate at various threshold settings.</li>
-<li><strong>AUC</strong>: Measures the entire two-dimensional area underneath the ROC curve. Higher AUC indicates better model performance.</li>
-</ul>
-</section>
-<section id="mean-absolute-error-mae" class="level2">
-<h2 class="anchored" data-anchor-id="mean-absolute-error-mae">7. Mean Absolute Error (MAE)</h2>
-<ul>
-<li><strong>Description</strong>: The average of the absolute differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|\)</span></li>
-</ul>
-</section>
-<section id="mean-squared-error-mse-and-root-mean-squared-error-rmse" class="level2">
-<h2 class="anchored" data-anchor-id="mean-squared-error-mse-and-root-mean-squared-error-rmse">8. Mean Squared Error (MSE) and Root Mean Squared Error (RMSE)</h2>
-<section id="mse" class="level3">
-<h3 class="anchored" data-anchor-id="mse">MSE</h3>
-<ul>
-<li><strong>Description</strong>: The average of the squared differences between predicted and actual values.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></li>
-</ul>
-</section>
-<section id="rmse" class="level3">
-<h3 class="anchored" data-anchor-id="rmse">RMSE</h3>
-<ul>
-<li><strong>Description</strong>: The square root of MSE.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{RMSE} = \sqrt{\text{MSE}}\)</span></li>
-</ul>
-</section>
-</section>
-<section id="r-squared-coefficient-of-determination" class="level2">
-<h2 class="anchored" data-anchor-id="r-squared-coefficient-of-determination">9. R-squared (Coefficient of Determination)</h2>
-<ul>
-<li><strong>Description</strong>: The proportion of the variance in the dependent variable that is predictable from the independent variables.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(R^2 = 1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></li>
-</ul>
-</section>
-<section id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic" class="level2">
-<h2 class="anchored" data-anchor-id="akaike-information-criterion-aic-and-bayesian-information-criterion-bic">10. Akaike Information Criterion (AIC) and Bayesian Information Criterion (BIC)</h2>
-<section id="aic" class="level3">
-<h3 class="anchored" data-anchor-id="aic">AIC</h3>
-<ul>
-<li><strong>Description</strong>: Measures the relative quality of a statistical model for a given set of data.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{AIC} = 2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is the number of parameters and <span class="math inline">\(L\)</span> is the likelihood.</li>
-</ul>
-</section>
-<section id="bic" class="level3">
-<h3 class="anchored" data-anchor-id="bic">BIC</h3>
-<ul>
-<li><strong>Description</strong>: Similar to AIC but includes a penalty term for the number of parameters.</li>
-<li><strong>Formula</strong>: <span class="math inline">\(\text{BIC} = k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is the number of observations.</li>
-</ul>
-</section>
-</section>
+<section id="metrics-to-evaluate-machine-model-performance" class="level1">
+<h1>Metrics to Evaluate Machine Model Performance</h1>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 26%">
+<col style="width: 19%">
+<col style="width: 25%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Technique/Metric</th>
+<th>Description</th>
+<th>Purpose/Formula</th>
+<th>Scenario: Cancer prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1. Train-Test Split</td>
+<td>Split the dataset into training and testing subsets</td>
+<td>Assess model performance on unseen data to detect overfitting and ensure generalizability</td>
+<td>Always used; crucial for unbiased evaluation of model performance</td>
+</tr>
+<tr class="even">
+<td>2. Cross-Validation</td>
+<td>Divide data into k subsets and train the model k times, using a different subset as test set each time</td>
+<td>Provides robust estimate of model performance by averaging results over multiple splits</td>
+<td>Useful for smaller datasets or when data collection is expensive (e.g., rare cancer types)</td>
+</tr>
+<tr class="odd">
+<td>3. Confusion Matrix</td>
+<td>Table comparing predicted and actual values in classification</td>
+<td>Metrics: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN)</td>
+<td>Fundamental for understanding model performance in classification tasks, like cancer detection</td>
+</tr>
+<tr class="even">
+<td>4. Accuracy</td>
+<td>Ratio of correctly predicted instances to total instances</td>
+<td><span class="math inline">\(\frac{TP + TN}{TP + TN + FP + FN}\)</span></td>
+<td>Used when classes are balanced; less suitable for rare cancer detection due to class imbalance</td>
+</tr>
+<tr class="odd">
+<td>5a. Precision</td>
+<td>Ratio of correctly predicted positive observations to total predicted positives</td>
+<td><span class="math inline">\(\frac{TP}{TP + FP}\)</span></td>
+<td>Important when false positives are costly (e.g., unnecessary biopsies or treatments)</td>
+</tr>
+<tr class="even">
+<td>5b. Recall (Sensitivity)</td>
+<td>Ratio of correctly predicted positive observations to all actual positive observations</td>
+<td><span class="math inline">\(\frac{TP}{TP + FN}\)</span></td>
+<td>Critical in cancer detection to minimize false negatives (missed cancer cases)</td>
+</tr>
+<tr class="odd">
+<td>5c. F1-Score</td>
+<td>Harmonic mean of Precision and Recall</td>
+<td><span class="math inline">\(2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\)</span></td>
+<td>Balances precision and recall; useful when seeking a compromise between false positives and false negatives</td>
+</tr>
+<tr class="even">
+<td>6. ROC Curve and AUC</td>
+<td>ROC: Graph of true positive rate vs false positive rate at various thresholds. AUC: Area under ROC curve</td>
+<td>Higher AUC indicates better model performance</td>
+<td>Useful for comparing models and choosing optimal threshold, especially in diagnostic tests</td>
+</tr>
+<tr class="odd">
+<td>7. Mean Absolute Error (MAE)</td>
+<td>Average of absolute differences between predicted and actual values</td>
+<td><span class="math inline">\(\frac{1}{n} \sum_{i=1}^{n} \|y_i - \hat{y}_i\|\)</span></td>
+<td>Used in regression tasks, e.g., predicting survival time; less sensitive to outliers than MSE</td>
+</tr>
+<tr class="even">
+<td>8a. Mean Squared Error (MSE)</td>
+<td>Average of squared differences between predicted and actual values</td>
+<td><span class="math inline">\(\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2\)</span></td>
+<td>Used in regression; penalizes large errors more, suitable when large errors are particularly undesirable</td>
+</tr>
+<tr class="odd">
+<td>8b. Root Mean Squared Error (RMSE)</td>
+<td>Square root of MSE</td>
+<td><span class="math inline">\(\sqrt{\text{MSE}}\)</span></td>
+<td>Same as MSE, but in the original unit of the target variable, making it more interpretable</td>
+</tr>
+<tr class="even">
+<td>9. R-squared</td>
+<td>Proportion of variance in dependent variable predictable from independent variables</td>
+<td><span class="math inline">\(1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}\)</span></td>
+<td>Used in regression to assess overall fit; indicates how well the model explains the variance in the data</td>
+</tr>
+<tr class="odd">
+<td>10a. Akaike Information Criterion (AIC)</td>
+<td>Measures relative quality of statistical model for given data</td>
+<td><span class="math inline">\(2k - 2\ln(L)\)</span> where <span class="math inline">\(k\)</span> is number of parameters and <span class="math inline">\(L\)</span> is likelihood</td>
+<td>Used for model selection; helps prevent overfitting by penalizing complex models</td>
+</tr>
+<tr class="even">
+<td>10b. Bayesian Information Criterion (BIC)</td>
+<td>Similar to AIC but with stronger penalty term for number of parameters</td>
+<td><span class="math inline">\(k\ln(n) - 2\ln(L)\)</span> where <span class="math inline">\(n\)</span> is number of observations</td>
+<td>Also used for model selection; tends to favor simpler models compared to AIC</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="machine-learning-aqi-time-series" class="level1">
 <h1>Machine Learning AQI Time Series</h1>
@@ -464,7 +439,7 @@ window.Quarto = {
 <div id="cell-sweetvis-report" class="cell" data-execution_count="9">
 <div id="sweetvis-report" class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"fdcc90420a164305971dc29a58c764fa","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"4327aa9a215844d1960793bffa4990b1","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -549,195 +524,17 @@ For recognized time series features: - Histograms are replaced with line plots -
 </div>
 <p>We finally completed the exploratory data analysis.</p>
 </section>
-<section id="machine-learning-using-sklearn" class="level1">
-<h1>Machine Learning using SKlearn</h1>
+<section id="results" class="level1">
+<h1>Results</h1>
+<section id="sci-kit-learn-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="sci-kit-learn-machine-learning">Sci-Kit Learn Machine Learning</h2>
 <p>Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm.</p>
-<p>Starting by looking at the head to see all of our columns. Immediately, we can some missing data, which must be addressed before any machine learning algorithms can be conducted.</p>
-<section id="import-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="import-the-data">Import the Data</h2>
-<div id="cell-check-len" class="cell" data-execution_count="18">
-<div id="check-len" class="cell-output cell-output-display" data-execution_count="18">
-<pre><code>147039</code></pre>
-</div>
-</div>
-<p>Here we can see all the missing data in each column. There are some very large numbers we must address. The entire dataset is only 147039 rows long. Some columnshave more than half the data missing.</p>
-<div id="cell-check-isna" class="cell" data-execution_count="19">
-<div id="check-isna" class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>yearly_transit_id                            5114
-category_id                                  3068
-location_id                                     0
-date_id                                         0
-id                                              0
-aqi                                          3068
-mean_temperature_fahrenheit                 61895
-max_temperature_fahrenheit                  61895
-mean_pressure_millibars                     91859
-max_pressure_millibars                      91859
-mean_humidity_percent_relative_humidity     76818
-max_humidity_percent_relative_humidity      76818
-mean_wind_knots                             58488
-max_wind_knots                              58488
-mean_co_ppm                                 32615
-max_co_ppm                                  32615
-mean_no2_ppb                                27747
-max_no2_ppb                                 27747
-mean_ozone_ppm                              33163
-max_ozone_ppm                               33163
-mean_so2_ppb                                49291
-max_so2_ppb                                 49291
-mean_pm100_micrograms_per_cubic_meter       77281
-max_pm100_micrograms_per_cubic_meter        77281
-mean_pm25_micrograms_per_cubic_meter        37443
-max_pm25_micrograms_per_cubic_meter         37443
-mean_lead_micrograms_per_cubic_meter       138816
-max_lead_micrograms_per_cubic_meter        138816
-date                                            0
-state                                           0
-st_abbv                                         0
-county                                          0
-city                                            0
-population                                      0
-density                                         0
-category                                     3068
-aqi_range                                    3068
-num_busses                                   5114
-revenue                                      5844
-operating_expense                            5114
-passenger_trips                              5114
-operating_hours                              5114
-passenger_miles                              5114
-operating_miles                              5114
-dtype: int64</code></pre>
-</div>
-</div>
-<p>The first steps to addressing the missing data will be to drop the columns that will definitely not be needed. This includes the id columns used for joining within the SQL database, as well as the maximum columns as we already have the mean data. We also rename the columns to make it easier to understand and reference.</p>
-<p>Now the missing data looks like this, it is a little better, but we can still do so much more.</p>
-<div id="cell-check-NaN" class="cell" data-execution_count="21">
-<div id="check-nan" class="cell-output cell-output-display" data-execution_count="21">
-<pre><code>date                      0
-state                     0
-county                    0
-city                      0
-population                0
-density                   0
-aqi                    3068
-category               3068
-temp                  61895
-pressure              91859
-humidity              76818
-wind_speed            58488
-co                    32615
-no2                   27747
-o3                    33163
-so2                   49291
-pm100                 77281
-pm25                  37443
-lead                 138816
-num_busses             5114
-revenue                5844
-operating_expense      5114
-passenger_trips        5114
-operating_hours        5114
-passenger_miles        5114
-operating_miles        5114
-dtype: int64</code></pre>
-</div>
-</div>
-<p>We will group data by week. This will take an average count for the entire week for each variable for each city. This will eliminate any missing data that was not captured everyday, but only some days. For example, the pollutants (PM10 and PM2.5) were captured once every three days.</p>
-<p>We can also see that the city Virginia Beach has almost no data, so it will be easiest to drop that city.</p>
-<p>Next, since we will be measuring and predicting AQI, we will drop all rows missing AQI data.</p>
-<p>Missing data is better, but there is still work to do.</p>
-<div id="cell-check-NaN-again" class="cell" data-execution_count="25">
-<div id="check-nan-again" class="cell-output cell-output-display" data-execution_count="25">
-<pre><code>date                     0
-state                    0
-county                   0
-city                     0
-population               0
-density                  0
-aqi                      0
-temp                  8199
-pressure             12387
-humidity             10318
-wind_speed            7679
-co                    3900
-no2                   3250
-o3                    3964
-so2                   6315
-pm100                 4835
-pm25                  2055
-num_busses             312
-revenue                416
-operating_expense      312
-passenger_trips        312
-operating_hours        312
-passenger_miles        312
-operating_miles        312
-dtype: int64</code></pre>
-</div>
-</div>
-<p>The data collected has separate information for the city of New York City. NYC is divided into five borroughs, each within its own county. We will group and average out these values to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York borroughs but not others.</p>
-<div id="group-nyc-1-city" class="cell" data-execution_count="26">
-<div class="cell-output cell-output-stdout">
-<pre><code>          date     state    county           city  population  density  \
-0   2015-01-04  New York  Multiple  New York City    18908608  11080.3   
-1   2015-01-11  New York  Multiple  New York City    18908608  11080.3   
-2   2015-01-18  New York  Multiple  New York City    18908608  11080.3   
-3   2015-01-25  New York  Multiple  New York City    18908608  11080.3   
-4   2015-02-01  New York  Multiple  New York City    18908608  11080.3   
-..         ...       ...       ...            ...         ...      ...   
-413 2022-12-04  New York  Multiple  New York City    18908608  11080.3   
-414 2022-12-11  New York  Multiple  New York City    18908608  11080.3   
-415 2022-12-18  New York  Multiple  New York City    18908608  11080.3   
-416 2022-12-25  New York  Multiple  New York City    18908608  11080.3   
-417 2023-01-01  New York  Multiple  New York City    18908608  11080.3   
-
-           aqi       temp     pressure   humidity  ...       so2      pm100  \
-0    49.450000  38.984375  1015.694425  63.076739  ...  2.011285        NaN   
-1    47.514286  23.241072  1019.509891  50.699404  ...  3.337455        NaN   
-2    56.000000  29.508929  1017.454363  65.954221  ...  3.034949        NaN   
-3    49.800000  34.836310  1008.855166  60.536141  ...  2.267468        NaN   
-4    44.342857  25.562500  1010.873006  63.099378  ...  2.640521        NaN   
-..         ...        ...          ...        ...  ...       ...        ...   
-413  29.657143        NaN          NaN        NaN  ...  0.437256   5.333334   
-414  34.742857        NaN          NaN        NaN  ...  0.517050  11.666667   
-415  27.600000        NaN          NaN        NaN  ...  0.507095   9.333333   
-416  38.000000        NaN          NaN        NaN  ...  0.837313   8.000000   
-417  59.566667        NaN          NaN        NaN  ...  1.217373  22.666666   
-
-          pm25  num_busses       revenue  operating_expense  passenger_trips  \
-0     7.781642     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
-1     8.393517     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
-2    13.683131     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
-3    10.417719     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
-4     7.102983     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
-..         ...         ...           ...                ...              ...   
-413   4.959028      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
-414   7.456925      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
-415   4.837290      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
-416   7.295255      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
-417  17.720097      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
-
-     operating_hours  passenger_miles  operating_miles  
-0         77805045.0     9.676463e+09      577333420.0  
-1         77805045.0     9.676463e+09      577333420.0  
-2         77805045.0     9.676463e+09      577333420.0  
-3         77805045.0     9.676463e+09      577333420.0  
-4         77805045.0     9.676463e+09      577333420.0  
-..               ...              ...              ...  
-413       16852360.0     1.446845e+09      130602200.0  
-414       16852360.0     1.446845e+09      130602200.0  
-415       16852360.0     1.446845e+09      130602200.0  
-416       16852360.0     1.446845e+09      130602200.0  
-417       16852360.0     1.446845e+09      130602200.0  
-
-[418 rows x 24 columns]</code></pre>
-</div>
-</div>
-<p>Additionally, Kansas City is located in two states, and thus in two counties. We will do the same thing to contract and standardize the data.</p>
-<p>After doing this, we drop the rest of the rows with missing data, leaving us with a total of 17 cities with metropolitan area populations greater than one million.</p>
-<div id="cell-count-cities" class="cell" data-execution_count="29">
-<div id="count-cities" class="cell-output cell-output-display" data-execution_count="29">
+<p>First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped.</p>
+<p>Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.</p>
+<p>The data collected has separate information for the city of New York City. NYC is divided into five boroughs, each within its own county. These values are grouped and averaged out to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York boroughs but not others. Likewise, Kansas City spans two states and two counties, so those values are grouped together.</p>
+<p>After this data cleaning, we are left with a total of eighteen cities across the country with a total metropolitan area population of greater than one million. The table below (figure 24324) shows all eighteen cities being used in the prediction algorithm and their respective row counts.</p>
+<div id="cell-count-cities" class="cell" data-execution_count="28">
+<div id="count-cities" class="cell-output cell-output-display" data-execution_count="28">
 <div>
 
 
@@ -846,9 +643,51 @@ dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<p>To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are shown below:</p>
-<div id="cell-AQI-bin-ML" class="cell" data-execution_count="30">
-<div id="aqi-bin-ml" class="cell-output cell-output-display" data-execution_count="30">
+<p>To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are:</p>
+<ul>
+<li>0-30</li>
+<li>31-40</li>
+<li>41-50</li>
+<li>51-60</li>
+<li>61-70</li>
+<li>71-80</li>
+<li>81-90</li>
+<li>91-100</li>
+<li>101-150</li>
+<li>151+</li>
+</ul>
+<p>A feature selector is run on the set of all variables. This chooses the best predictors of the dependent variable AQI.</p>
+<p>The following tools are used:</p>
+<ul>
+<li>Train Test Split</li>
+<li>One Hot Encoder</li>
+<li>Transformer</li>
+<li>Pipeline</li>
+<li>Standard Scaler</li>
+</ul>
+<p>Feature selection is done on the data. From this we are given the following variables:</p>
+<ul>
+<li>City</li>
+<li>Temperature</li>
+<li>Humidity</li>
+<li>Carbon Monoxide</li>
+<li>Nitrogen Dioxide</li>
+<li>Ozone</li>
+<li>PM10</li>
+<li>PM2.5</li>
+</ul>
+<p>These features are used in the final model.</p>
+<p>With these features, we test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models tested are:</p>
+<ul>
+<li>K nearest neighbors</li>
+<li>Tree model</li>
+<li>Random Forest model</li>
+<li>Logistic Regression</li>
+<li>Naive Bayes</li>
+</ul>
+<p>Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.</p>
+<div id="cell-model-select" class="cell" data-execution_count="37">
+<div id="model-select" class="cell-output cell-output-display">
 <div>
 
 
@@ -856,159 +695,62 @@ dtype: int64</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">date</th>
-<th data-quarto-table-cell-role="th">state</th>
-<th data-quarto-table-cell-role="th">county</th>
-<th data-quarto-table-cell-role="th">city</th>
-<th data-quarto-table-cell-role="th">population</th>
-<th data-quarto-table-cell-role="th">density</th>
-<th data-quarto-table-cell-role="th">aqi</th>
-<th data-quarto-table-cell-role="th">temp</th>
-<th data-quarto-table-cell-role="th">pressure</th>
-<th data-quarto-table-cell-role="th">humidity</th>
-<th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">pm100</th>
-<th data-quarto-table-cell-role="th">pm25</th>
-<th data-quarto-table-cell-role="th">num_busses</th>
-<th data-quarto-table-cell-role="th">revenue</th>
-<th data-quarto-table-cell-role="th">operating_expense</th>
-<th data-quarto-table-cell-role="th">passenger_trips</th>
-<th data-quarto-table-cell-role="th">operating_hours</th>
-<th data-quarto-table-cell-role="th">passenger_miles</th>
-<th data-quarto-table-cell-role="th">operating_miles</th>
-<th data-quarto-table-cell-role="th">aqi_discrete</th>
+<th data-quarto-table-cell-role="th">Model</th>
+<th data-quarto-table-cell-role="th">Cohen Kappa Score</th>
+<th data-quarto-table-cell-role="th">Accuracy</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>2015-01-04</td>
-<td>Arizona</td>
-<td>Maricopa</td>
-<td>Phoenix</td>
-<td>4064275</td>
-<td>1198.9</td>
-<td>86.50</td>
-<td>41.458333</td>
-<td>972.860814</td>
-<td>60.739583</td>
-<td>...</td>
-<td>20.709822</td>
-<td>20.505426</td>
-<td>729.0</td>
-<td>47024975.0</td>
-<td>2.256208e+08</td>
-<td>55497019.0</td>
-<td>2228182.0</td>
-<td>2.190928e+08</td>
-<td>28371107.0</td>
-<td>81-90</td>
+<td>KNN</td>
+<td>0.279682</td>
+<td>0.451824</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
-<td>2015-01-04</td>
-<td>California</td>
-<td>Los Angeles</td>
-<td>Los Angeles</td>
-<td>11922389</td>
-<td>3184.7</td>
-<td>118.50</td>
-<td>50.281250</td>
-<td>1010.666650</td>
-<td>58.177084</td>
-<td>...</td>
-<td>24.954331</td>
-<td>21.400000</td>
-<td>2259.0</td>
-<td>273158938.0</td>
-<td>1.056348e+09</td>
-<td>367104774.0</td>
-<td>7938548.0</td>
-<td>1.448619e+09</td>
-<td>84041668.0</td>
-<td>101-150</td>
+<td>Tree</td>
+<td>0.390715</td>
+<td>0.520958</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">7</td>
-<td>2015-01-04</td>
-<td>District Of Columbia</td>
-<td>District of Columbia</td>
-<td>Washington</td>
-<td>5116378</td>
-<td>4235.7</td>
-<td>45.25</td>
-<td>41.149479</td>
-<td>1015.388525</td>
-<td>61.075000</td>
-<td>...</td>
-<td>13.750000</td>
-<td>11.088055</td>
-<td>1394.0</td>
-<td>149657899.0</td>
-<td>6.453259e+08</td>
-<td>139353079.0</td>
-<td>4115200.0</td>
-<td>4.293390e+08</td>
-<td>39643319.0</td>
-<td>41-50</td>
+<td data-quarto-table-cell-role="th">2</td>
+<td>Random Forest</td>
+<td>0.481175</td>
+<td>0.602069</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">17</td>
-<td>2015-01-04</td>
-<td>Massachusetts</td>
-<td>Suffolk</td>
-<td>Boston</td>
-<td>4328315</td>
-<td>5319.0</td>
-<td>42.75</td>
-<td>33.458332</td>
-<td>1018.536500</td>
-<td>58.234375</td>
-<td>...</td>
-<td>6.000000</td>
-<td>7.244791</td>
-<td>800.0</td>
-<td>96572664.0</td>
-<td>4.080501e+08</td>
-<td>122496729.0</td>
-<td>2231562.0</td>
-<td>3.162285e+08</td>
-<td>22115804.0</td>
-<td>41-50</td>
+<td data-quarto-table-cell-role="th">3</td>
+<td>Logistic</td>
+<td>0.312286</td>
+<td>0.485574</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">18</td>
-<td>2015-01-04</td>
-<td>Michigan</td>
-<td>Wayne</td>
-<td>Detroit</td>
-<td>3725908</td>
-<td>1772.2</td>
-<td>49.25</td>
-<td>30.203125</td>
-<td>994.260400</td>
-<td>72.671876</td>
-<td>...</td>
-<td>18.250000</td>
-<td>9.394618</td>
-<td>432.0</td>
-<td>31303313.0</td>
-<td>1.729056e+08</td>
-<td>33078462.0</td>
-<td>1225079.0</td>
-<td>1.696881e+08</td>
-<td>17705665.0</td>
-<td>41-50</td>
+<td data-quarto-table-cell-role="th">4</td>
+<td>naive Bayes</td>
+<td>0.003825</td>
+<td>0.048993</td>
 </tr>
 </tbody>
 </table>
 
-<p>5 rows × 25 columns</p>
 </div>
 </div>
 </div>
-<div id="cell-label-bin" class="cell" data-execution_count="31">
-<div id="label-bin" class="cell-output cell-output-display" data-execution_count="31">
+<p>Hyperparameter optimization will be done to further improve the model. A randomized search is run with 100 iterations. The following hyperparameters are optimized:</p>
+<ul>
+<li>Max Categories</li>
+<li>Min Frequency</li>
+<li>Max Depth</li>
+<li>Max Features</li>
+<li>Min Samples Leaf</li>
+<li>Min Samples Split</li>
+<li>Num Estimators</li>
+<li>Bootstrap</li>
+</ul>
+<p>Figure 242442 below shows the selected hyperparameters.</p>
+<div id="cell-randsearch-get-params" class="cell" data-execution_count="42">
+<div id="randsearch-get-params" class="cell-output cell-output-display">
 <div>
 
 
@@ -1016,1266 +758,217 @@ dtype: int64</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">date</th>
-<th data-quarto-table-cell-role="th">state</th>
-<th data-quarto-table-cell-role="th">county</th>
-<th data-quarto-table-cell-role="th">city</th>
-<th data-quarto-table-cell-role="th">population</th>
-<th data-quarto-table-cell-role="th">density</th>
-<th data-quarto-table-cell-role="th">aqi</th>
-<th data-quarto-table-cell-role="th">temp</th>
-<th data-quarto-table-cell-role="th">pressure</th>
-<th data-quarto-table-cell-role="th">humidity</th>
-<th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">pm100</th>
-<th data-quarto-table-cell-role="th">pm25</th>
-<th data-quarto-table-cell-role="th">num_busses</th>
-<th data-quarto-table-cell-role="th">revenue</th>
-<th data-quarto-table-cell-role="th">operating_expense</th>
-<th data-quarto-table-cell-role="th">passenger_trips</th>
-<th data-quarto-table-cell-role="th">operating_hours</th>
-<th data-quarto-table-cell-role="th">passenger_miles</th>
-<th data-quarto-table-cell-role="th">operating_miles</th>
-<th data-quarto-table-cell-role="th">aqi_discrete</th>
+<th data-quarto-table-cell-role="th">Parameter</th>
+<th data-quarto-table-cell-role="th">Value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>2015-01-04</td>
-<td>Arizona</td>
-<td>Maricopa</td>
-<td>Phoenix</td>
-<td>4064275</td>
-<td>1198.9</td>
-<td>86.50</td>
-<td>41.458333</td>
-<td>972.860814</td>
-<td>60.739583</td>
-<td>...</td>
-<td>20.709822</td>
-<td>20.505426</td>
-<td>729.0</td>
-<td>47024975.0</td>
-<td>2.256208e+08</td>
-<td>55497019.0</td>
-<td>2228182.0</td>
-<td>2.190928e+08</td>
-<td>28371107.0</td>
-<td>81-90</td>
+<td>RF_model__bootstrap</td>
+<td>False</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
-<td>2015-01-04</td>
-<td>California</td>
-<td>Los Angeles</td>
-<td>Los Angeles</td>
-<td>11922389</td>
-<td>3184.7</td>
-<td>118.50</td>
-<td>50.281250</td>
-<td>1010.666650</td>
-<td>58.177084</td>
-<td>...</td>
-<td>24.954331</td>
-<td>21.400000</td>
-<td>2259.0</td>
-<td>273158938.0</td>
-<td>1.056348e+09</td>
-<td>367104774.0</td>
-<td>7938548.0</td>
-<td>1.448619e+09</td>
-<td>84041668.0</td>
-<td>101-150</td>
+<td>RF_model__max_depth</td>
+<td>28</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">7</td>
-<td>2015-01-04</td>
-<td>District Of Columbia</td>
-<td>District of Columbia</td>
-<td>Washington</td>
-<td>5116378</td>
-<td>4235.7</td>
-<td>45.25</td>
-<td>41.149479</td>
-<td>1015.388525</td>
-<td>61.075000</td>
-<td>...</td>
-<td>13.750000</td>
-<td>11.088055</td>
-<td>1394.0</td>
-<td>149657899.0</td>
-<td>6.453259e+08</td>
-<td>139353079.0</td>
-<td>4115200.0</td>
-<td>4.293390e+08</td>
-<td>39643319.0</td>
-<td>41-50</td>
+<td data-quarto-table-cell-role="th">2</td>
+<td>RF_model__max_features</td>
+<td>sqrt</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">17</td>
-<td>2015-01-04</td>
-<td>Massachusetts</td>
-<td>Suffolk</td>
-<td>Boston</td>
-<td>4328315</td>
-<td>5319.0</td>
-<td>42.75</td>
-<td>33.458332</td>
-<td>1018.536500</td>
-<td>58.234375</td>
-<td>...</td>
-<td>6.000000</td>
-<td>7.244791</td>
-<td>800.0</td>
-<td>96572664.0</td>
-<td>4.080501e+08</td>
-<td>122496729.0</td>
-<td>2231562.0</td>
-<td>3.162285e+08</td>
-<td>22115804.0</td>
-<td>41-50</td>
+<td data-quarto-table-cell-role="th">3</td>
+<td>RF_model__min_samples_leaf</td>
+<td>2</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">18</td>
-<td>2015-01-04</td>
-<td>Michigan</td>
-<td>Wayne</td>
-<td>Detroit</td>
-<td>3725908</td>
-<td>1772.2</td>
-<td>49.25</td>
-<td>30.203125</td>
-<td>994.260400</td>
-<td>72.671876</td>
-<td>...</td>
-<td>18.250000</td>
-<td>9.394618</td>
-<td>432.0</td>
-<td>31303313.0</td>
-<td>1.729056e+08</td>
-<td>33078462.0</td>
-<td>1225079.0</td>
-<td>1.696881e+08</td>
-<td>17705665.0</td>
-<td>41-50</td>
+<td data-quarto-table-cell-role="th">4</td>
+<td>RF_model__min_samples_split</td>
+<td>5</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>RF_model__n_estimators</td>
+<td>120</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>aqi_transformer__categories__max_categories</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>aqi_transformer__categories__min_frequency</td>
+<td>15</td>
 </tr>
 </tbody>
 </table>
 
-<p>5 rows × 25 columns</p>
 </div>
-</div>
-</div>
-<p>To set up the ML prediction, we must specify the variable being predicted (aqi_discrete, the aqi separated into bins), and the independent prediction variables. We will use a feature selector to select the most accurate predictors to try to optimize the model. Therefore, we initially choose every other variable to be our independent variables.</p>
-<p>We must split the data into training and testing datasets. We also define an encoder to transform the discrete predictors into many binary variables for each category.</p>
-<p>A transformer is used to quickly transform variables into the necessary form for modeling.</p>
-<div id="cell-def-transformer" class="cell" data-execution_count="35">
-<div id="def-transformer" class="cell-output cell-output-display theorem definition" data-execution_count="35">
-<p><span class="theorem-title"><strong>Definition 1</strong></span> &nbsp;</p>
-<style>#sk-container-id-1 {
-  /* Definition of color scheme common for light and dark mode */
-  --sklearn-color-text: black;
-  --sklearn-color-line: gray;
-  /* Definition of color scheme for unfitted estimators */
-  --sklearn-color-unfitted-level-0: #fff5e6;
-  --sklearn-color-unfitted-level-1: #f6e4d2;
-  --sklearn-color-unfitted-level-2: #ffe0b3;
-  --sklearn-color-unfitted-level-3: chocolate;
-  /* Definition of color scheme for fitted estimators */
-  --sklearn-color-fitted-level-0: #f0f8ff;
-  --sklearn-color-fitted-level-1: #d4ebff;
-  --sklearn-color-fitted-level-2: #b3dbfd;
-  --sklearn-color-fitted-level-3: cornflowerblue;
-
-  /* Specific color for light theme */
-  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
-  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-icon: #696969;
-
-  @media (prefers-color-scheme: dark) {
-    /* Redefinition of color scheme for dark theme */
-    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
-    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-icon: #878787;
-  }
-}
-
-#sk-container-id-1 {
-  color: var(--sklearn-color-text);
-}
-
-#sk-container-id-1 pre {
-  padding: 0;
-}
-
-#sk-container-id-1 input.sk-hidden--visually {
-  border: 0;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-#sk-container-id-1 div.sk-dashed-wrapped {
-  border: 1px dashed var(--sklearn-color-line);
-  margin: 0 0.4em 0.5em 0.4em;
-  box-sizing: border-box;
-  padding-bottom: 0.4em;
-  background-color: var(--sklearn-color-background);
-}
-
-#sk-container-id-1 div.sk-container {
-  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
-     but bootstrap.min.css set `[hidden] { display: none !important; }`
-     so we also need the `!important` here to be able to override the
-     default hidden behavior on the sphinx rendered scikit-learn.org.
-     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
-  display: inline-block !important;
-  position: relative;
-}
-
-#sk-container-id-1 div.sk-text-repr-fallback {
-  display: none;
-}
-
-div.sk-parallel-item,
-div.sk-serial,
-div.sk-item {
-  /* draw centered vertical line to link estimators */
-  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
-  background-size: 2px 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-/* Parallel-specific style estimator block */
-
-#sk-container-id-1 div.sk-parallel-item::after {
-  content: "";
-  width: 100%;
-  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
-  flex-grow: 1;
-}
-
-#sk-container-id-1 div.sk-parallel {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  background-color: var(--sklearn-color-background);
-  position: relative;
-}
-
-#sk-container-id-1 div.sk-parallel-item {
-  display: flex;
-  flex-direction: column;
-}
-
-#sk-container-id-1 div.sk-parallel-item:first-child::after {
-  align-self: flex-end;
-  width: 50%;
-}
-
-#sk-container-id-1 div.sk-parallel-item:last-child::after {
-  align-self: flex-start;
-  width: 50%;
-}
-
-#sk-container-id-1 div.sk-parallel-item:only-child::after {
-  width: 0;
-}
-
-/* Serial-specific style estimator block */
-
-#sk-container-id-1 div.sk-serial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--sklearn-color-background);
-  padding-right: 1em;
-  padding-left: 1em;
-}
-
-
-/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
-clickable and can be expanded/collapsed.
-- Pipeline and ColumnTransformer use this feature and define the default style
-- Estimators will overwrite some part of the style using the `sk-estimator` class
-*/
-
-/* Pipeline and ColumnTransformer style (default) */
-
-#sk-container-id-1 div.sk-toggleable {
-  /* Default theme specific background. It is overwritten whether we have a
-  specific estimator or a Pipeline/ColumnTransformer */
-  background-color: var(--sklearn-color-background);
-}
-
-/* Toggleable label */
-#sk-container-id-1 label.sk-toggleable__label {
-  cursor: pointer;
-  display: block;
-  width: 100%;
-  margin-bottom: 0;
-  padding: 0.5em;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-#sk-container-id-1 label.sk-toggleable__label-arrow:before {
-  /* Arrow on the left of the label */
-  content: "▸";
-  float: left;
-  margin-right: 0.25em;
-  color: var(--sklearn-color-icon);
-}
-
-#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
-  color: var(--sklearn-color-text);
-}
-
-/* Toggleable content - dropdown */
-
-#sk-container-id-1 div.sk-toggleable__content {
-  max-height: 0;
-  max-width: 0;
-  overflow: hidden;
-  text-align: left;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-1 div.sk-toggleable__content.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-1 div.sk-toggleable__content pre {
-  margin: 0.2em;
-  border-radius: 0.25em;
-  color: var(--sklearn-color-text);
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-1 div.sk-toggleable__content.fitted pre {
-  /* unfitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
-  /* Expand drop-down */
-  max-height: 200px;
-  max-width: 100%;
-  overflow: auto;
-}
-
-#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
-  content: "▾";
-}
-
-/* Pipeline/ColumnTransformer-specific style */
-
-#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator-specific style */
-
-/* Colorize estimator box */
-#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-#sk-container-id-1 div.sk-label label.sk-toggleable__label,
-#sk-container-id-1 div.sk-label label {
-  /* The background is the default theme color */
-  color: var(--sklearn-color-text-on-default-background);
-}
-
-/* On hover, darken the color of the background */
-#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-/* Label box, darken color on hover, fitted */
-#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator label */
-
-#sk-container-id-1 div.sk-label label {
-  font-family: monospace;
-  font-weight: bold;
-  display: inline-block;
-  line-height: 1.2em;
-}
-
-#sk-container-id-1 div.sk-label-container {
-  text-align: center;
-}
-
-/* Estimator-specific */
-#sk-container-id-1 div.sk-estimator {
-  font-family: monospace;
-  border: 1px dotted var(--sklearn-color-border-box);
-  border-radius: 0.25em;
-  box-sizing: border-box;
-  margin-bottom: 0.5em;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-1 div.sk-estimator.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-/* on hover */
-#sk-container-id-1 div.sk-estimator:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-1 div.sk-estimator.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Specification for estimator info (e.g. "i" and "?") */
-
-/* Common style for "i" and "?" */
-
-.sk-estimator-doc-link,
-a:link.sk-estimator-doc-link,
-a:visited.sk-estimator-doc-link {
-  float: right;
-  font-size: smaller;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1em;
-  height: 1em;
-  width: 1em;
-  text-decoration: none !important;
-  margin-left: 1ex;
-  /* unfitted */
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-  color: var(--sklearn-color-unfitted-level-1);
-}
-
-.sk-estimator-doc-link.fitted,
-a:link.sk-estimator-doc-link.fitted,
-a:visited.sk-estimator-doc-link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-div.sk-estimator:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover,
-div.sk-label-container:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover,
-div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-/* Span, style for the box shown on hovering the info icon */
-.sk-estimator-doc-link span {
-  display: none;
-  z-index: 9999;
-  position: relative;
-  font-weight: normal;
-  right: .2ex;
-  padding: .5ex;
-  margin: .5ex;
-  width: min-content;
-  min-width: 20ex;
-  max-width: 50ex;
-  color: var(--sklearn-color-text);
-  box-shadow: 2pt 2pt 4pt #999;
-  /* unfitted */
-  background: var(--sklearn-color-unfitted-level-0);
-  border: .5pt solid var(--sklearn-color-unfitted-level-3);
-}
-
-.sk-estimator-doc-link.fitted span {
-  /* fitted */
-  background: var(--sklearn-color-fitted-level-0);
-  border: var(--sklearn-color-fitted-level-3);
-}
-
-.sk-estimator-doc-link:hover span {
-  display: block;
-}
-
-/* "?"-specific style due to the `<a>` HTML tag */
-
-#sk-container-id-1 a.estimator_doc_link {
-  float: right;
-  font-size: 1rem;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1rem;
-  height: 1rem;
-  width: 1rem;
-  text-decoration: none;
-  /* unfitted */
-  color: var(--sklearn-color-unfitted-level-1);
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-}
-
-#sk-container-id-1 a.estimator_doc_link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-#sk-container-id-1 a.estimator_doc_link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-#sk-container-id-1 a.estimator_doc_link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-}
-</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ColumnTransformer(transformers=[('categories',
-                                 OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                               min_frequency=5,
-                                               sparse_output=False),
-                                 ['city', 'year', 'month']),
-                                ('scaled_air_quality', StandardScaler(),
-                                 ['population', 'density', 'temp', 'pressure',
-                                  'humidity', 'wind_speed', 'co', 'no2', 'o3',
-                                  'so2', 'pm100', 'pm25', 'num_busses',
-                                  'revenue', 'operating_expense',
-                                  'passenger_trips', 'operating_hours',
-                                  'passenger_miles', 'operating_miles'])],
-                  verbose_feature_names_out=False)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox"><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for ColumnTransformer</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
-                                 OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                               min_frequency=5,
-                                               sparse_output=False),
-                                 ['city', 'year', 'month']),
-                                ('scaled_air_quality', StandardScaler(),
-                                 ['population', 'density', 'temp', 'pressure',
-                                  'humidity', 'wind_speed', 'co', 'no2', 'o3',
-                                  'so2', 'pm100', 'pm25', 'num_busses',
-                                  'revenue', 'operating_expense',
-                                  'passenger_trips', 'operating_hours',
-                                  'passenger_miles', 'operating_miles'])],
-                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox"><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city', 'year', 'month']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox"><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
-              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox"><label for="sk-estimator-id-4" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['population', 'density', 'temp', 'pressure', 'humidity', 'wind_speed', 'co', 'no2', 'o3', 'so2', 'pm100', 'pm25', 'num_busses', 'revenue', 'operating_expense', 'passenger_trips', 'operating_hours', 'passenger_miles', 'operating_miles']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox"><label for="sk-estimator-id-5" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div></div></div>
-</div>
-</div>
-<p>Feature selection is done on the data. From this we are given the following variables: City, Temperature, Humidity, Carbon Monoxide, Nitrogen Dioxide, Ozone, PM10, and PM2.5.</p>
-<div id="cell-feature-select" class="cell" data-execution_count="36">
-<div id="feature-select" class="cell-output cell-output-display" data-execution_count="36">
-<pre><code>Index(['city_Los Angeles', 'city_Phoenix', 'city_Portland', 'temp', 'humidity',
-       'co', 'no2', 'o3', 'pm100', 'pm25'],
-      dtype='object')</code></pre>
-</div>
-</div>
-<p>Using these selected features, we will run our models.</p>
-<p>We will test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models selected are: K nearest neighbors, Tree model, Random Forest model, Logistic Regression, and Naive Bayes.Running the models shows us that the Random Forest model is the most accurate.</p>
-<div id="model-select" class="cell" data-execution_count="38">
-<div class="cell-output cell-output-stdout">
-<pre><code>Model:  KNN
-Cohen Kappa Score:  0.27968217934165707
-Accuracy:  0.4518236254763201
-
-
-Model:  Tree
-Cohen Kappa Score:  0.38414321515154604
-Accuracy:  0.517691888949374
-
-
-Model:  Random Forest
-Cohen Kappa Score:  0.4811754974115705
-Accuracy:  0.6020685900925422
-
-
-Model:  Logistic
-Cohen Kappa Score:  0.31228619929444534
-Accuracy:  0.48557430593358736
-
-
-Model:  naive Bayes
-Cohen Kappa Score:  0.003824544630551596
-Accuracy:  0.04899292324442025
-
-</code></pre>
-</div>
-</div>
-<p>Running a basic Random Forest model gives us the following cohen kappa score and accuracy. This will serve as the baseline to be compared to.</p>
-<div id="cell-def-best-model" class="cell" data-execution_count="39">
-<div class="cell-output cell-output-stdout">
-<pre><code>cohen kappa score:  0.4763274559330172
-accuracy:  0.5982580293957539</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="capstone_files/figure-html/def-best-model-output-2.png" id="def-best-model" width="580" height="495" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>We will further simplify this with a transformer to be used in a pipeline.</p>
-<div id="cell-improve-transformer" class="cell" data-execution_count="40">
-<div id="improve-transformer" class="cell-output cell-output-display" data-execution_count="40">
-<style>#sk-container-id-2 {
-  /* Definition of color scheme common for light and dark mode */
-  --sklearn-color-text: black;
-  --sklearn-color-line: gray;
-  /* Definition of color scheme for unfitted estimators */
-  --sklearn-color-unfitted-level-0: #fff5e6;
-  --sklearn-color-unfitted-level-1: #f6e4d2;
-  --sklearn-color-unfitted-level-2: #ffe0b3;
-  --sklearn-color-unfitted-level-3: chocolate;
-  /* Definition of color scheme for fitted estimators */
-  --sklearn-color-fitted-level-0: #f0f8ff;
-  --sklearn-color-fitted-level-1: #d4ebff;
-  --sklearn-color-fitted-level-2: #b3dbfd;
-  --sklearn-color-fitted-level-3: cornflowerblue;
-
-  /* Specific color for light theme */
-  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
-  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
-  --sklearn-color-icon: #696969;
-
-  @media (prefers-color-scheme: dark) {
-    /* Redefinition of color scheme for dark theme */
-    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
-    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
-    --sklearn-color-icon: #878787;
-  }
-}
-
-#sk-container-id-2 {
-  color: var(--sklearn-color-text);
-}
-
-#sk-container-id-2 pre {
-  padding: 0;
-}
-
-#sk-container-id-2 input.sk-hidden--visually {
-  border: 0;
-  clip: rect(1px 1px 1px 1px);
-  clip: rect(1px, 1px, 1px, 1px);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-#sk-container-id-2 div.sk-dashed-wrapped {
-  border: 1px dashed var(--sklearn-color-line);
-  margin: 0 0.4em 0.5em 0.4em;
-  box-sizing: border-box;
-  padding-bottom: 0.4em;
-  background-color: var(--sklearn-color-background);
-}
-
-#sk-container-id-2 div.sk-container {
-  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
-     but bootstrap.min.css set `[hidden] { display: none !important; }`
-     so we also need the `!important` here to be able to override the
-     default hidden behavior on the sphinx rendered scikit-learn.org.
-     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
-  display: inline-block !important;
-  position: relative;
-}
-
-#sk-container-id-2 div.sk-text-repr-fallback {
-  display: none;
-}
-
-div.sk-parallel-item,
-div.sk-serial,
-div.sk-item {
-  /* draw centered vertical line to link estimators */
-  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
-  background-size: 2px 100%;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-/* Parallel-specific style estimator block */
-
-#sk-container-id-2 div.sk-parallel-item::after {
-  content: "";
-  width: 100%;
-  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
-  flex-grow: 1;
-}
-
-#sk-container-id-2 div.sk-parallel {
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  background-color: var(--sklearn-color-background);
-  position: relative;
-}
-
-#sk-container-id-2 div.sk-parallel-item {
-  display: flex;
-  flex-direction: column;
-}
-
-#sk-container-id-2 div.sk-parallel-item:first-child::after {
-  align-self: flex-end;
-  width: 50%;
-}
-
-#sk-container-id-2 div.sk-parallel-item:last-child::after {
-  align-self: flex-start;
-  width: 50%;
-}
-
-#sk-container-id-2 div.sk-parallel-item:only-child::after {
-  width: 0;
-}
-
-/* Serial-specific style estimator block */
-
-#sk-container-id-2 div.sk-serial {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--sklearn-color-background);
-  padding-right: 1em;
-  padding-left: 1em;
-}
-
-
-/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
-clickable and can be expanded/collapsed.
-- Pipeline and ColumnTransformer use this feature and define the default style
-- Estimators will overwrite some part of the style using the `sk-estimator` class
-*/
-
-/* Pipeline and ColumnTransformer style (default) */
-
-#sk-container-id-2 div.sk-toggleable {
-  /* Default theme specific background. It is overwritten whether we have a
-  specific estimator or a Pipeline/ColumnTransformer */
-  background-color: var(--sklearn-color-background);
-}
-
-/* Toggleable label */
-#sk-container-id-2 label.sk-toggleable__label {
-  cursor: pointer;
-  display: block;
-  width: 100%;
-  margin-bottom: 0;
-  padding: 0.5em;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-#sk-container-id-2 label.sk-toggleable__label-arrow:before {
-  /* Arrow on the left of the label */
-  content: "▸";
-  float: left;
-  margin-right: 0.25em;
-  color: var(--sklearn-color-icon);
-}
-
-#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
-  color: var(--sklearn-color-text);
-}
-
-/* Toggleable content - dropdown */
-
-#sk-container-id-2 div.sk-toggleable__content {
-  max-height: 0;
-  max-width: 0;
-  overflow: hidden;
-  text-align: left;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-2 div.sk-toggleable__content.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-2 div.sk-toggleable__content pre {
-  margin: 0.2em;
-  border-radius: 0.25em;
-  color: var(--sklearn-color-text);
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-2 div.sk-toggleable__content.fitted pre {
-  /* unfitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
-  /* Expand drop-down */
-  max-height: 200px;
-  max-width: 100%;
-  overflow: auto;
-}
-
-#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
-  content: "▾";
-}
-
-/* Pipeline/ColumnTransformer-specific style */
-
-#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator-specific style */
-
-/* Colorize estimator box */
-#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-#sk-container-id-2 div.sk-label label.sk-toggleable__label,
-#sk-container-id-2 div.sk-label label {
-  /* The background is the default theme color */
-  color: var(--sklearn-color-text-on-default-background);
-}
-
-/* On hover, darken the color of the background */
-#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-/* Label box, darken color on hover, fitted */
-#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
-  color: var(--sklearn-color-text);
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Estimator label */
-
-#sk-container-id-2 div.sk-label label {
-  font-family: monospace;
-  font-weight: bold;
-  display: inline-block;
-  line-height: 1.2em;
-}
-
-#sk-container-id-2 div.sk-label-container {
-  text-align: center;
-}
-
-/* Estimator-specific */
-#sk-container-id-2 div.sk-estimator {
-  font-family: monospace;
-  border: 1px dotted var(--sklearn-color-border-box);
-  border-radius: 0.25em;
-  box-sizing: border-box;
-  margin-bottom: 0.5em;
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-0);
-}
-
-#sk-container-id-2 div.sk-estimator.fitted {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-0);
-}
-
-/* on hover */
-#sk-container-id-2 div.sk-estimator:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-2);
-}
-
-#sk-container-id-2 div.sk-estimator.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-2);
-}
-
-/* Specification for estimator info (e.g. "i" and "?") */
-
-/* Common style for "i" and "?" */
-
-.sk-estimator-doc-link,
-a:link.sk-estimator-doc-link,
-a:visited.sk-estimator-doc-link {
-  float: right;
-  font-size: smaller;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1em;
-  height: 1em;
-  width: 1em;
-  text-decoration: none !important;
-  margin-left: 1ex;
-  /* unfitted */
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-  color: var(--sklearn-color-unfitted-level-1);
-}
-
-.sk-estimator-doc-link.fitted,
-a:link.sk-estimator-doc-link.fitted,
-a:visited.sk-estimator-doc-link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-div.sk-estimator:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover,
-div.sk-label-container:hover .sk-estimator-doc-link:hover,
-.sk-estimator-doc-link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover,
-div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
-.sk-estimator-doc-link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-/* Span, style for the box shown on hovering the info icon */
-.sk-estimator-doc-link span {
-  display: none;
-  z-index: 9999;
-  position: relative;
-  font-weight: normal;
-  right: .2ex;
-  padding: .5ex;
-  margin: .5ex;
-  width: min-content;
-  min-width: 20ex;
-  max-width: 50ex;
-  color: var(--sklearn-color-text);
-  box-shadow: 2pt 2pt 4pt #999;
-  /* unfitted */
-  background: var(--sklearn-color-unfitted-level-0);
-  border: .5pt solid var(--sklearn-color-unfitted-level-3);
-}
-
-.sk-estimator-doc-link.fitted span {
-  /* fitted */
-  background: var(--sklearn-color-fitted-level-0);
-  border: var(--sklearn-color-fitted-level-3);
-}
-
-.sk-estimator-doc-link:hover span {
-  display: block;
-}
-
-/* "?"-specific style due to the `<a>` HTML tag */
-
-#sk-container-id-2 a.estimator_doc_link {
-  float: right;
-  font-size: 1rem;
-  line-height: 1em;
-  font-family: monospace;
-  background-color: var(--sklearn-color-background);
-  border-radius: 1rem;
-  height: 1rem;
-  width: 1rem;
-  text-decoration: none;
-  /* unfitted */
-  color: var(--sklearn-color-unfitted-level-1);
-  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
-}
-
-#sk-container-id-2 a.estimator_doc_link.fitted {
-  /* fitted */
-  border: var(--sklearn-color-fitted-level-1) 1pt solid;
-  color: var(--sklearn-color-fitted-level-1);
-}
-
-/* On hover */
-#sk-container-id-2 a.estimator_doc_link:hover {
-  /* unfitted */
-  background-color: var(--sklearn-color-unfitted-level-3);
-  color: var(--sklearn-color-background);
-  text-decoration: none;
-}
-
-#sk-container-id-2 a.estimator_doc_link.fitted:hover {
-  /* fitted */
-  background-color: var(--sklearn-color-fitted-level-3);
-}
-</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[('aqi_transformer',
-                 ColumnTransformer(transformers=[('categories',
-                                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                                min_frequency=5,
-                                                                sparse_output=False),
-                                                  ['city']),
-                                                 ('scaled_air_quality',
-                                                  StandardScaler(),
-                                                  ['temp', 'humidity', 'co',
-                                                   'no2', 'o3', 'pm100',
-                                                   'pm25'])],
-                                   verbose_feature_names_out=False)),
-                ('RF_model', RandomForestClassifier())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox"><label for="sk-estimator-id-6" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('aqi_transformer',
-                 ColumnTransformer(transformers=[('categories',
-                                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                                min_frequency=5,
-                                                                sparse_output=False),
-                                                  ['city']),
-                                                 ('scaled_air_quality',
-                                                  StandardScaler(),
-                                                  ['temp', 'humidity', 'co',
-                                                   'no2', 'o3', 'pm100',
-                                                   'pm25'])],
-                                   verbose_feature_names_out=False)),
-                ('RF_model', RandomForestClassifier())])</pre></div> </div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox"><label for="sk-estimator-id-7" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;aqi_transformer: ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for aqi_transformer: ColumnTransformer</span></a></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
-                                 OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                               min_frequency=5,
-                                               sparse_output=False),
-                                 ['city']),
-                                ('scaled_air_quality', StandardScaler(),
-                                 ['temp', 'humidity', 'co', 'no2', 'o3',
-                                  'pm100', 'pm25'])],
-                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-8" type="checkbox"><label for="sk-estimator-id-8" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-9" type="checkbox"><label for="sk-estimator-id-9" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
-              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-10" type="checkbox"><label for="sk-estimator-id-10" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-11" type="checkbox"><label for="sk-estimator-id-11" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-12" type="checkbox"><label for="sk-estimator-id-12" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;RandomForestClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.ensemble.RandomForestClassifier.html">?<span>Documentation for RandomForestClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>RandomForestClassifier()</pre></div> </div></div></div></div></div></div>
-</div>
-</div>
-<p>Next we will optimize hyperparameters to make the model more accurate.</p>
-<div id="cell-hyper-parameters-optim" class="cell" data-execution_count="41">
-<div id="hyper-parameters-optim" class="cell-output cell-output-display" data-execution_count="41">
-<pre><code>{'memory': None,
- 'steps': [('aqi_transformer',
-   ColumnTransformer(transformers=[('categories',
-                                    OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                  min_frequency=5,
-                                                  sparse_output=False),
-                                    ['city']),
-                                   ('scaled_air_quality', StandardScaler(),
-                                    ['temp', 'humidity', 'co', 'no2', 'o3',
-                                     'pm100', 'pm25'])],
-                     verbose_feature_names_out=False)),
-  ('RF_model', RandomForestClassifier())],
- 'verbose': False,
- 'aqi_transformer': ColumnTransformer(transformers=[('categories',
-                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                min_frequency=5,
-                                                sparse_output=False),
-                                  ['city']),
-                                 ('scaled_air_quality', StandardScaler(),
-                                  ['temp', 'humidity', 'co', 'no2', 'o3',
-                                   'pm100', 'pm25'])],
-                   verbose_feature_names_out=False),
- 'RF_model': RandomForestClassifier(),
- 'aqi_transformer__n_jobs': None,
- 'aqi_transformer__remainder': 'drop',
- 'aqi_transformer__sparse_threshold': 0.3,
- 'aqi_transformer__transformer_weights': None,
- 'aqi_transformer__transformers': [('categories',
-   OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
-                 sparse_output=False),
-   ['city']),
-  ('scaled_air_quality',
-   StandardScaler(),
-   ['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25'])],
- 'aqi_transformer__verbose': False,
- 'aqi_transformer__verbose_feature_names_out': False,
- 'aqi_transformer__categories': OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
-               sparse_output=False),
- 'aqi_transformer__scaled_air_quality': StandardScaler(),
- 'aqi_transformer__categories__categories': 'auto',
- 'aqi_transformer__categories__drop': None,
- 'aqi_transformer__categories__dtype': numpy.float64,
- 'aqi_transformer__categories__feature_name_combiner': 'concat',
- 'aqi_transformer__categories__handle_unknown': 'infrequent_if_exist',
- 'aqi_transformer__categories__max_categories': None,
- 'aqi_transformer__categories__min_frequency': 5,
- 'aqi_transformer__categories__sparse_output': False,
- 'aqi_transformer__scaled_air_quality__copy': True,
- 'aqi_transformer__scaled_air_quality__with_mean': True,
- 'aqi_transformer__scaled_air_quality__with_std': True,
- 'RF_model__bootstrap': True,
- 'RF_model__ccp_alpha': 0.0,
- 'RF_model__class_weight': None,
- 'RF_model__criterion': 'gini',
- 'RF_model__max_depth': None,
- 'RF_model__max_features': 'sqrt',
- 'RF_model__max_leaf_nodes': None,
- 'RF_model__max_samples': None,
- 'RF_model__min_impurity_decrease': 0.0,
- 'RF_model__min_samples_leaf': 1,
- 'RF_model__min_samples_split': 2,
- 'RF_model__min_weight_fraction_leaf': 0.0,
- 'RF_model__monotonic_cst': None,
- 'RF_model__n_estimators': 100,
- 'RF_model__n_jobs': None,
- 'RF_model__oob_score': False,
- 'RF_model__random_state': None,
- 'RF_model__verbose': 0,
- 'RF_model__warm_start': False}</code></pre>
-</div>
-</div>
-<p>The following parameters are selected, each with a range of possible values. A large 100 iterations are run to find the highest score.</p>
-<div id="def-parameters" class="cell theorem definition" data-execution_count="42">
-<p><span class="theorem-title"><strong>Definition 2</strong></span> &nbsp;</p>
-<div class="cell-output cell-output-stdout">
-<pre><code>0.6208711433756806</code></pre>
-</div>
-</div>
-<p>We can see which hyperparameters are selected.</p>
-<div id="cell-randsearch-get-params" class="cell" data-execution_count="43">
-<div id="randsearch-get-params" class="cell-output cell-output-display" data-execution_count="43">
-<pre><code>{'memory': None,
- 'steps': [('aqi_transformer',
-   ColumnTransformer(transformers=[('categories',
-                                    OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                  max_categories=12,
-                                                  min_frequency=6,
-                                                  sparse_output=False),
-                                    ['city']),
-                                   ('scaled_air_quality', StandardScaler(),
-                                    ['temp', 'humidity', 'co', 'no2', 'o3',
-                                     'pm100', 'pm25'])],
-                     verbose_feature_names_out=False)),
-  ('RF_model',
-   RandomForestClassifier(bootstrap=False, max_depth=19, min_samples_leaf=4,
-                          min_samples_split=8, n_estimators=99))],
- 'verbose': False,
- 'aqi_transformer': ColumnTransformer(transformers=[('categories',
-                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
-                                                max_categories=12,
-                                                min_frequency=6,
-                                                sparse_output=False),
-                                  ['city']),
-                                 ('scaled_air_quality', StandardScaler(),
-                                  ['temp', 'humidity', 'co', 'no2', 'o3',
-                                   'pm100', 'pm25'])],
-                   verbose_feature_names_out=False),
- 'RF_model': RandomForestClassifier(bootstrap=False, max_depth=19, min_samples_leaf=4,
-                        min_samples_split=8, n_estimators=99),
- 'aqi_transformer__n_jobs': None,
- 'aqi_transformer__remainder': 'drop',
- 'aqi_transformer__sparse_threshold': 0.3,
- 'aqi_transformer__transformer_weights': None,
- 'aqi_transformer__transformers': [('categories',
-   OneHotEncoder(handle_unknown='infrequent_if_exist', max_categories=12,
-                 min_frequency=6, sparse_output=False),
-   ['city']),
-  ('scaled_air_quality',
-   StandardScaler(),
-   ['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25'])],
- 'aqi_transformer__verbose': False,
- 'aqi_transformer__verbose_feature_names_out': False,
- 'aqi_transformer__categories': OneHotEncoder(handle_unknown='infrequent_if_exist', max_categories=12,
-               min_frequency=6, sparse_output=False),
- 'aqi_transformer__scaled_air_quality': StandardScaler(),
- 'aqi_transformer__categories__categories': 'auto',
- 'aqi_transformer__categories__drop': None,
- 'aqi_transformer__categories__dtype': numpy.float64,
- 'aqi_transformer__categories__feature_name_combiner': 'concat',
- 'aqi_transformer__categories__handle_unknown': 'infrequent_if_exist',
- 'aqi_transformer__categories__max_categories': 12,
- 'aqi_transformer__categories__min_frequency': 6,
- 'aqi_transformer__categories__sparse_output': False,
- 'aqi_transformer__scaled_air_quality__copy': True,
- 'aqi_transformer__scaled_air_quality__with_mean': True,
- 'aqi_transformer__scaled_air_quality__with_std': True,
- 'RF_model__bootstrap': False,
- 'RF_model__ccp_alpha': 0.0,
- 'RF_model__class_weight': None,
- 'RF_model__criterion': 'gini',
- 'RF_model__max_depth': 19,
- 'RF_model__max_features': 'sqrt',
- 'RF_model__max_leaf_nodes': None,
- 'RF_model__max_samples': None,
- 'RF_model__min_impurity_decrease': 0.0,
- 'RF_model__min_samples_leaf': 4,
- 'RF_model__min_samples_split': 8,
- 'RF_model__min_weight_fraction_leaf': 0.0,
- 'RF_model__monotonic_cst': None,
- 'RF_model__n_estimators': 99,
- 'RF_model__n_jobs': None,
- 'RF_model__oob_score': False,
- 'RF_model__random_state': None,
- 'RF_model__verbose': 0,
- 'RF_model__warm_start': False}</code></pre>
 </div>
 </div>
 <p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
-<div id="cell-predict-X_test" class="cell" data-execution_count="44">
+<div id="cell-predict-X_test" class="cell" data-execution_count="43">
 <div class="cell-output cell-output-stdout">
-<pre><code>cohen kappa score:  0.49871815842740097
-accuracy:  0.6167664670658682</code></pre>
+<pre><code>Cohen Kappa Score:  0.5344227699027316
+Accuracy:  0.643440391943386</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="capstone_files/figure-html/predict-x_test-output-2.png" id="predict-x_test" width="580" height="495" class="figure-img"></p>
+<p><img src="capstone_files/figure-html/predict-x_test-output-2.png" id="predict-x_test" width="580" height="500" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>
+<hr>
+<p>format: html: code-fold: true code-tools: source: repo #toggle: true caption: “Python” smooth-scroll: true toc: true toc-title: Contents number-sections: false html-math-method: mathjax #css: styles.css execute: echo: false warning: false jupyter: python3</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 100%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"># ML Time Series with SARIMAX Model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ar.L1 0.0483 0.306 0.158 0.875 -0.551 0.648 ma.L1 -1.0000 924.523 -0.001 0.999 -1813.031 1811.031 ma.S.L12 -1.0000 2355.498 -0.000 1.000 -4617.692 4615.692 sigma2 134.1503 3.35e+05 0.000 1.000 -6.57e+05 6.57e+05 ============================================================================== ``` ::: :::</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"># How Fit the SARIMAX model ## Print the summary which includes AIC</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">::: {#fit-summary-aic .cell execution_count=50}</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">::: {.cell-output .cell-output-stdout} ``` SARIMAX Results ========================================================================================== Dep. Variable: aqi No.&nbsp;Observations: 96 Model: SARIMAX(1, 1, 1)x(0, 1, 1, 12) Log Likelihood -276.765 Date: Mon, 05 Aug 2024 AIC 561.530 Time: 14:12:52 BIC 570.467 Sample: 01-31-2015 HQIC 565.076 - 12-31-2022 Covariance Type: opg ============================================================================== coef std err z P&gt;|z| [0.025 0.975]</td>
+</tr>
+</tbody>
+</table>
+<p>ar.L1 0.0483 0.306 0.158 0.875 -0.551 0.648 ma.L1 -1.0000 924.523 -0.001 0.999 -1813.031 1811.031 ma.S.L12 -1.0000 2355.498 -0.000 1.000 -4617.692 4615.692 sigma2 134.1503 3.35e+05 0.000 1.000 -6.57e+05 6.57e+05 =================================================================================== Ljung-Box (L1) (Q): 0.00 Jarque-Bera (JB): 2571.65 Prob(Q): 1.00 Prob(JB): 0.00 Heteroskedasticity (H): 1.11 Skew: 4.63 Prob(H) (two-sided): 0.81 Kurtosis: 31.44 ===================================================================================</p>
+<p>Warnings: [1] Covariance matrix calculated using the outer product of gradients (complex-step).</p>
+<pre><code>:::
+:::
+
+
+::: {#extract-aic-value .cell execution_count=51}
+
+::: {.cell-output .cell-output-stdout}</code></pre>
+<p>The AIC value is: 561.5301944999834</p>
+<pre><code>:::
+:::
+
+
+# Plot Diagnostics
+
+::: {#plot-diag .cell execution_count=52}
+
+::: {.cell-output .cell-output-display execution_count=52}
+![](capstone_files/figure-html/plot-diag-output-1.png){#plot-diag-1 width=1001 height=859}
+:::
+
+::: {.cell-output .cell-output-display}
+![](capstone_files/figure-html/plot-diag-output-2.png){#plot-diag-2 width=1001 height=859}
+:::
+:::
+
+
+# Train and Test
+Rigorous validation is paramount to establishing the model's reliability and practical application. To ensure the model's generalizability, we will employ a train-test split. This approach safeguards against overfitting by exposing the model to unseen data, allowing for a more accurate assessment of its predictive capabilities.
+
+By partitioning the dataset, we can:
+
+- Evaluate performance: Measure the model's accuracy on unseen data.
+- Detect overfitting: Identify discrepancies between training and testing performance.
+- Assess generalization: Determine the model's ability to handle new data.
+- Quantify reliability: Calculate confidence intervals for prediction accuracy.
+- Iteratively improve: Use insights to refine the model.
+
+This rigorous process underpins the credibility and utility of our research findings.
+
+To split the data, we follow the recommended `70:30` ratio, 70% of the data is the training data, and 30% of the data is the testing data.
+
+
+
+
+
+Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input
+
+
+
+The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model's performance.
+
+::: {#cell-plot-prediction .cell execution_count=56}
+
+::: {.cell-output .cell-output-display}
+![](capstone_files/figure-html/plot-prediction-output-1.png){#plot-prediction width=1181 height=607}
+:::
+:::
+
+
+To facilitate comparison of true and predicted test values, we will create a separate DataFrame. 
+Mean Error Estimation will be used for analysis.
+
+
+
+To evaluate model performance, we calculate the MSE
+
+::: {#calculate-mse .cell execution_count=58}
+
+::: {.cell-output .cell-output-stdout}</code></pre>
+<p>The Mean Squared Error of our forecasts is 1.41 ``` ::: :::</p>
+</section>
+<section id="forecasting-future-values" class="level2">
+<h2 class="anchored" data-anchor-id="forecasting-future-values">Forecasting Future Values</h2>
+<p>As we conclude our modeling process, we generate predictions for the next 7 data points:</p>
+<ol type="1">
+<li><p><strong>Model Information</strong>: The <code>result</code> variable contains our fitted model’s details.</p></li>
+<li><p><strong>Forecasting Method</strong>: We use the <code>.get_forecast()</code> method on our model results.</p></li>
+<li><p><strong>Prediction Generation</strong>: This method analyzes observed patterns in our data to project future values.</p></li>
+<li><p><strong>Output</strong>: We obtain forecasts for the next 7 time points, representing predicted air quality levels.</p></li>
+</ol>
+<p>This step transforms our analytical work into actionable insights for air quality management.</p>
+</section>
+<section id="visualizing-our-results-the-culmination-of-our-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-our-results-the-culmination-of-our-analysis">Visualizing Our Results: The Culmination of Our Analysis</h2>
+<p>The final and crucial step of our project is the creation of a comprehensive plot that encapsulates our complex analysis. This visualization serves as the key to understanding and interpreting our findings.</p>
+<section id="interpreting-the-forecast-plot" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-forecast-plot">Interpreting the Forecast Plot</h3>
+<p>Our plot consists of several key elements:</p>
+<ol type="1">
+<li><strong>Observed Values (Blue Line)</strong>
+<ul>
+<li>Represents the actual, historical air quality measurements</li>
+<li>Provides a baseline for comparing our predictions</li>
+</ul></li>
+<li><strong>Forecasted Values (Orange Line)</strong>
+<ul>
+<li>Depicts the future air quality levels predicted by our SARIMAX Time Series Model</li>
+<li>Allows us to visualize potential trends and patterns in air quality</li>
+</ul></li>
+<li><strong>Confidence Interval (Shaded Region)</strong>
+<ul>
+<li>The shaded area around the forecast line represents the 95% Confidence Interval (CI)</li>
+<li>Indicates the range within which we can be 95% confident that the true future values will fall</li>
+<li>Wider intervals suggest greater uncertainty in the prediction</li>
+</ul></li>
+</ol>
+<p>This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.</p>
+<div id="cell-plot-forecast" class="cell" data-execution_count="60">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="capstone_files/figure-html/plot-forecast-output-1.png" id="plot-forecast" width="1164" height="607" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="conclusion" class="level1">
@@ -2339,7 +1032,7 @@ accuracy:  0.6167664670658682</code></pre>
 </main>
 <!-- /main column -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"053f7f3ffc474471bf5fc95acac311f0":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"23a9199e05394469827987e1e5ee2c35":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"3d606d543041412bae6eba0fc0ee35a4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"55c741bb64db4e4e838150aced002609":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_b9ffa18d6fa94b06a65c31d1e34a876c","placeholder":"​","style":"IPY_MODEL_c6a898e112b241998bb50cc92e9879ae","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"629426e524c548f7b38a72b1790145c4":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_23a9199e05394469827987e1e5ee2c35","placeholder":"​","style":"IPY_MODEL_053f7f3ffc474471bf5fc95acac311f0","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"b9ffa18d6fa94b06a65c31d1e34a876c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"bd7274ae092345a0af2b5b2d7371bde2":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"c163e01cc77c405d93c85da3e6497c27":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_3d606d543041412bae6eba0fc0ee35a4","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_c5b8619a61e146d793f9947b574feb60","tabbable":null,"tooltip":null,"value":1}},"c5b8619a61e146d793f9947b574feb60":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"c6a898e112b241998bb50cc92e9879ae":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"fdcc90420a164305971dc29a58c764fa":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_55c741bb64db4e4e838150aced002609","IPY_MODEL_c163e01cc77c405d93c85da3e6497c27","IPY_MODEL_629426e524c548f7b38a72b1790145c4"],"layout":"IPY_MODEL_bd7274ae092345a0af2b5b2d7371bde2","tabbable":null,"tooltip":null}}},"version_major":2,"version_minor":0}
+{"state":{"00fe15299a4c49b18c4f2319d2fd4097":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"35a5c9c53a1b4b0cbba7d250568dec35":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"4327aa9a215844d1960793bffa4990b1":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_e9ffe310755d480aa9610ce2f668fbf8","IPY_MODEL_9487431393bb4e63bdc5dff6f44c04bb","IPY_MODEL_5afbdb23345b42b8ac99b835c6c59798"],"layout":"IPY_MODEL_35a5c9c53a1b4b0cbba7d250568dec35","tabbable":null,"tooltip":null}},"5afbdb23345b42b8ac99b835c6c59798":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_00fe15299a4c49b18c4f2319d2fd4097","placeholder":"​","style":"IPY_MODEL_9d43480b128e4a8fb79dabe7899081cb","tabbable":null,"tooltip":null,"value":" [100%]   00:02 -&gt; (00:00 left)"}},"9114e9d55ae8439d86a484d64d27526c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"9487431393bb4e63bdc5dff6f44c04bb":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_cb76c103281142a9947329bbdefe834a","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_eafb32d05fd24d3a89816e893dc34cc5","tabbable":null,"tooltip":null,"value":1}},"9d43480b128e4a8fb79dabe7899081cb":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"aa632be29e734dbd9a4964fb1b4d3389":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"cb76c103281142a9947329bbdefe834a":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"e9ffe310755d480aa9610ce2f668fbf8":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_aa632be29e734dbd9a4964fb1b4d3389","placeholder":"​","style":"IPY_MODEL_9114e9d55ae8439d86a484d64d27526c","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"eafb32d05fd24d3a89816e893dc34cc5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
