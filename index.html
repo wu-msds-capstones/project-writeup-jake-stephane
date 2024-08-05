@@ -153,9 +153,9 @@ window.Quarto = {
   <li><a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation">Cross Validation</a></li>
   <li><a href="#portlands-transit-system" id="toc-portlands-transit-system" class="nav-link" data-scroll-target="#portlands-transit-system">Portland’s Transit System</a></li>
   </ul></li>
-  <li><a href="#machine-learning-using-sklearn" id="toc-machine-learning-using-sklearn" class="nav-link" data-scroll-target="#machine-learning-using-sklearn">Machine Learning using SKlearn</a>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
-  <li><a href="#import-the-data" id="toc-import-the-data" class="nav-link" data-scroll-target="#import-the-data">Import the Data</a></li>
+  <li><a href="#sci-kit-learn-machine-learning" id="toc-sci-kit-learn-machine-learning" class="nav-link" data-scroll-target="#sci-kit-learn-machine-learning">Sci-Kit Learn Machine Learning</a></li>
   </ul></li>
   <li><a href="#ml-time-series-with-sarimax-model" id="toc-ml-time-series-with-sarimax-model" class="nav-link" data-scroll-target="#ml-time-series-with-sarimax-model">ML Time Series with SARIMAX Model</a></li>
   <li><a href="#decomposing-the-time-series-with-additive-method" id="toc-decomposing-the-time-series-with-additive-method" class="nav-link" data-scroll-target="#decomposing-the-time-series-with-additive-method">Decomposing the Time Series With Additive Method</a>
@@ -727,7 +727,7 @@ plt.show()</code></pre>
 <li><p>Independence: AQI in Portland does not affect AQI in the rest of the country. However, the dataset for the large metro areas does include Portland, so Portland AQI will be repeated within both population groups. Both groups are largely independent, though this should be noted.</p></li>
 <li><p>Normal Distribution:</p></li>
 </ol>
-<div id="05bc892d" class="cell" data-execution_count="4">
+<div id="8bd66d0a" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -739,19 +739,19 @@ plt.show()</code></pre>
 <p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. They have long tails to the right. However, since the tails have such low frequencies and the samples are very large, this likely will not impact the results.</p>
 <p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
 <p><strong>Two Sample T Test Portland AQI vs Large Metro Areas AQI</strong></p>
-<div id="9e49074c" class="cell" data-execution_count="5">
+<div id="2412d437" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <pre><code>
     Welch Two Sample t-test
 
 data:  pdx_aqi_sample and lmaqi_sample
-t = -11.601, df = 314.63, p-value &lt; 2.2e-16
+t = -16.972, df = 332.55, p-value &lt; 2.2e-16
 alternative hypothesis: true difference in means is less than 0
 95 percent confidence interval:
-      -Inf -9.650848
+      -Inf -11.61026
 sample estimates:
 mean of x mean of y 
- 37.40068  48.65151 </code></pre>
+ 35.71918  48.57927 </code></pre>
 </div>
 </div>
 <p>Based on the low P-value of &lt; 2.2*10^-16, we can safely reject the null hypothesis. We conclude that Portland’s AQI mean is not greater than or equal to the AQI of all large metropolitan areas. This agrees with our initial observations on the greater AQI outcomes of Portland, and specifies the significance of this statistically.</p>
@@ -764,7 +764,7 @@ mean of x mean of y
 <p>To use the package, data must be in the format of a two column graph, with the first column being the date data, and the second being the variable being mapped and predicted. In this case, this predicted variable is AQI.</p>
 <p>The package allows a future period to be generated, which can be specified and added to the end of the time data. It can then predict future AQI values for the new data period.</p>
 <p>The graph below (figure 4324), shows the supplied data with the future prediction over the future period. The actual values are shown with the black datapoints, and the blue line represents the prediction. The upper and lower bounds of the error are represented with the transparent blue area. Each year, the data spikes during the late summer to early fall. Even more significant is the large spike in September 2020. What caused it? How significant was it?</p>
-<div id="61331524" class="cell" data-execution_count="10">
+<div id="2e65c9ba" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -786,7 +786,7 @@ mean of x mean of y
 <li><p>Independence: AQI in September 2020 does not affect AQI in the rest of the timeframe.</p></li>
 <li><p>Normal Distribution:</p></li>
 </ol>
-<div id="1bd9f4c8" class="cell" data-execution_count="11">
+<div id="8f6ec09c" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -798,19 +798,19 @@ mean of x mean of y
 <p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. They have long tails to the right, and the September 2020 dataset is oddly shaped due to lack of data.</p>
 <p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
 <p><strong>Two Sample T Test September 2020 vs Full Period of Portland AQI</strong></p>
-<div id="a75d626d" class="cell" data-execution_count="12">
+<div id="bd313b46" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <pre><code>
     Welch Two Sample t-test
 
 data:  pdx_sep_20_aqi and pdx_data_sample
-t = 3.1868, df = 29.09, p-value = 0.001712
+t = 3.172, df = 29.079, p-value = 0.001779
 alternative hypothesis: true difference in means is greater than 0
 95 percent confidence interval:
- 39.4569     Inf
+ 39.05995      Inf
 sample estimates:
 mean of x mean of y 
-122.66667  38.15411 </code></pre>
+122.66667  38.55479 </code></pre>
 </div>
 </div>
 <p>Based on the low p value, we reject the null. We conclude that the September AQI in Portland is not less than or equal to the AQI for the entire period. The wildfire had a significant effect on the air quality, making it much more difficult to breathe. This aligns with the observation of the large spike during this period. We must do more to address and combat the wildfires that not only harm the air we breathe, but cause long lasting damage to the local environment.</p>
@@ -818,7 +818,7 @@ mean of x mean of y
 <section id="aqi-trends" class="level2">
 <h2 class="anchored" data-anchor-id="aqi-trends">AQI Trends</h2>
 <p>Prophet’s plot component function allows us to see specific trends including the total (entire eight years), weekly, and yearly trends in figure 21111. This allows us to see how AQI changes by day. In the top full time span graph, it shows the potential spread of data for the predicted period with the transparent blue area. We can also see that day of the week tends to have very little impact on the trend(it may look significant but it is only moving up and down less than 1.5 AQI between days). Finally, from the yearly graph we cab see the consistent increase during the late summer to mid fall each year.</p>
-<div id="45c060e8" class="cell" data-execution_count="13">
+<div id="1a8f8bb0" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -833,7 +833,7 @@ mean of x mean of y
 <p>How accurate are these predictions? A cross validation predicts over the period from the cutoff date up to specified date in the ds column date.</p>
 <p>Cross validating the predictions allows us to create many estimates from a starting date up to an end date within out timeframe. In this instance, the tool predicts using start dates every half a year. It will predict AQI for that date to every day up to a year after the start date, giving us 365 estimates per start date. We then compare all estimations seeing how accurate the prediction is for a number of days after the start date as shown in figure 348483 below.</p>
 <p>The tool allows us to measure the difference in predicted y and actual y with a variety of different measurements. In the figure below, we have selected mean absolute percent error, to show how if the error on average increased as the prediction got further from the starting point.</p>
-<div id="bca9cf85" class="cell" data-execution_count="16">
+<div id="51870da9" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -857,7 +857,7 @@ mean of x mean of y
 <li><p>Independence: Transit ridership in Portland does not affect transit ridership in the rest of the country.</p></li>
 <li><p>Normal Distribution:</p></li>
 </ol>
-<div id="d4104fda" class="cell" data-execution_count="17">
+<div id="c41929b8" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -869,29 +869,31 @@ mean of x mean of y
 <p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. The Portland data has so few datapoints that it is hard to tell if it has a normal distribution or not. The large city transit data seems normal with the exception of one datapoint.</p>
 <p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
 <p><strong>Two Sample T Test Portland Transit Ridership vs Large Metro Area Ridership</strong></p>
-<div id="e3fd7dae" class="cell" data-execution_count="18">
+<div id="5398a0e6" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display">
 <pre><code>
     Welch Two Sample t-test
 
 data:  pdx_transit$pass_miles_per_person and large_metro_transit_sample
-t = 2.8645, df = 9.6071, p-value = 0.008743
+t = 2.7867, df = 9.7723, p-value = 0.009815
 alternative hypothesis: true difference in means is greater than 0
 95 percent confidence interval:
- 14.9332     Inf
+ 13.92879      Inf
 sample estimates:
 mean of x mean of y 
- 95.90601  54.95260 </code></pre>
+ 95.90601  55.88720 </code></pre>
 </div>
 </div>
 <p>Based on the low p value, we reject the null. Portland transit ridership is not less than or equal to the average transit ridership of large metro areas across the country. Portland’s higher transit numbers could be an influence in the better air outcomes of the city. However, because transit ridership is better in some other cites such as Baltimore and New York but not reflected in their AQI outcomes, this leads us to believe that transit ridership does not have very significant influence in the air quality. We will explore which features have a greater effect on AQI in the upcoming Machine Learning section.</p>
 </section>
 </section>
-<section id="machine-learning-using-sklearn" class="level1">
-<h1>Machine Learning using SKlearn</h1>
+<section id="results" class="level1">
+<h1>Results</h1>
+<section id="sci-kit-learn-machine-learning" class="level2">
+<h2 class="anchored" data-anchor-id="sci-kit-learn-machine-learning">Sci-Kit Learn Machine Learning</h2>
 <p>Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm.</p>
 <pre class="{python}"><code>#| label: import-packages
-#| #| include: false
+#| include: false
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -913,22 +915,15 @@ from sklearn.pipeline import Pipeline
 from sklearn.model_selection import RandomizedSearchCV
 from scipy.stats import randint</code></pre>
 <p>First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped.</p>
-<section id="import-the-data" class="level2">
-<h2 class="anchored" data-anchor-id="import-the-data">Import the Data</h2>
-<pre class="{python}"><code>#| label: read-csv
-#| include: false
-#| cache: true
+<pre class="{python}"><code>#| include: false 
+#| #| label: read-csv
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 len(df)</code></pre>
-<pre class="{python}"><code>#| label: check-len
-#| include: false</code></pre>
-<p>Here we can see all the missing data in each column. There are some very large numbers we must address. The entire dataset is only 147039 rows long. Some columnshave more than half the data missing.</p>
 <pre class="{python}"><code>#| label: check-isna
 #| include: false
 df.isna().sum()</code></pre>
-<p>The first steps to addressing the missing data will be to drop the columns that will definitely not be needed. This includes the id columns used for joining within the SQL database, as well as the maximum columns as we already have the mean data. We also rename the columns to make it easier to understand and reference.</p>
-<pre class="{python}"><code>#| include: false
-#| label: met-dataframe
+<pre class="{python}"><code>#| label: met-dataframe
+#| include: false
 met = df[[
     'date',
     'state',
@@ -969,7 +964,6 @@ met = met.rename(columns={'mean_temperature_fahrenheit': 'temp',
                           'mean_pm100_micrograms_per_cubic_meter': 'pm100',
                           'mean_pm25_micrograms_per_cubic_meter': 'pm25', 
                           'mean_lead_micrograms_per_cubic_meter': 'lead'})</code></pre>
-<p>Now the missing data looks like this, it is a little better, but we can still do so much more.</p>
 <pre class="{python}"><code>#| include: false
 #| label: check-NaN
 met.isna().sum()</code></pre>
@@ -1004,7 +998,6 @@ met = met.groupby([pd.Grouper(freq='W'), 'state', 'county', 'city']).agg({
 <pre class="{python}"><code>#| include: false
 #| label: drop-missNaN-col
 met = met[met['city'] != 'Virginia Beach']</code></pre>
-<p>Next, since we will be measuring and predicting AQI, we will drop all rows missing AQI data.</p>
 <pre class="{python}"><code>#| include: false
 #| label: drop-null-aqi
 met = met.dropna(subset=['aqi'])</code></pre>
@@ -1023,7 +1016,6 @@ columns = ['date', 'aqi', 'temp', 'pressure','humidity',
            'passenger_miles', 'operating_miles']
 
 nyc = nyc[columns].groupby('date').mean().reset_index()
-
 #Add data that was dropped
 nyc['state'] = 'New York'
 nyc['county'] = 'Multiple'
@@ -1045,6 +1037,7 @@ met = met[met['city'] != 'New York']
 met = pd.concat([met, nyc], ignore_index=True)</code></pre>
 <pre class="{python}"><code>#| include: false
 #| label: dataframe-Kansas-City
+#Do same with Kansas City
 kc = met[met['city'] == 'Kansas City']
 columns = ['date', 'aqi', 'temp', 'pressure','humidity',
            'wind_speed','co','no2','o3',
@@ -1078,12 +1071,25 @@ kc = kc[['date', 'state', 'county', 'city', 'population',
 
 met = met[met['city'] != 'Kansas City']
 met = pd.concat([met, kc], ignore_index=True)</code></pre>
-<p>After doing this, we drop the rest of the rows with missing data, leaving us with a total of 17 cities with metropolitan area populations greater than one million.</p>
-<pre class="{python}"><code>#| include: false
+<p>After this data cleaning, we are left with a total of eighteen cities across the country with a total metropolitan area population of greater than one million. The table below (figure 24324) shows all eighteen cities being used in the prediction algorithm and their respective row counts.</p>
+<pre class="{python}"><code>#| echo: false
 #| label: count-cities
 ds = met.dropna()
+
 ds.groupby('city').size().reset_index(name='count')</code></pre>
-<p>To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are shown below:</p>
+<p>To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are:</p>
+<ul>
+<li>0-30</li>
+<li>31-40</li>
+<li>41-50</li>
+<li>51-60</li>
+<li>61-70</li>
+<li>71-80</li>
+<li>81-90</li>
+<li>91-100</li>
+<li>101-150</li>
+<li>151+</li>
+</ul>
 <pre class="{python}"><code>#| include: false
 #| label: AQI-bin-ML
 bins = [0, 30, 40, 50, 60, 70, 80, 90, 100, 150, 500]
@@ -1093,18 +1099,19 @@ ds.loc[:,'aqi_discrete'] = pd.cut(ds['aqi'], bins=bins, labels=labels, right=Tru
 
 ds.head()</code></pre>
 <pre class="{python}"><code>#| include: false
-#| label: label-bin
+#| #| label: label-bin
 labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
 ds.loc[:,'aqi_discrete'] = pd.cut(ds['aqi'], bins=bins, labels=labels, right=True)
 
 ds.head()</code></pre>
 <pre class="{python}"><code>#| include: false
-#| label: convert-year-month-datetime
+#| #| label: convert-year-month-datetime
 ds.loc[:,'year'] = pd.to_datetime(ds['date']).dt.year
 ds.loc[:,'month'] = pd.to_datetime(ds['date']).dt.month</code></pre>
-<p>To set up the ML prediction, we must specify the variable being predicted (aqi_discrete, the aqi separated into bins), and the independent prediction variables. We will use a feature selector to select the most accurate predictors to try to optimize the model. Therefore, we initially choose every other variable to be our independent variables.</p>
+<p>A feature selector is run on the set of all variables. This chooses the best predictors of the dependent variable AQI.</p>
 <pre class="{python}"><code>#| include: false
-#| label: aqi-X-y
+#| #| label: aqi-X-y
+#dependent variable aqi, all others (except aqi category) as independent variables
 y = ds['aqi_discrete']
 X = ds[['city',
         'population',
@@ -1130,14 +1137,22 @@ X = ds[['city',
         'month'
         ]]
 </code></pre>
-<p>We must split the data into training and testing datasets. We also define an encoder to transform the discrete predictors into many binary variables for each category.</p>
+<p>The following tools are used:</p>
+<ul>
+<li>Train Test Split</li>
+<li>One Hot Encoder</li>
+<li>Transformer</li>
+<li>Pipeline</li>
+<li>Standard Scaler</li>
+</ul>
 <pre class="{python}"><code>#| include: false
-#| label: split-train
+#| #| label: split-train
+#Split into train and test datasets, define model and encoder
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 encoder = OneHotEncoder(sparse_output=False, min_frequency=5, handle_unknown='infrequent_if_exist')</code></pre>
-<p>A transformer is used to quickly transform variables into the necessary form for modeling.</p>
 <pre class="{python}"><code>#| include: false
-#| label: def-transformer
+#| #| label: def-transformer
+#define transformer with encoder and standardscaler
 
 transformer = ColumnTransformer(
         [
@@ -1166,11 +1181,23 @@ transformer = ColumnTransformer(
             )
         ],
         remainder='drop', verbose_feature_names_out=False)
-
+#fit transformer
 transformer.fit(X_train, y_train)</code></pre>
-<p>Feature selection is done on the data. From this we are given the following variables: City, Temperature, Humidity, Carbon Monoxide, Nitrogen Dioxide, Ozone, PM10, and PM2.5.</p>
+<p>Feature selection is done on the data. From this we are given the following variables:</p>
+<ul>
+<li>City</li>
+<li>Temperature</li>
+<li>Humidity</li>
+<li>Carbon Monoxide</li>
+<li>Nitrogen Dioxide</li>
+<li>Ozone</li>
+<li>PM10</li>
+<li>PM2.5</li>
+</ul>
+<p>These features are used in the final model.</p>
 <pre class="{python}"><code>#| include: false
-#| label: feature-select
+#| #| label: feature-select
+#feature selection
 feature_selector = SelectKBest(k=10)
 X_train_trans = transformer.transform(X_train)
 X_train_trans_df = pd.DataFrame(
@@ -1181,10 +1208,9 @@ feature_selector.fit(X_train_trans_df, y_train)
 feature_selector.get_support()
 feature_selector.scores_[feature_selector.get_support()]
 X_train_trans_df.columns[feature_selector.get_support()]</code></pre>
-<p>Using these selected features, we will run our models.</p>
 <pre class="{python}"><code>#| include: false
-#| label: use-features
-
+#| #| label: use-features
+#Use selected features
 y = ds['aqi_discrete']
 X = ds[[
     'city', 'temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25'
@@ -1201,8 +1227,17 @@ X_test_enc = pd.DataFrame(encoder.fit_transform(X_test[['city']]),
 X_test_trans = X_test[[
     'temp', 'humidity', 'co', 'no2','o3', 'pm100', 'pm25'
     ]].merge(X_test_enc, left_index = True, right_index = True)</code></pre>
-<p>We will test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models selected are: K nearest neighbors, Tree model, Random Forest model, Logistic Regression, and Naive Bayes.Running the models shows us that the Random Forest model is the most accurate.</p>
-<pre class="{python}"><code>#| include: false
+<p>With these features, we test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models tested are:</p>
+<ul>
+<li>K nearest neighbors</li>
+<li>Tree model</li>
+<li>Random Forest model</li>
+<li>Logistic Regression</li>
+<li>Naive Bayes</li>
+</ul>
+<p>Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.</p>
+<pre class="{python}"><code>#| echo: false
+#| warning: false
 #| label: model-select
 model1 = KNeighborsClassifier(n_neighbors=5)
 model2 = tree.DecisionTreeClassifier()
@@ -1210,23 +1245,32 @@ model3 = RandomForestClassifier(n_estimators=10, random_state=12)
 model4 = LogisticRegression()
 model5 = GaussianNB()
 
+results = []
+
 for model, label in zip([model1, model2, model3, model4, model5], ['KNN', 'Tree', 'Random Forest', 'Logistic', 'naive Bayes']):
     model.fit(X_train_trans, y_train)
     y_pred = model.predict(X_test_trans)
-    print("Model: ", label)
-    print("Cohen Kappa Score: ", cohen_kappa_score(y_test, y_pred))
-    print("Accuracy: ", sum(y_test == y_pred)/len(y_test))
-    print("\n")</code></pre>
-<p>Running a basic Random Forest model gives us the following cohen kappa score and accuracy. This will serve as the baseline to be compared to.</p>
+    model = label
+    cohen_kappa = cohen_kappa_score(y_test, y_pred)
+    accuracy = sum(y_test == y_pred)/len(y_test)
+    
+    results.append({
+        'Model': label,
+        'Cohen Kappa Score': cohen_kappa,
+        'Accuracy': accuracy
+    })
+
+display(pd.DataFrame(results))</code></pre>
 <pre class="{python}"><code>#| include: false
-#| label: def-best-model
+#| #| label: def-best-model
+#Create model from most accurate, RandomForest
 model = RandomForestClassifier(n_estimators=10)
 model.fit(X_train_trans, y_train)
 
-
+#predict on test data
 y_pred = model.predict(X_test_trans)
 
-
+#Print results
 print("cohen kappa score: ", cohen_kappa_score(y_test, y_pred))
 print("accuracy: ", sum(y_test == y_pred)/len(y_test))
 ConfusionMatrixDisplay(
@@ -1236,9 +1280,9 @@ ConfusionMatrixDisplay(
         ), 
         display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
         ).plot(xticks_rotation='vertical')</code></pre>
-<p>We will further simplify this with a transformer to be used in a pipeline.</p>
 <pre class="{python}"><code>#| include: false
 #| label: improve-transformer
+#redefined transformer
 transformer = ColumnTransformer(
         [
             ('categories', encoder, ['city']),
@@ -1254,17 +1298,27 @@ transformer = ColumnTransformer(
             )
         ],
         remainder='drop', verbose_feature_names_out=False)
-
+#Pipeline for simplification
 
 classification_pipeline = Pipeline([('aqi_transformer', transformer),
                                     ('RF_model', RandomForestClassifier())
                                     ])
 classification_pipeline.fit(X_train, y_train)</code></pre>
-<p>Next we will optimize hyperparameters to make the model more accurate.</p>
+<p>Hyperparameter optimization will be done to further improve the model. A randomized search is run with 100 iterations. The following hyperparameters are optimized:</p>
+<ul>
+<li>Max Categories</li>
+<li>Min Frequency</li>
+<li>Max Depth</li>
+<li>Max Features</li>
+<li>Min Samples Leaf</li>
+<li>Min Samples Split</li>
+<li>Num Estimators</li>
+<li>Bootstrap</li>
+</ul>
 <pre class="{python}"><code>#| include: false
 #| label: hyper-parameters-optim
+#hyperparameter optimization
 classification_pipeline.get_params()</code></pre>
-<p>The following parameters are selected, each with a range of possible values. A large 100 iterations are run to find the highest score.</p>
 <pre class="{python}"><code>#| include: false
 #| label: def-parameters
 parameters = {
@@ -1275,18 +1329,22 @@ parameters = {
     'RF_model__min_samples_leaf': randint(2, 10),
     'RF_model__min_samples_split': randint(2, 10),
     'RF_model__n_estimators': randint(50, 200),
-    'RF_model__min_samples_split': randint(2, 10),
     'RF_model__bootstrap': [True, False]
 }
-n_iter_search = 10 # be 100
+n_iter_search = 10
 random_search = RandomizedSearchCV(classification_pipeline, param_distributions=parameters,
                                    n_iter=n_iter_search, n_jobs=-1, cv=5)
 random_search.fit(X_train, y_train)
 print(random_search.best_score_)</code></pre>
-<p>We can see which hyperparameters are selected.</p>
-<pre class="{python}"><code>#| include: false
+<p>Figure 242442 below shows the selected hyperparameters.</p>
+<pre class="{python}"><code>#| echo: false
 #| label: randsearch-get-params
-random_search.best_estimator_.get_params()</code></pre>
+random_search.best_params_
+#random_search.best_estimator_.get_params()
+params_df = pd.DataFrame(list(random_search.best_params_.items()), columns=['Parameter', 'Value'])
+
+# Print the DataFrame
+display(params_df)</code></pre>
 <p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
 <pre class="{python}"><code>#| echo: false
 #| warning: false
