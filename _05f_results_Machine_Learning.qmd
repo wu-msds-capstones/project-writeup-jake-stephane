@@ -568,4 +568,6 @@ ConfusionMatrixDisplay(
         ).plot(xticks_rotation='vertical')
 ```
 
+
+!(AirQuality Confusion Matrix)[]
 We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.
