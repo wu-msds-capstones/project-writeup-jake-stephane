@@ -44,8 +44,15 @@ df_aqi = df_aqi.resample('ME').mean()
 df_aqi.ffill(inplace=True)
 #df_aqi.plot(figsize=(15,8))
 ```
+Any time series is decomposed of two things:
 
-# Decomposing the Time Series Additive Method
+- Seasonality
+- Trends
+
+By the help of `statsmodel` package we can break the time series into its seasonal pattern and trends.
+This will helps us to understand the data clearly and will help us to make more sense of the data.
+
+# Decomposing the Time Series With Additive Method
 ```{python}
 #| label: additive-decomp
 sns.set_theme(style="darkgrid")
@@ -54,28 +61,49 @@ fig = decomposition.plot()
 plt.show()
 ```
 
-# Decomposing the Time Series Multiplicative Method
-```{python}
-#| label: multiplicative-decomp
-sns.set_theme(style="darkgrid")
-decomposition = sm.tsa.seasonal_decompose(df_aqi, model='multiplicative')
-fig = decomposition.plot()
-plt.show()
-```
+There are three components to a time series: 
+
+1. `Trend`: Trend tells you how things are overall changing  
+2. `Seasonality`: Seasonality shows you how things change within a given period (e.g. year,month, week, day)  
+3. `Residual`: The Error/residual/irregular activity are the anomalies whitch cannot be explained by the trend or the seasonal value  
+
+In a additive time series, the components add together to make the time series. If you have an increasing trend, you still
+see roughly the same size peaks and troughs throughout the time series. This is often seen in indexed time series where the
+absolute value is growing but changes stay relative.
+
 
 ## Time Series Prediction
+For this project, we have used an extended version of *ARIMA* model knows as *SARIMAX* model as we have explained in the methods section.
+The *SARIMAX* model is used when the data sets have seasonal cycles. In our dataset concerning air quality/AQI there is a seasonal pattern
+which we can see in the above visualization.
+
+We need to find the right p,d and q parameters to correctly forecast and predict the AQI value.
+
+- *p* is the auto-regressive part of the model. It allows us to incorporate the effect of past values into our model.
+- *d* is the integrated part of the model. This includes terms in the model that incorporate the amount of diferencing (the number of past time points to subtract from the current value) to apply the time series.
+- *q* is the moving average part of the model. This allows us to set the error of our model as a linear combination of the error values observed at previous time points in the past.  
+
+We use a tuning technique called `grid search method` that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.
 ```{python}
 #| label: grid-search
+#| cache: true
 import itertools
 
-# Define the p, d, q parameters to take any value between 0 and 2
+# Define the p, d, q parameters to take any value between 0 to 1
 p = d = q = range(0, 2)
-pdq = list(itertools.product(p, d, q))
+pdq = list(itertools.product(p, d, q)) # generate all possible combinations of p,d,q
 
-# Define the seasonal p, d, q parameters to take any value between 0 and 2, and the seasonality period (e.g., 12 for monthly data)
-seasonal_pdq = [(x[0], x[1], x[2], 12) for x in pdq]
+# This creates combinations of seasonal parameters with a seasonality period of 12 (e.g., monthly data).
+seasonal_pdq = [(x[0], x[1], x[2], 12) for x in pdq] 
 
-# Iterate over all combinations of pdq and seasonal_pdq
+# Outer Loop: Iterates over all combinations of pdq.
+# Inner Loop: Iterates over all combinations of seasonal_pdq.
+#  Try Block:
+#  Creates a SARIMAX model with the current combination of parameters.
+#  Fits the model to the data.
+#  Prints the AIC (Akaike Information Criterion) for the model, which is a measure of model quality.
+# Except Block:
+#  Catches and prints any errors that occur during model fitting, allowing the loop to continue with the next set of parameters.
 for param in pdq:
     for param_seasonal in seasonal_pdq:
         try:
@@ -91,7 +119,9 @@ for param in pdq:
             continue
 ```
 
-# Let's print the summary of SARIMAX
+We have to find the lowest AIC values which would have the best corresponding p,d,q values to have the best forecast of AQI values.  
+
+## Summary of SARIMAX
 ```{python}
 #| label: mod-fit
 mod = sm.tsa.statespace.SARIMAX(df_aqi,order=(1, 1, 1),seasonal_order=(0,1, 1, 12),enforce_stationarity=False,enforce_invertibility=False)

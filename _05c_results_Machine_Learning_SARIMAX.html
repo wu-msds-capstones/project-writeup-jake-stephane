@@ -47,11 +47,11 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#ml-time-series-with-sarimax-model" id="toc-ml-time-series-with-sarimax-model" class="nav-link active" data-scroll-target="#ml-time-series-with-sarimax-model">ML Time Series with SARIMAX Model</a></li>
-  <li><a href="#decomposing-the-time-series-multiplicative-method" id="toc-decomposing-the-time-series-multiplicative-method" class="nav-link" data-scroll-target="#decomposing-the-time-series-multiplicative-method">Decomposing the Time Series Multiplicative Method</a>
+  <li><a href="#decomposing-the-time-series-with-additive-method" id="toc-decomposing-the-time-series-with-additive-method" class="nav-link" data-scroll-target="#decomposing-the-time-series-with-additive-method">Decomposing the Time Series With Additive Method</a>
   <ul class="collapse">
   <li><a href="#time-series-prediction" id="toc-time-series-prediction" class="nav-link" data-scroll-target="#time-series-prediction">Time Series Prediction</a></li>
+  <li><a href="#summary-of-sarimax" id="toc-summary-of-sarimax" class="nav-link" data-scroll-target="#summary-of-sarimax">Summary of SARIMAX</a></li>
   </ul></li>
-  <li><a href="#lets-print-the-summary-of-sarimax" id="toc-lets-print-the-summary-of-sarimax" class="nav-link" data-scroll-target="#lets-print-the-summary-of-sarimax">Let’s print the summary of SARIMAX</a></li>
   <li><a href="#how-fit-the-sarimax-model" id="toc-how-fit-the-sarimax-model" class="nav-link" data-scroll-target="#how-fit-the-sarimax-model">How Fit the SARIMAX model</a>
   <ul class="collapse">
   <li><a href="#print-the-summary-which-includes-aic" id="toc-print-the-summary-which-includes-aic" class="nav-link" data-scroll-target="#print-the-summary-which-includes-aic">Print the summary which includes AIC</a></li>
@@ -68,29 +68,22 @@ ul.task-list li input[type="checkbox"] {
   </ul>
 </nav>
 </div>
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Decomposing the Time Series Additive Method</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="repo"><i class="bi"></i> Python</button></div></div>
-</div>
+<main class="content" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="repo"><i class="bi"></i> Python</button></div></div>
 
 
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <section id="ml-time-series-with-sarimax-model" class="level1">
 <h1>ML Time Series with SARIMAX Model</h1>
+<p>Any time series is decomposed of two things:</p>
+<ul>
+<li>Seasonality</li>
+<li>Trends</li>
+</ul>
+<p>By the help of <code>statsmodel</code> package we can break the time series into its seasonal pattern and trends. This will helps us to understand the data clearly and will help us to make more sense of the data.</p>
+</section>
+<section id="decomposing-the-time-series-with-additive-method" class="level1">
+<h1>Decomposing the Time Series With Additive Method</h1>
 <div id="cell-additive-decomp" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div>
@@ -100,21 +93,26 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-</section>
-<section id="decomposing-the-time-series-multiplicative-method" class="level1">
-<h1>Decomposing the Time Series Multiplicative Method</h1>
-<div id="cell-multiplicative-decomp" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="_05c_results_Machine_Learning_SARIMAX_files/figure-html/multiplicative-decomp-output-1.png" id="multiplicative-decomp" width="656" height="465" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+<p>There are three components to a time series:</p>
+<ol type="1">
+<li><code>Trend</code>: Trend tells you how things are overall changing<br>
+</li>
+<li><code>Seasonality</code>: Seasonality shows you how things change within a given period (e.g.&nbsp;year,month, week, day)<br>
+</li>
+<li><code>Residual</code>: The Error/residual/irregular activity are the anomalies whitch cannot be explained by the trend or the seasonal value</li>
+</ol>
+<p>In a additive time series, the components add together to make the time series. If you have an increasing trend, you still see roughly the same size peaks and troughs throughout the time series. This is often seen in indexed time series where the absolute value is growing but changes stay relative.</p>
 <section id="time-series-prediction" class="level2">
 <h2 class="anchored" data-anchor-id="time-series-prediction">Time Series Prediction</h2>
-<div id="grid-search" class="cell" data-execution_count="6">
+<p>For this project, we have used an extended version of <em>ARIMA</em> model knows as <em>SARIMAX</em> model as we have explained in the methods section. The <em>SARIMAX</em> model is used when the data sets have seasonal cycles. In our dataset concerning air quality/AQI there is a seasonal pattern which we can see in the above visualization.</p>
+<p>We need to find the right p,d and q parameters to correctly forecast and predict the AQI value.</p>
+<ul>
+<li><em>p</em> is the auto-regressive part of the model. It allows us to incorporate the effect of past values into our model.</li>
+<li><em>d</em> is the integrated part of the model. This includes terms in the model that incorporate the amount of diferencing (the number of past time points to subtract from the current value) to apply the time series.</li>
+<li><em>q</em> is the moving average part of the model. This allows us to set the error of our model as a linear combination of the error values observed at previous time points in the past.</li>
+</ul>
+<p>We use a tuning technique called <code>grid search method</code> that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.</p>
+<div id="grid-search" class="cell" data-cache="true" data-execution_count="5">
 <div class="cell-output cell-output-stdout">
 <pre><code>ARIMA(0, 0, 0)x(0, 0, 0, 12) - AIC:969.5419650946665
 ARIMA(0, 0, 0)x(0, 0, 1, 12) - AIC:799.0140026908043
@@ -182,11 +180,11 @@ ARIMA(1, 1, 1)x(1, 1, 0, 12) - AIC:588.5992832053371
 ARIMA(1, 1, 1)x(1, 1, 1, 12) - AIC:564.5468753697722</code></pre>
 </div>
 </div>
+<p>We have to find the lowest AIC values which would have the best corresponding p,d,q values to have the best forecast of AQI values.</p>
 </section>
-</section>
-<section id="lets-print-the-summary-of-sarimax" class="level1">
-<h1>Let’s print the summary of SARIMAX</h1>
-<div id="mod-fit" class="cell" data-execution_count="7">
+<section id="summary-of-sarimax" class="level2">
+<h2 class="anchored" data-anchor-id="summary-of-sarimax">Summary of SARIMAX</h2>
+<div id="mod-fit" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-stdout">
 <pre><code>==============================================================================
                  coef    std err          z      P&gt;|z|      [0.025      0.975]
@@ -199,18 +197,19 @@ sigma2       134.1503   3.35e+05      0.000      1.000   -6.57e+05    6.57e+05
 </div>
 </div>
 </section>
+</section>
 <section id="how-fit-the-sarimax-model" class="level1">
 <h1>How Fit the SARIMAX model</h1>
 <section id="print-the-summary-which-includes-aic" class="level2">
 <h2 class="anchored" data-anchor-id="print-the-summary-which-includes-aic">Print the summary which includes AIC</h2>
-<div id="fit-summary-aic" class="cell" data-execution_count="8">
+<div id="fit-summary-aic" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-stdout">
 <pre><code>                                     SARIMAX Results                                      
 ==========================================================================================
 Dep. Variable:                                aqi   No. Observations:                   96
 Model:             SARIMAX(1, 1, 1)x(0, 1, 1, 12)   Log Likelihood                -276.765
-Date:                            Fri, 02 Aug 2024   AIC                            561.530
-Time:                                    14:25:05   BIC                            570.467
+Date:                            Mon, 05 Aug 2024   AIC                            561.530
+Time:                                    13:21:53   BIC                            570.467
 Sample:                                01-31-2015   HQIC                           565.076
                                      - 12-31-2022                                         
 Covariance Type:                              opg                                         
@@ -232,7 +231,7 @@ Warnings:
 [1] Covariance matrix calculated using the outer product of gradients (complex-step).</code></pre>
 </div>
 </div>
-<div id="extract-aic-value" class="cell" data-execution_count="9">
+<div id="extract-aic-value" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>The AIC value is: 561.5301944999834</code></pre>
 </div>
@@ -241,8 +240,8 @@ Warnings:
 </section>
 <section id="plot-diagnostics" class="level1">
 <h1>Plot Diagnostics</h1>
-<div id="plot-diag" class="cell" data-execution_count="10">
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div id="plot-diag" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 <figure class="figure">
 <p><img src="_05c_results_Machine_Learning_SARIMAX_files/figure-html/plot-diag-output-1.png" id="plot-diag-1" width="961" height="824" class="figure-img"></p>
@@ -273,7 +272,7 @@ Warnings:
 <p>To split the data, we follow the recommended <code>70:30</code> ratio, 70% of the data is the training data, and 30% of the data is the testing data.</p>
 <p>Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input</p>
 <p>The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model’s performance.</p>
-<div id="cell-plot-prediction" class="cell" data-execution_count="14">
+<div id="cell-plot-prediction" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -284,7 +283,7 @@ Warnings:
 </div>
 <p>To facilitate comparison of true and predicted test values, we will create a separate DataFrame. Mean Error Estimation will be used for analysis.</p>
 <p>To evaluate model performance, we calculate the MSE</p>
-<div id="calculate-mse" class="cell" data-execution_count="16">
+<div id="calculate-mse" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-stdout">
 <pre><code>The Mean Squared Error of our forecasts is 1.41</code></pre>
 </div>
@@ -325,7 +324,7 @@ Warnings:
 </ul></li>
 </ol>
 <p>This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.</p>
-<div id="cell-plot-forecast" class="cell" data-execution_count="18">
+<div id="cell-plot-forecast" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
