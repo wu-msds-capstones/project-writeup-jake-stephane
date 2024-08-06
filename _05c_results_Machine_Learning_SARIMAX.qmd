@@ -102,7 +102,8 @@ for param in pdq:
 
 We have to find the lowest AIC values which would have the best corresponding p,d,q values to have the best forecast of AQI values.  
 
-## Summary of SARIMAX
+# Summary of SARIMAX
+## Print the summary which includes AIC 
 ```{python}
 #| label: mod-fit
 mod = sm.tsa.statespace.SARIMAX(df_aqi,order=(1, 1, 1),seasonal_order=(0,1, 1, 12),enforce_stationarity=False,enforce_invertibility=False)
@@ -111,26 +112,17 @@ print(results.summary().tables[1])
 ```
 
 # How Fit the SARIMAX model
-## Print the summary which includes AIC
+## Plot Diagnostics
 ```{python}
-#| label: fit-summary-AIC
-mod = sm.tsa.statespace.SARIMAX(df_aqi, order=(1, 1, 1), seasonal_order=(0, 1, 1, 12), enforce_stationarity=False, enforce_invertibility=False)
-results = mod.fit()
-print(results.summary())
-```
-
-```{python}
-#| label: Extract-AIC-value
+#| label: Extract-AIC-value-plot
 aic_value = results.aic
 print(f"The AIC value is: {aic_value}")
-# Additional performance metrics can be calculated as needed
 ```
 
-# Plot Diagnostics
 ```{python}
-#| label: plot-diag
-results.plot_diagnostics(figsize=(12, 10))
+#results.plot_diagnostics(figsize=(10, 8))
 ```
+![Plot Diag](![AirNow Map](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/plot-diag.png?raw=true))
 
 # Train and Test
 Rigorous validation is paramount to establishing the model's reliability and practical application. To ensure the model's generalizability, we will employ a train-test split. This approach safeguards against overfitting by exposing the model to unseen data, allowing for a more accurate assessment of its predictive capabilities.

@@ -1,27 +1,12 @@
 ---
-execute:
-  echo: false
-  warning: false
 jupyter: ir
 ---
-
 # Prophet AQI Trend Forecasting and Hypothesis Testing
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-#| echo: false
-#| warning: false
-#library(prophet)
-#library(DBI)
-#library(dbplyr)
-#library(tidyverse)
-#library(RPostgres)
-#library(rpivotTable)
-#library(lubridate)
-
-
 library(dbplyr)
 library(tidyverse)
 library(lubridate)
@@ -56,8 +41,6 @@ Initially we can run a two sample t-test to show that Portland's AQI average is 
 
 ```{r}
 #| echo: false
-
-# data
 pdx_aqi = portland_data$aqi
 pdx_aqi_sample <- sample(pdx_aqi, size = as.integer(length(pdx_aqi)/10), replace = FALSE)
 lmaqi = large_metro_data$aqi

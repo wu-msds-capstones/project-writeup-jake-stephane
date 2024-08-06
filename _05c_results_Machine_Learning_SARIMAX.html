@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -33,58 +67,68 @@ ul.task-list li input[type="checkbox"] {
 <script src="_05c_results_Machine_Learning_SARIMAX_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="_05c_results_Machine_Learning_SARIMAX_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="_05c_results_Machine_Learning_SARIMAX_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<style>html{ scroll-behavior: smooth; }</style>
 
 
 </head>
 
-<body>
+<body class="fullcontent">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Contents</h2>
-   
-  <ul>
-  <li><a href="#ml-time-series-with-sarimax-model" id="toc-ml-time-series-with-sarimax-model" class="nav-link active" data-scroll-target="#ml-time-series-with-sarimax-model">ML Time Series with SARIMAX Model</a></li>
-  <li><a href="#decomposing-the-time-series-with-additive-method" id="toc-decomposing-the-time-series-with-additive-method" class="nav-link" data-scroll-target="#decomposing-the-time-series-with-additive-method">Decomposing the Time Series With Additive Method</a>
-  <ul class="collapse">
-  <li><a href="#time-series-prediction" id="toc-time-series-prediction" class="nav-link" data-scroll-target="#time-series-prediction">Time Series Prediction</a></li>
-  <li><a href="#summary-of-sarimax" id="toc-summary-of-sarimax" class="nav-link" data-scroll-target="#summary-of-sarimax">Summary of SARIMAX</a></li>
-  </ul></li>
-  <li><a href="#how-fit-the-sarimax-model" id="toc-how-fit-the-sarimax-model" class="nav-link" data-scroll-target="#how-fit-the-sarimax-model">How Fit the SARIMAX model</a>
-  <ul class="collapse">
-  <li><a href="#print-the-summary-which-includes-aic" id="toc-print-the-summary-which-includes-aic" class="nav-link" data-scroll-target="#print-the-summary-which-includes-aic">Print the summary which includes AIC</a></li>
-  </ul></li>
-  <li><a href="#plot-diagnostics" id="toc-plot-diagnostics" class="nav-link" data-scroll-target="#plot-diagnostics">Plot Diagnostics</a></li>
-  <li><a href="#train-and-test" id="toc-train-and-test" class="nav-link" data-scroll-target="#train-and-test">Train and Test</a>
-  <ul class="collapse">
-  <li><a href="#forecasting-future-values" id="toc-forecasting-future-values" class="nav-link" data-scroll-target="#forecasting-future-values">Forecasting Future Values</a></li>
-  <li><a href="#visualizing-our-results-the-culmination-of-our-analysis" id="toc-visualizing-our-results-the-culmination-of-our-analysis" class="nav-link" data-scroll-target="#visualizing-our-results-the-culmination-of-our-analysis">Visualizing Our Results: The Culmination of Our Analysis</a>
-  <ul class="collapse">
-  <li><a href="#interpreting-the-forecast-plot" id="toc-interpreting-the-forecast-plot" class="nav-link" data-scroll-target="#interpreting-the-forecast-plot">Interpreting the Forecast Plot</a></li>
-  </ul></li>
-  </ul></li>
-  </ul>
-</nav>
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ML Time Series with SARIMAX Model</h1>
 </div>
-<main class="content" id="quarto-document-content"><div class="quarto-title-block"><div class="quarto-title-tools-only"><h1></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source" data-quarto-source-url="repo"><i class="bi"></i> Python</button></div></div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="ml-time-series-with-sarimax-model" class="level1">
-<h1>ML Time Series with SARIMAX Model</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div id="import-lib" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="read-data2" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_pickle(<span class="st">'/data/df.pkl'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="define-df_aqi" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"darkgrid"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_aqi <span class="op">=</span> df[[<span class="st">'date'</span>,<span class="st">'aqi'</span>]]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df_aqi <span class="op">=</span> df_aqi.set_index(<span class="st">'date'</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>df_aqi <span class="op">=</span> df_aqi.resample(<span class="st">'ME'</span>).mean()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>df_aqi.ffill(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#df_aqi.plot(figsize=(15,8))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Any time series is decomposed of two things:</p>
 <ul>
 <li>Seasonality</li>
 <li>Trends</li>
 </ul>
 <p>By the help of <code>statsmodel</code> package we can break the time series into its seasonal pattern and trends. This will helps us to understand the data clearly and will help us to make more sense of the data.</p>
-</section>
 <section id="decomposing-the-time-series-with-additive-method" class="level1">
 <h1>Decomposing the Time Series With Additive Method</h1>
 <div id="cell-additive-decomp" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"darkgrid"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>decomposition <span class="op">=</span> sm.tsa.seasonal_decompose(df_aqi, model<span class="op">=</span><span class="st">'additive'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> decomposition.plot()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -113,6 +157,36 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>We use a tuning technique called <code>grid search method</code> that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.</p>
 <div id="grid-search" class="cell" data-cache="true" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the p, d, q parameters to take any value between 0 to 1</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> d <span class="op">=</span> q <span class="op">=</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>pdq <span class="op">=</span> <span class="bu">list</span>(itertools.product(p, d, q)) <span class="co"># generate all possible combinations of p,d,q</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># This creates combinations of seasonal parameters with a seasonality period of 12 (e.g., monthly data).</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>seasonal_pdq <span class="op">=</span> [(x[<span class="dv">0</span>], x[<span class="dv">1</span>], x[<span class="dv">2</span>], <span class="dv">12</span>) <span class="cf">for</span> x <span class="kw">in</span> pdq] </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Outer Loop: Iterates over all combinations of pdq.</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Inner Loop: Iterates over all combinations of seasonal_pdq.</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  Try Block:</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  Creates a SARIMAX model with the current combination of parameters.</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  Fits the model to the data.</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  Prints the AIC (Akaike Information Criterion) for the model, which is a measure of model quality.</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Except Block:</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#  Catches and prints any errors that occur during model fitting, allowing the loop to continue with the next set of parameters.</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> param <span class="kw">in</span> pdq:</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> param_seasonal <span class="kw">in</span> seasonal_pdq:</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>            mod <span class="op">=</span> sm.tsa.statespace.SARIMAX(df_aqi,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>                                            order<span class="op">=</span>param,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                                            seasonal_order<span class="op">=</span>param_seasonal,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                                            enforce_stationarity<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>                                            enforce_invertibility<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>            results <span class="op">=</span> mod.fit()</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">'ARIMA</span><span class="sc">{}</span><span class="st">x</span><span class="sc">{}</span><span class="st"> - AIC:</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(param, param_seasonal, results.aic))</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"Error with parameters </span><span class="sc">{</span>param<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>param_seasonal<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>ARIMA(0, 0, 0)x(0, 0, 0, 12) - AIC:969.5419650946665
 ARIMA(0, 0, 0)x(0, 0, 1, 12) - AIC:799.0140026908043
@@ -182,9 +256,15 @@ ARIMA(1, 1, 1)x(1, 1, 1, 12) - AIC:564.5468753697722</code></pre>
 </div>
 <p>We have to find the lowest AIC values which would have the best corresponding p,d,q values to have the best forecast of AQI values.</p>
 </section>
-<section id="summary-of-sarimax" class="level2">
-<h2 class="anchored" data-anchor-id="summary-of-sarimax">Summary of SARIMAX</h2>
+</section>
+<section id="summary-of-sarimax" class="level1">
+<h1>Summary of SARIMAX</h1>
+<section id="print-the-summary-which-includes-aic" class="level2">
+<h2 class="anchored" data-anchor-id="print-the-summary-which-includes-aic">Print the summary which includes AIC</h2>
 <div id="mod-fit" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>mod <span class="op">=</span> sm.tsa.statespace.SARIMAX(df_aqi,order<span class="op">=</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>),seasonal_order<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">12</span>),enforce_stationarity<span class="op">=</span><span class="va">False</span>,enforce_invertibility<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> mod.fit()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(results.summary().tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>==============================================================================
                  coef    std err          z      P&gt;|z|      [0.025      0.975]
@@ -200,62 +280,25 @@ sigma2       134.1503   3.35e+05      0.000      1.000   -6.57e+05    6.57e+05
 </section>
 <section id="how-fit-the-sarimax-model" class="level1">
 <h1>How Fit the SARIMAX model</h1>
-<section id="print-the-summary-which-includes-aic" class="level2">
-<h2 class="anchored" data-anchor-id="print-the-summary-which-includes-aic">Print the summary which includes AIC</h2>
-<div id="fit-summary-aic" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-stdout">
-<pre><code>                                     SARIMAX Results                                      
-==========================================================================================
-Dep. Variable:                                aqi   No. Observations:                   96
-Model:             SARIMAX(1, 1, 1)x(0, 1, 1, 12)   Log Likelihood                -276.765
-Date:                            Mon, 05 Aug 2024   AIC                            561.530
-Time:                                    13:21:53   BIC                            570.467
-Sample:                                01-31-2015   HQIC                           565.076
-                                     - 12-31-2022                                         
-Covariance Type:                              opg                                         
-==============================================================================
-                 coef    std err          z      P&gt;|z|      [0.025      0.975]
-------------------------------------------------------------------------------
-ar.L1          0.0483      0.306      0.158      0.875      -0.551       0.648
-ma.L1         -1.0000    924.523     -0.001      0.999   -1813.031    1811.031
-ma.S.L12      -1.0000   2355.498     -0.000      1.000   -4617.692    4615.692
-sigma2       134.1503   3.35e+05      0.000      1.000   -6.57e+05    6.57e+05
-===================================================================================
-Ljung-Box (L1) (Q):                   0.00   Jarque-Bera (JB):              2571.65
-Prob(Q):                              1.00   Prob(JB):                         0.00
-Heteroskedasticity (H):               1.11   Skew:                             4.63
-Prob(H) (two-sided):                  0.81   Kurtosis:                        31.44
-===================================================================================
-
-Warnings:
-[1] Covariance matrix calculated using the outer product of gradients (complex-step).</code></pre>
-</div>
-</div>
-<div id="extract-aic-value" class="cell" data-execution_count="8">
+<section id="plot-diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="plot-diagnostics">Plot Diagnostics</h2>
+<div id="extract-aic-value-plot" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>aic_value <span class="op">=</span> results.aic</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The AIC value is: </span><span class="sc">{</span>aic_value<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The AIC value is: 561.5301944999834</code></pre>
 </div>
 </div>
-</section>
-</section>
-<section id="plot-diagnostics" class="level1">
-<h1>Plot Diagnostics</h1>
-<div id="plot-diag" class="cell" data-execution_count="9">
-<div class="cell-output cell-output-display" data-execution_count="9">
-<div>
+<div id="90df07e8" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#results.plot_diagnostics(figsize=(10, 8))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="_05c_results_Machine_Learning_SARIMAX_files/figure-html/plot-diag-output-1.png" id="plot-diag-1" width="961" height="824" class="figure-img"></p>
+<p><img src=".png" class="img-fluid figure-img"></p>
+<figcaption>Plot Diag</figcaption>
 </figure>
 </div>
-</div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="_05c_results_Machine_Learning_SARIMAX_files/figure-html/plot-diag-output-2.png" id="plot-diag-2" width="961" height="824" class="figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
+</section>
 </section>
 <section id="train-and-test" class="level1">
 <h1>Train and Test</h1>
@@ -270,9 +313,29 @@ Warnings:
 </ul>
 <p>This rigorous process underpins the credibility and utility of our research findings.</p>
 <p>To split the data, we follow the recommended <code>70:30</code> ratio, 70% of the data is the training data, and 30% of the data is the testing data.</p>
+<div id="check-min-date" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check the minimum date in the 'date' column</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#print(f"Start date of the data:", df_aqi.index.min())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="check-max-date" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#print(f"End date of the data:", df_aqi.index.max())</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input</p>
+<div id="check-prediction" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> results.get_prediction(start<span class="op">=</span>pd.to_datetime(<span class="st">'2023-01-01 00:00:00'</span>), dynamic<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pred_ci <span class="op">=</span> pred.conf_int()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model’s performance.</p>
-<div id="cell-plot-prediction" class="cell" data-execution_count="13">
+<div id="cell-plot-prediction" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> df_aqi[<span class="st">'2015-01-31 00:00:00'</span>:].plot(label<span class="op">=</span><span class="st">'Observed'</span>) <span class="co"># plot the observed data </span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pred.predicted_mean.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">'One-step ahead Forecast'</span>, alpha<span class="op">=</span><span class="fl">.7</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">7</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>ax.fill_between(pred_ci.index,pred_ci.iloc[:, <span class="dv">0</span>],pred_ci.iloc[:, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">.2</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Days'</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'AQI index'</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -282,8 +345,16 @@ Warnings:
 </div>
 </div>
 <p>To facilitate comparison of true and predicted test values, we will create a separate DataFrame. Mean Error Estimation will be used for analysis.</p>
+<div id="define-forecast-truth" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>y_forecasted <span class="op">=</span> pred.predicted_mean</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>y_truth <span class="op">=</span> df_aqi[<span class="st">'2022-12-31 00:00:00'</span>:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>To evaluate model performance, we calculate the MSE</p>
-<div id="calculate-mse" class="cell" data-execution_count="15">
+<div id="calculate-mse" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>mse <span class="op">=</span> np.sqrt(mean_squared_error(y_truth, y_forecasted))   </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'The Mean Squared Error of our forecasts is </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(<span class="bu">round</span>(mse, <span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The Mean Squared Error of our forecasts is 1.41</code></pre>
 </div>
@@ -298,6 +369,10 @@ Warnings:
 <li><p><strong>Output</strong>: We obtain forecasts for the next 7 time points, representing predicted air quality levels.</p></li>
 </ol>
 <p>This step transforms our analytical work into actionable insights for air quality management.</p>
+<div id="recheck-forecast" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pred_uc <span class="op">=</span> results.get_forecast(steps<span class="op">=</span><span class="dv">7</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pred_ci <span class="op">=</span> pred_uc.conf_int()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="visualizing-our-results-the-culmination-of-our-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="visualizing-our-results-the-culmination-of-our-analysis">Visualizing Our Results: The Culmination of Our Analysis</h2>
@@ -324,7 +399,14 @@ Warnings:
 </ul></li>
 </ol>
 <p>This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.</p>
-<div id="cell-plot-forecast" class="cell" data-execution_count="17">
+<div id="cell-plot-forecast" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> df_aqi.plot(label<span class="op">=</span><span class="st">'Observed'</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">7</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>pred_uc.predicted_mean.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">'Forecast'</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>ax.fill_between(pred_ci.index,pred_ci.iloc[:, <span class="dv">0</span>],pred_ci.iloc[:, <span class="dv">1</span>], color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">.25</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Days'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'AQI index'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -428,57 +510,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       container: window.document.getElementById('quarto-embedded-source-code-modal')
     });
     clipboardModal.on('success', onCopySuccess);
-  }
-  const viewSource = window.document.getElementById('quarto-view-source') ||
-                     window.document.getElementById('quarto-code-tools-source');
-  if (viewSource) {
-    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
-    viewSource.addEventListener("click", function(e) {
-      if (sourceUrl) {
-        // rstudio viewer pane
-        if (/\bcapabilities=\b/.test(window.location)) {
-          window.open(sourceUrl);
-        } else {
-          window.location.href = sourceUrl;
-        }
-      } else {
-        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
-        modal.show();
-      }
-      return false;
-    });
-  }
-  function toggleCodeHandler(show) {
-    return function(e) {
-      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
-      for (let i=0; i<detailsSrc.length; i++) {
-        const details = detailsSrc[i].parentElement;
-        if (show) {
-          details.open = true;
-        } else {
-          details.removeAttribute("open");
-        }
-      }
-      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
-      const fromCls = show ? "hidden" : "unhidden";
-      const toCls = show ? "unhidden" : "hidden";
-      for (let i=0; i<cellCodeDivs.length; i++) {
-        const codeDiv = cellCodeDivs[i];
-        if (codeDiv.classList.contains(fromCls)) {
-          codeDiv.classList.remove(fromCls);
-          codeDiv.classList.add(toCls);
-        } 
-      }
-      return false;
-    }
-  }
-  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
-  if (hideAllCode) {
-    hideAllCode.addEventListener("click", toggleCodeHandler(false));
-  }
-  const showAllCode = window.document.getElementById("quarto-show-all-code");
-  if (showAllCode) {
-    showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
@@ -815,5 +846,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<script src="_05c_results_Machine_Learning_SARIMAX_files/libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

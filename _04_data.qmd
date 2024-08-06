@@ -80,7 +80,7 @@ num_rows, num_columns = df.shape
 ```
 The DataFrame contains `{python} num_rows` rows and `{python} num_columns` columns.
 
-# Exploring Oregon State: 
+# Exploring Oregon State 
 ```{python}
 #| label: filter-df
 df = df[df['state'] == 'Oregon']
