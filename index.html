@@ -717,7 +717,7 @@ plt.show()</code></pre>
 <li><p>Independence: AQI in Portland does not affect AQI in the rest of the country. However, the dataset for the large metro areas does include Portland, so Portland AQI will be repeated within both population groups. Both groups are largely independent, though this should be noted.</p></li>
 <li><p>Normal Distribution:</p></li>
 </ol>
-<div id="b9b61755" class="cell" data-execution_count="4">
+<div id="752be843" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -729,19 +729,19 @@ plt.show()</code></pre>
 <p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. They have long tails to the right. However, since the tails have such low frequencies and the samples are very large, this likely will not impact the results.</p>
 <p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
 <p><strong>Two Sample T Test Portland AQI vs Large Metro Areas AQI</strong></p>
-<div id="f3afd3db" class="cell" data-execution_count="5">
+<div id="b2d0fb41" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <pre><code>
     Welch Two Sample t-test
 
 data:  pdx_aqi_sample and lmaqi_sample
-t = -9.997, df = 310.85, p-value &lt; 2.2e-16
+t = -12.654, df = 317.68, p-value &lt; 2.2e-16
 alternative hypothesis: true difference in means is less than 0
 95 percent confidence interval:
-      -Inf -8.831337
+      -Inf -10.15129
 sample estimates:
 mean of x mean of y 
- 37.86301  48.43980 </code></pre>
+ 36.85274  48.52583 </code></pre>
 </div>
 </div>
 <p>Based on the low P-value of &lt; 2.2*10^-16, we can safely reject the null hypothesis. We conclude that Portland’s AQI mean is not greater than or equal to the AQI of all large metropolitan areas. This agrees with our initial observations on the greater AQI outcomes of Portland, and specifies the significance of this statistically.</p>
@@ -754,7 +754,7 @@ mean of x mean of y
 <p>To use the package, data must be in the format of a two column graph, with the first column being the date data, and the second being the variable being mapped and predicted. In this case, this predicted variable is AQI.</p>
 <p>The package allows a future period to be generated, which can be specified and added to the end of the time data. It can then predict future AQI values for the new data period.</p>
 <p>The graph below (figure 4324), shows the supplied data with the future prediction over the future period. The actual values are shown with the black datapoints, and the blue line represents the prediction. The upper and lower bounds of the error are represented with the transparent blue area. Each year, the data spikes during the late summer to early fall. Even more significant is the large spike in September 2020. What caused it? How significant was it?</p>
-<div id="53d45e3d" class="cell" data-execution_count="10">
+<div id="cc7489bf" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -776,7 +776,7 @@ mean of x mean of y
 <li><p>Independence: AQI in September 2020 does not affect AQI in the rest of the timeframe.</p></li>
 <li><p>Normal Distribution:</p></li>
 </ol>
-<div id="e27e4f9a" class="cell" data-execution_count="11">
+<div id="3c4ee344" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -788,19 +788,19 @@ mean of x mean of y
 <p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. They have long tails to the right, and the September 2020 dataset is oddly shaped due to lack of data.</p>
 <p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
 <p><strong>Two Sample T Test September 2020 vs Full Period of Portland AQI</strong></p>
-<div id="b3e086bd" class="cell" data-execution_count="12">
+<div id="9678cb1f" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <pre><code>
     Welch Two Sample t-test
 
 data:  pdx_sep_20_aqi and pdx_data_sample
-t = 3.2945, df = 29.061, p-value = 0.0013
+t = 3.1844, df = 29.231, p-value = 0.001717
 alternative hypothesis: true difference in means is greater than 0
 95 percent confidence interval:
- 42.30231      Inf
+ 39.4472     Inf
 sample estimates:
 mean of x mean of y 
-122.66667  35.31849 </code></pre>
+122.66667  38.11644 </code></pre>
 </div>
 </div>
 <p>Based on the low p value, we reject the null. We conclude that the September AQI in Portland is not less than or equal to the AQI for the entire period. The wildfire had a significant effect on the air quality, making it much more difficult to breathe. This aligns with the observation of the large spike during this period. We must do more to address and combat the wildfires that not only harm the air we breathe, but cause long lasting damage to the local environment.</p>
@@ -808,7 +808,7 @@ mean of x mean of y
 <section id="aqi-trends" class="level2">
 <h2 class="anchored" data-anchor-id="aqi-trends">AQI Trends</h2>
 <p>Prophet’s plot component function allows us to see specific trends including the total (entire eight years), weekly, and yearly trends in figure 21111. This allows us to see how AQI changes by day. In the top full time span graph, it shows the potential spread of data for the predicted period with the transparent blue area. We can also see that day of the week tends to have very little impact on the trend(it may look significant but it is only moving up and down less than 1.5 AQI between days). Finally, from the yearly graph we cab see the consistent increase during the late summer to mid fall each year.</p>
-<div id="3cee7717" class="cell" data-execution_count="13">
+<div id="061a419a" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -823,7 +823,7 @@ mean of x mean of y
 <p>How accurate are these predictions? A cross validation predicts over the period from the cutoff date up to specified date in the ds column date.</p>
 <p>Cross validating the predictions allows us to create many estimates from a starting date up to an end date within out timeframe. In this instance, the tool predicts using start dates every half a year. It will predict AQI for that date to every day up to a year after the start date, giving us 365 estimates per start date. We then compare all estimations seeing how accurate the prediction is for a number of days after the start date as shown in figure 348483 below.</p>
 <p>The tool allows us to measure the difference in predicted y and actual y with a variety of different measurements. In the figure below, we have selected mean absolute percent error, to show how if the error on average increased as the prediction got further from the starting point.</p>
-<div id="04ef7fdb" class="cell" data-execution_count="16">
+<div id="bb4ca5f3" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -847,7 +847,7 @@ mean of x mean of y
 <li><p>Independence: Transit ridership in Portland does not affect transit ridership in the rest of the country.</p></li>
 <li><p>Normal Distribution:</p></li>
 </ol>
-<div id="e898dc3b" class="cell" data-execution_count="17">
+<div id="471bed3d" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -859,19 +859,19 @@ mean of x mean of y
 <p>From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. The Portland data has so few datapoints that it is hard to tell if it has a normal distribution or not. The large city transit data seems normal with the exception of one datapoint.</p>
 <p>The partial violations of the assumptions in the t test in our analysis suggest that the conclusions should be considered with a degree of caution.</p>
 <p><strong>Two Sample T Test Portland Transit Ridership vs Large Metro Area Ridership</strong></p>
-<div id="31635ea9" class="cell" data-execution_count="18">
+<div id="92433554" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display">
 <pre><code>
     Welch Two Sample t-test
 
 data:  pdx_transit$pass_miles_per_person and large_metro_transit_sample
-t = 2.1778, df = 10.213, p-value = 0.02695
+t = 1.4667, df = 23.77, p-value = 0.07778
 alternative hypothesis: true difference in means is greater than 0
 95 percent confidence interval:
- 5.363552      Inf
+ -4.627348       Inf
 sample estimates:
 mean of x mean of y 
- 95.90601  64.26533 </code></pre>
+ 95.90601  68.18090 </code></pre>
 </div>
 </div>
 <p>Based on the low p value, we reject the null. Portland transit ridership is not less than or equal to the average transit ridership of large metro areas across the country. Portland’s higher transit numbers could be an influence in the better air outcomes of the city. However, because transit ridership is better in some other cites such as Baltimore and New York but not reflected in their AQI outcomes, this leads us to believe that transit ridership does not have very significant influence in the air quality. We will explore which features have a greater effect on AQI in the upcoming Machine Learning section.</p>
