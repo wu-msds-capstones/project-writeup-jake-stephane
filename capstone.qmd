@@ -3,6 +3,10 @@ title-block-banner: true
 title: "Unveiling the Drivers of Clean Air"
 subtitle: "Analysis of Portland Air Quality (AQI)"
 date: "2024-07-30"
+execute:
+  echo: false
+  warning: false
+jupyter: python3
 format:
   html:
     code-fold: true
@@ -23,19 +27,11 @@ format:
         href: SWEETVIZ_REPORT.html
     html-math-method: mathjax
     css: styles.css
-execute:
-  echo: false
-  warning: false
-jupyter: python3
 ---
-
 {{< include _01_intro.qmd >}}
 {{< include _02_background.qmd >}}
 {{< include _03_methods.qmd >}}
 {{< include _04_data.qmd >}}
-{{< include _05af_results_Prophet_Hypothesis.qmd >}}
-{{< include _05f_results_Machine_Learning.qmd >}}
 {{< include _05c_results_Machine_Learning_SARIMAX.qmd >}}
 {{< include _06_conclusions.qmd >}}
 {{< include _07_bibliography.qmd >}}
-

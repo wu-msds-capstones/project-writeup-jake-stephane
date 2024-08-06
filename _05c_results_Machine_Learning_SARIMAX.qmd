@@ -122,7 +122,8 @@ print(f"The AIC value is: {aic_value}")
 ```{python}
 #results.plot_diagnostics(figsize=(10, 8))
 ```
-![Plot Diag](![AirNow Map](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/plot-diag.png?raw=true))
+
+![Plot Diag](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/plot-diag.png?raw=true))
 
 # Train and Test
 Rigorous validation is paramount to establishing the model's reliability and practical application. To ensure the model's generalizability, we will employ a train-test split. This approach safeguards against overfitting by exposing the model to unseen data, allowing for a more accurate assessment of its predictive capabilities.
