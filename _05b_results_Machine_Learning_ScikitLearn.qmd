@@ -420,7 +420,7 @@ Running the models gives the output in figure 234324. Random Forest model is the
 
 ```{python}
 #| echo: false
-#| warning: false
+#| output: false
 #| label: model-select
 model1 = KNeighborsClassifier(n_neighbors=5)
 model2 = tree.DecisionTreeClassifier()
@@ -443,8 +443,10 @@ for model, label in zip([model1, model2, model3, model4, model5], ['KNN', 'Tree'
         'Accuracy': accuracy
     })
 
-display(pd.DataFrame(results))
+#display(pd.DataFrame(results))
 ```
+
+![AirQuality Confusion Matrix 1](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init.png?raw=true)
 
 ```{python}
 #| echo: false
@@ -571,6 +573,6 @@ ConfusionMatrixDisplay(
         ).plot(xticks_rotation='vertical')
 ```
 
-![AirQuality Confusion Matrix](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true)
+![AirQuality Confusion Matrix 2](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true)
 
 We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.

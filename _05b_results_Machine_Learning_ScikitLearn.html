@@ -68,12 +68,12 @@ ul.task-list li input[type="checkbox"] {
 <p>Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm.</p>
 <p>First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped.</p>
 <div id="cell-read-csv" class="cell" data-execution_count="2">
-<div id="read-csv" class="cell-output cell-output-display" data-execution_count="118">
+<div id="read-csv" class="cell-output cell-output-display" data-execution_count="60">
 <pre><code>147039</code></pre>
 </div>
 </div>
 <div id="cell-check-isna" class="cell" data-execution_count="3">
-<div id="check-isna" class="cell-output cell-output-display" data-execution_count="119">
+<div id="check-isna" class="cell-output cell-output-display" data-execution_count="61">
 <pre><code>yearly_transit_id                            5114
 category_id                                  3068
 location_id                                     0
@@ -122,7 +122,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <div id="cell-check-NaN" class="cell" data-execution_count="5">
-<div id="check-nan" class="cell-output cell-output-display" data-execution_count="121">
+<div id="check-nan" class="cell-output cell-output-display" data-execution_count="63">
 <pre><code>date                      0
 state                     0
 county                    0
@@ -154,7 +154,7 @@ dtype: int64</code></pre>
 </div>
 <p>Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.</p>
 <div id="cell-check-NaN-again" class="cell" data-execution_count="9">
-<div id="check-nan-again" class="cell-output cell-output-display" data-execution_count="125">
+<div id="check-nan-again" class="cell-output cell-output-display" data-execution_count="67">
 <pre><code>date                     0
 state                    0
 county                   0
@@ -242,7 +242,7 @@ dtype: int64</code></pre>
 </div>
 <p>After this data cleaning, we are left with a total of eighteen cities across the country with a total metropolitan area population of greater than one million. The table below (figure 24324) shows all eighteen cities being used in the prediction algorithm and their respective row counts.</p>
 <div id="cell-count-cities" class="cell" data-execution_count="13">
-<div id="count-cities" class="cell-output cell-output-display" data-execution_count="129">
+<div id="count-cities" class="cell-output cell-output-display" data-execution_count="71">
 <div>
 
 
@@ -366,7 +366,7 @@ dtype: int64</code></pre>
 </ul>
 <div id="cell-AQI-bin-ML" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\Steve\AppData\Local\Temp\ipykernel_13252\1032393669.py:4: SettingWithCopyWarning:
+<pre><code>C:\Users\Steve\AppData\Local\Temp\ipykernel_37848\1032393669.py:4: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -375,7 +375,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 </code></pre>
 </div>
-<div id="aqi-bin-ml" class="cell-output cell-output-display" data-execution_count="130">
+<div id="aqi-bin-ml" class="cell-output cell-output-display" data-execution_count="72">
 <div>
 
 
@@ -535,7 +535,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 <div id="cell-label-bin" class="cell" data-execution_count="15">
-<div id="label-bin" class="cell-output cell-output-display" data-execution_count="131">
+<div id="label-bin" class="cell-output cell-output-display" data-execution_count="73">
 <div>
 
 
@@ -696,7 +696,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 <div id="convert-year-month-datetime" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\Steve\AppData\Local\Temp\ipykernel_13252\3789006578.py:1: SettingWithCopyWarning:
+<pre><code>C:\Users\Steve\AppData\Local\Temp\ipykernel_37848\3789006578.py:1: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -704,7 +704,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-C:\Users\Steve\AppData\Local\Temp\ipykernel_13252\3789006578.py:2: SettingWithCopyWarning:
+C:\Users\Steve\AppData\Local\Temp\ipykernel_37848\3789006578.py:2: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -724,9 +724,9 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <li>Standard Scaler</li>
 </ul>
 <div id="cell-def-transformer" class="cell" data-execution_count="19">
-<div id="def-transformer" class="cell-output cell-output-display theorem definition" data-execution_count="135">
+<div id="def-transformer" class="cell-output cell-output-display theorem definition" data-execution_count="77">
 <p><span class="theorem-title"><strong>Definition 1</strong></span> &nbsp;</p>
-<style>#sk-container-id-9 {
+<style>#sk-container-id-5 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: black;
   --sklearn-color-line: gray;
@@ -756,15 +756,15 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
   }
 }
 
-#sk-container-id-9 {
+#sk-container-id-5 {
   color: var(--sklearn-color-text);
 }
 
-#sk-container-id-9 pre {
+#sk-container-id-5 pre {
   padding: 0;
 }
 
-#sk-container-id-9 input.sk-hidden--visually {
+#sk-container-id-5 input.sk-hidden--visually {
   border: 0;
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
@@ -776,7 +776,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
   width: 1px;
 }
 
-#sk-container-id-9 div.sk-dashed-wrapped {
+#sk-container-id-5 div.sk-dashed-wrapped {
   border: 1px dashed var(--sklearn-color-line);
   margin: 0 0.4em 0.5em 0.4em;
   box-sizing: border-box;
@@ -784,7 +784,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
   background-color: var(--sklearn-color-background);
 }
 
-#sk-container-id-9 div.sk-container {
+#sk-container-id-5 div.sk-container {
   /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
      but bootstrap.min.css set `[hidden] { display: none !important; }`
      so we also need the `!important` here to be able to override the
@@ -794,7 +794,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
   position: relative;
 }
 
-#sk-container-id-9 div.sk-text-repr-fallback {
+#sk-container-id-5 div.sk-text-repr-fallback {
   display: none;
 }
 
@@ -810,14 +810,14 @@ div.sk-item {
 
 /* Parallel-specific style estimator block */
 
-#sk-container-id-9 div.sk-parallel-item::after {
+#sk-container-id-5 div.sk-parallel-item::after {
   content: "";
   width: 100%;
   border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
   flex-grow: 1;
 }
 
-#sk-container-id-9 div.sk-parallel {
+#sk-container-id-5 div.sk-parallel {
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -825,28 +825,28 @@ div.sk-item {
   position: relative;
 }
 
-#sk-container-id-9 div.sk-parallel-item {
+#sk-container-id-5 div.sk-parallel-item {
   display: flex;
   flex-direction: column;
 }
 
-#sk-container-id-9 div.sk-parallel-item:first-child::after {
+#sk-container-id-5 div.sk-parallel-item:first-child::after {
   align-self: flex-end;
   width: 50%;
 }
 
-#sk-container-id-9 div.sk-parallel-item:last-child::after {
+#sk-container-id-5 div.sk-parallel-item:last-child::after {
   align-self: flex-start;
   width: 50%;
 }
 
-#sk-container-id-9 div.sk-parallel-item:only-child::after {
+#sk-container-id-5 div.sk-parallel-item:only-child::after {
   width: 0;
 }
 
 /* Serial-specific style estimator block */
 
-#sk-container-id-9 div.sk-serial {
+#sk-container-id-5 div.sk-serial {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -864,14 +864,14 @@ clickable and can be expanded/collapsed.
 
 /* Pipeline and ColumnTransformer style (default) */
 
-#sk-container-id-9 div.sk-toggleable {
+#sk-container-id-5 div.sk-toggleable {
   /* Default theme specific background. It is overwritten whether we have a
   specific estimator or a Pipeline/ColumnTransformer */
   background-color: var(--sklearn-color-background);
 }
 
 /* Toggleable label */
-#sk-container-id-9 label.sk-toggleable__label {
+#sk-container-id-5 label.sk-toggleable__label {
   cursor: pointer;
   display: block;
   width: 100%;
@@ -881,7 +881,7 @@ clickable and can be expanded/collapsed.
   text-align: center;
 }
 
-#sk-container-id-9 label.sk-toggleable__label-arrow:before {
+#sk-container-id-5 label.sk-toggleable__label-arrow:before {
   /* Arrow on the left of the label */
   content: "▸";
   float: left;
@@ -889,13 +889,13 @@ clickable and can be expanded/collapsed.
   color: var(--sklearn-color-icon);
 }
 
-#sk-container-id-9 label.sk-toggleable__label-arrow:hover:before {
+#sk-container-id-5 label.sk-toggleable__label-arrow:hover:before {
   color: var(--sklearn-color-text);
 }
 
 /* Toggleable content - dropdown */
 
-#sk-container-id-9 div.sk-toggleable__content {
+#sk-container-id-5 div.sk-toggleable__content {
   max-height: 0;
   max-width: 0;
   overflow: hidden;
@@ -904,12 +904,12 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-9 div.sk-toggleable__content.fitted {
+#sk-container-id-5 div.sk-toggleable__content.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-9 div.sk-toggleable__content pre {
+#sk-container-id-5 div.sk-toggleable__content pre {
   margin: 0.2em;
   border-radius: 0.25em;
   color: var(--sklearn-color-text);
@@ -917,79 +917,79 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-9 div.sk-toggleable__content.fitted pre {
+#sk-container-id-5 div.sk-toggleable__content.fitted pre {
   /* unfitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-9 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+#sk-container-id-5 input.sk-toggleable__control:checked~div.sk-toggleable__content {
   /* Expand drop-down */
   max-height: 200px;
   max-width: 100%;
   overflow: auto;
 }
 
-#sk-container-id-9 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+#sk-container-id-5 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
   content: "▾";
 }
 
 /* Pipeline/ColumnTransformer-specific style */
 
-#sk-container-id-9 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-9 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator-specific style */
 
 /* Colorize estimator box */
-#sk-container-id-9 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-9 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
-#sk-container-id-9 div.sk-label label.sk-toggleable__label,
-#sk-container-id-9 div.sk-label label {
+#sk-container-id-5 div.sk-label label.sk-toggleable__label,
+#sk-container-id-5 div.sk-label label {
   /* The background is the default theme color */
   color: var(--sklearn-color-text-on-default-background);
 }
 
 /* On hover, darken the color of the background */
-#sk-container-id-9 div.sk-label:hover label.sk-toggleable__label {
+#sk-container-id-5 div.sk-label:hover label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
 /* Label box, darken color on hover, fitted */
-#sk-container-id-9 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+#sk-container-id-5 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator label */
 
-#sk-container-id-9 div.sk-label label {
+#sk-container-id-5 div.sk-label label {
   font-family: monospace;
   font-weight: bold;
   display: inline-block;
   line-height: 1.2em;
 }
 
-#sk-container-id-9 div.sk-label-container {
+#sk-container-id-5 div.sk-label-container {
   text-align: center;
 }
 
 /* Estimator-specific */
-#sk-container-id-9 div.sk-estimator {
+#sk-container-id-5 div.sk-estimator {
   font-family: monospace;
   border: 1px dotted var(--sklearn-color-border-box);
   border-radius: 0.25em;
@@ -999,18 +999,18 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-9 div.sk-estimator.fitted {
+#sk-container-id-5 div.sk-estimator.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
 /* on hover */
-#sk-container-id-9 div.sk-estimator:hover {
+#sk-container-id-5 div.sk-estimator:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-9 div.sk-estimator.fitted:hover {
+#sk-container-id-5 div.sk-estimator.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
@@ -1097,7 +1097,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 /* "?"-specific style due to the `<a>` HTML tag */
 
-#sk-container-id-9 a.estimator_doc_link {
+#sk-container-id-5 a.estimator_doc_link {
   float: right;
   font-size: 1rem;
   line-height: 1em;
@@ -1112,25 +1112,25 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
   border: var(--sklearn-color-unfitted-level-1) 1pt solid;
 }
 
-#sk-container-id-9 a.estimator_doc_link.fitted {
+#sk-container-id-5 a.estimator_doc_link.fitted {
   /* fitted */
   border: var(--sklearn-color-fitted-level-1) 1pt solid;
   color: var(--sklearn-color-fitted-level-1);
 }
 
 /* On hover */
-#sk-container-id-9 a.estimator_doc_link:hover {
+#sk-container-id-5 a.estimator_doc_link:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-3);
   color: var(--sklearn-color-background);
   text-decoration: none;
 }
 
-#sk-container-id-9 a.estimator_doc_link.fitted:hover {
+#sk-container-id-5 a.estimator_doc_link.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-3);
 }
-</style><div id="sk-container-id-9" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ColumnTransformer(transformers=[('categories',
+</style><div id="sk-container-id-5" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ColumnTransformer(transformers=[('categories',
                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
                                                min_frequency=5,
                                                sparse_output=False),
@@ -1142,7 +1142,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
                                   'revenue', 'operating_expense',
                                   'passenger_trips', 'operating_hours',
                                   'passenger_miles', 'operating_miles'])],
-                  verbose_feature_names_out=False)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-49" type="checkbox"><label for="sk-estimator-id-49" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for ColumnTransformer</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
+                  verbose_feature_names_out=False)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-25" type="checkbox"><label for="sk-estimator-id-25" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for ColumnTransformer</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
                                                min_frequency=5,
                                                sparse_output=False),
@@ -1154,8 +1154,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
                                   'revenue', 'operating_expense',
                                   'passenger_trips', 'operating_hours',
                                   'passenger_miles', 'operating_miles'])],
-                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-50" type="checkbox"><label for="sk-estimator-id-50" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city', 'year', 'month']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-51" type="checkbox"><label for="sk-estimator-id-51" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
-              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-52" type="checkbox"><label for="sk-estimator-id-52" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['population', 'density', 'temp', 'pressure', 'humidity', 'wind_speed', 'co', 'no2', 'o3', 'so2', 'pm100', 'pm25', 'num_busses', 'revenue', 'operating_expense', 'passenger_trips', 'operating_hours', 'passenger_miles', 'operating_miles']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-53" type="checkbox"><label for="sk-estimator-id-53" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div></div></div>
+                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-26" type="checkbox"><label for="sk-estimator-id-26" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city', 'year', 'month']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-27" type="checkbox"><label for="sk-estimator-id-27" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
+              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-28" type="checkbox"><label for="sk-estimator-id-28" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['population', 'density', 'temp', 'pressure', 'humidity', 'wind_speed', 'co', 'no2', 'o3', 'so2', 'pm100', 'pm25', 'num_busses', 'revenue', 'operating_expense', 'passenger_trips', 'operating_hours', 'passenger_miles', 'operating_miles']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-29" type="checkbox"><label for="sk-estimator-id-29" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div></div></div>
 </div>
 </div>
 <p>Feature selection is done on the data. From this we are given the following variables:</p>
@@ -1170,8 +1170,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li>PM2.5</li>
 </ul>
 <p>These features are used in the final model.</p>
-<div id="9e959071" class="cell" data-execution_count="20">
-<div class="cell-output cell-output-display" data-execution_count="136">
+<div id="7f5f95f1" class="cell" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="78">
 <pre><code>Index(['city_Los Angeles', 'city_Phoenix', 'city_Portland', 'temp', 'humidity',
        'co', 'no2', 'o3', 'pm100', 'pm25'],
       dtype='object')</code></pre>
@@ -1186,61 +1186,16 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li>Naive Bayes</li>
 </ul>
 <p>Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.</p>
-<div id="cell-model-select" class="cell" data-execution_count="22">
-<div id="model-select" class="cell-output cell-output-display">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Model</th>
-<th data-quarto-table-cell-role="th">Cohen Kappa Score</th>
-<th data-quarto-table-cell-role="th">Accuracy</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>KNN</td>
-<td>0.279682</td>
-<td>0.451824</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Tree</td>
-<td>0.391392</td>
-<td>0.522047</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>Random Forest</td>
-<td>0.481175</td>
-<td>0.602069</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Logistic</td>
-<td>0.312286</td>
-<td>0.485574</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>naive Bayes</td>
-<td>0.003825</td>
-<td>0.048993</td>
-</tr>
-</tbody>
-</table>
-
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/?raw=true.png" class="img-fluid figure-img"></p>
+<figcaption>AirQuality Confusion Matrix 1</figcaption>
+</figure>
 </div>
-</div>
-</div>
-<div id="215f546e" class="cell" data-execution_count="23">
+<div id="772977ad" class="cell" data-execution_count="23">
 <div class="cell-output cell-output-stdout">
-<pre><code>cohen kappa score:  0.48788396320124294
-accuracy:  0.6075122482308111</code></pre>
+<pre><code>cohen kappa score:  0.48461377717065335
+accuracy:  0.6053347849755035</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <div>
@@ -1251,8 +1206,8 @@ accuracy:  0.6075122482308111</code></pre>
 </div>
 </div>
 <div id="cell-improve-transformer" class="cell" data-execution_count="24">
-<div id="improve-transformer" class="cell-output cell-output-display" data-execution_count="140">
-<style>#sk-container-id-10 {
+<div id="improve-transformer" class="cell-output cell-output-display" data-execution_count="82">
+<style>#sk-container-id-6 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: black;
   --sklearn-color-line: gray;
@@ -1282,15 +1237,15 @@ accuracy:  0.6075122482308111</code></pre>
   }
 }
 
-#sk-container-id-10 {
+#sk-container-id-6 {
   color: var(--sklearn-color-text);
 }
 
-#sk-container-id-10 pre {
+#sk-container-id-6 pre {
   padding: 0;
 }
 
-#sk-container-id-10 input.sk-hidden--visually {
+#sk-container-id-6 input.sk-hidden--visually {
   border: 0;
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
@@ -1302,7 +1257,7 @@ accuracy:  0.6075122482308111</code></pre>
   width: 1px;
 }
 
-#sk-container-id-10 div.sk-dashed-wrapped {
+#sk-container-id-6 div.sk-dashed-wrapped {
   border: 1px dashed var(--sklearn-color-line);
   margin: 0 0.4em 0.5em 0.4em;
   box-sizing: border-box;
@@ -1310,7 +1265,7 @@ accuracy:  0.6075122482308111</code></pre>
   background-color: var(--sklearn-color-background);
 }
 
-#sk-container-id-10 div.sk-container {
+#sk-container-id-6 div.sk-container {
   /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
      but bootstrap.min.css set `[hidden] { display: none !important; }`
      so we also need the `!important` here to be able to override the
@@ -1320,7 +1275,7 @@ accuracy:  0.6075122482308111</code></pre>
   position: relative;
 }
 
-#sk-container-id-10 div.sk-text-repr-fallback {
+#sk-container-id-6 div.sk-text-repr-fallback {
   display: none;
 }
 
@@ -1336,14 +1291,14 @@ div.sk-item {
 
 /* Parallel-specific style estimator block */
 
-#sk-container-id-10 div.sk-parallel-item::after {
+#sk-container-id-6 div.sk-parallel-item::after {
   content: "";
   width: 100%;
   border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
   flex-grow: 1;
 }
 
-#sk-container-id-10 div.sk-parallel {
+#sk-container-id-6 div.sk-parallel {
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -1351,28 +1306,28 @@ div.sk-item {
   position: relative;
 }
 
-#sk-container-id-10 div.sk-parallel-item {
+#sk-container-id-6 div.sk-parallel-item {
   display: flex;
   flex-direction: column;
 }
 
-#sk-container-id-10 div.sk-parallel-item:first-child::after {
+#sk-container-id-6 div.sk-parallel-item:first-child::after {
   align-self: flex-end;
   width: 50%;
 }
 
-#sk-container-id-10 div.sk-parallel-item:last-child::after {
+#sk-container-id-6 div.sk-parallel-item:last-child::after {
   align-self: flex-start;
   width: 50%;
 }
 
-#sk-container-id-10 div.sk-parallel-item:only-child::after {
+#sk-container-id-6 div.sk-parallel-item:only-child::after {
   width: 0;
 }
 
 /* Serial-specific style estimator block */
 
-#sk-container-id-10 div.sk-serial {
+#sk-container-id-6 div.sk-serial {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1390,14 +1345,14 @@ clickable and can be expanded/collapsed.
 
 /* Pipeline and ColumnTransformer style (default) */
 
-#sk-container-id-10 div.sk-toggleable {
+#sk-container-id-6 div.sk-toggleable {
   /* Default theme specific background. It is overwritten whether we have a
   specific estimator or a Pipeline/ColumnTransformer */
   background-color: var(--sklearn-color-background);
 }
 
 /* Toggleable label */
-#sk-container-id-10 label.sk-toggleable__label {
+#sk-container-id-6 label.sk-toggleable__label {
   cursor: pointer;
   display: block;
   width: 100%;
@@ -1407,7 +1362,7 @@ clickable and can be expanded/collapsed.
   text-align: center;
 }
 
-#sk-container-id-10 label.sk-toggleable__label-arrow:before {
+#sk-container-id-6 label.sk-toggleable__label-arrow:before {
   /* Arrow on the left of the label */
   content: "▸";
   float: left;
@@ -1415,13 +1370,13 @@ clickable and can be expanded/collapsed.
   color: var(--sklearn-color-icon);
 }
 
-#sk-container-id-10 label.sk-toggleable__label-arrow:hover:before {
+#sk-container-id-6 label.sk-toggleable__label-arrow:hover:before {
   color: var(--sklearn-color-text);
 }
 
 /* Toggleable content - dropdown */
 
-#sk-container-id-10 div.sk-toggleable__content {
+#sk-container-id-6 div.sk-toggleable__content {
   max-height: 0;
   max-width: 0;
   overflow: hidden;
@@ -1430,12 +1385,12 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-10 div.sk-toggleable__content.fitted {
+#sk-container-id-6 div.sk-toggleable__content.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-10 div.sk-toggleable__content pre {
+#sk-container-id-6 div.sk-toggleable__content pre {
   margin: 0.2em;
   border-radius: 0.25em;
   color: var(--sklearn-color-text);
@@ -1443,79 +1398,79 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-10 div.sk-toggleable__content.fitted pre {
+#sk-container-id-6 div.sk-toggleable__content.fitted pre {
   /* unfitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-10 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+#sk-container-id-6 input.sk-toggleable__control:checked~div.sk-toggleable__content {
   /* Expand drop-down */
   max-height: 200px;
   max-width: 100%;
   overflow: auto;
 }
 
-#sk-container-id-10 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+#sk-container-id-6 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
   content: "▾";
 }
 
 /* Pipeline/ColumnTransformer-specific style */
 
-#sk-container-id-10 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-6 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-10 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-6 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator-specific style */
 
 /* Colorize estimator box */
-#sk-container-id-10 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-6 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-10 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-6 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
-#sk-container-id-10 div.sk-label label.sk-toggleable__label,
-#sk-container-id-10 div.sk-label label {
+#sk-container-id-6 div.sk-label label.sk-toggleable__label,
+#sk-container-id-6 div.sk-label label {
   /* The background is the default theme color */
   color: var(--sklearn-color-text-on-default-background);
 }
 
 /* On hover, darken the color of the background */
-#sk-container-id-10 div.sk-label:hover label.sk-toggleable__label {
+#sk-container-id-6 div.sk-label:hover label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
 /* Label box, darken color on hover, fitted */
-#sk-container-id-10 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+#sk-container-id-6 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator label */
 
-#sk-container-id-10 div.sk-label label {
+#sk-container-id-6 div.sk-label label {
   font-family: monospace;
   font-weight: bold;
   display: inline-block;
   line-height: 1.2em;
 }
 
-#sk-container-id-10 div.sk-label-container {
+#sk-container-id-6 div.sk-label-container {
   text-align: center;
 }
 
 /* Estimator-specific */
-#sk-container-id-10 div.sk-estimator {
+#sk-container-id-6 div.sk-estimator {
   font-family: monospace;
   border: 1px dotted var(--sklearn-color-border-box);
   border-radius: 0.25em;
@@ -1525,18 +1480,18 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-10 div.sk-estimator.fitted {
+#sk-container-id-6 div.sk-estimator.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
 /* on hover */
-#sk-container-id-10 div.sk-estimator:hover {
+#sk-container-id-6 div.sk-estimator:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-10 div.sk-estimator.fitted:hover {
+#sk-container-id-6 div.sk-estimator.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
@@ -1623,7 +1578,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 /* "?"-specific style due to the `<a>` HTML tag */
 
-#sk-container-id-10 a.estimator_doc_link {
+#sk-container-id-6 a.estimator_doc_link {
   float: right;
   font-size: 1rem;
   line-height: 1em;
@@ -1638,25 +1593,25 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
   border: var(--sklearn-color-unfitted-level-1) 1pt solid;
 }
 
-#sk-container-id-10 a.estimator_doc_link.fitted {
+#sk-container-id-6 a.estimator_doc_link.fitted {
   /* fitted */
   border: var(--sklearn-color-fitted-level-1) 1pt solid;
   color: var(--sklearn-color-fitted-level-1);
 }
 
 /* On hover */
-#sk-container-id-10 a.estimator_doc_link:hover {
+#sk-container-id-6 a.estimator_doc_link:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-3);
   color: var(--sklearn-color-background);
   text-decoration: none;
 }
 
-#sk-container-id-10 a.estimator_doc_link.fitted:hover {
+#sk-container-id-6 a.estimator_doc_link.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-3);
 }
-</style><div id="sk-container-id-10" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[('aqi_transformer',
+</style><div id="sk-container-id-6" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[('aqi_transformer',
                  ColumnTransformer(transformers=[('categories',
                                                   OneHotEncoder(handle_unknown='infrequent_if_exist',
                                                                 min_frequency=5,
@@ -1668,7 +1623,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
                                                    'no2', 'o3', 'pm100',
                                                    'pm25'])],
                                    verbose_feature_names_out=False)),
-                ('RF_model', RandomForestClassifier())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-54" type="checkbox"><label for="sk-estimator-id-54" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('aqi_transformer',
+                ('RF_model', RandomForestClassifier())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-30" type="checkbox"><label for="sk-estimator-id-30" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('aqi_transformer',
                  ColumnTransformer(transformers=[('categories',
                                                   OneHotEncoder(handle_unknown='infrequent_if_exist',
                                                                 min_frequency=5,
@@ -1680,7 +1635,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
                                                    'no2', 'o3', 'pm100',
                                                    'pm25'])],
                                    verbose_feature_names_out=False)),
-                ('RF_model', RandomForestClassifier())])</pre></div> </div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-55" type="checkbox"><label for="sk-estimator-id-55" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;aqi_transformer: ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for aqi_transformer: ColumnTransformer</span></a></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
+                ('RF_model', RandomForestClassifier())])</pre></div> </div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-31" type="checkbox"><label for="sk-estimator-id-31" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;aqi_transformer: ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for aqi_transformer: ColumnTransformer</span></a></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
                                                min_frequency=5,
                                                sparse_output=False),
@@ -1688,8 +1643,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
                                 ('scaled_air_quality', StandardScaler(),
                                  ['temp', 'humidity', 'co', 'no2', 'o3',
                                   'pm100', 'pm25'])],
-                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-56" type="checkbox"><label for="sk-estimator-id-56" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-57" type="checkbox"><label for="sk-estimator-id-57" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
-              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-58" type="checkbox"><label for="sk-estimator-id-58" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-59" type="checkbox"><label for="sk-estimator-id-59" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-60" type="checkbox"><label for="sk-estimator-id-60" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;RandomForestClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.ensemble.RandomForestClassifier.html">?<span>Documentation for RandomForestClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>RandomForestClassifier()</pre></div> </div></div></div></div></div></div>
+                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-32" type="checkbox"><label for="sk-estimator-id-32" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-33" type="checkbox"><label for="sk-estimator-id-33" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
+              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-34" type="checkbox"><label for="sk-estimator-id-34" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-35" type="checkbox"><label for="sk-estimator-id-35" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-36" type="checkbox"><label for="sk-estimator-id-36" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;RandomForestClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.ensemble.RandomForestClassifier.html">?<span>Documentation for RandomForestClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>RandomForestClassifier()</pre></div> </div></div></div></div></div></div>
 </div>
 </div>
 <p>Hyperparameter optimization will be done to further improve the model. A randomized search is run with 100 iterations. The following hyperparameters are optimized:</p>
@@ -1704,7 +1659,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li>Bootstrap</li>
 </ul>
 <div id="cell-hyper-parameters-optim" class="cell" data-execution_count="25">
-<div id="hyper-parameters-optim" class="cell-output cell-output-display" data-execution_count="141">
+<div id="hyper-parameters-optim" class="cell-output cell-output-display" data-execution_count="83">
 <pre><code>{'memory': None,
  'steps': [('aqi_transformer',
    ColumnTransformer(transformers=[('categories',
@@ -1779,7 +1734,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <div id="def-parameters" class="cell theorem definition" data-execution_count="26">
 <p><span class="theorem-title"><strong>Definition 2</strong></span> &nbsp;</p>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.6330308529945554</code></pre>
+<pre><code>0.6172413793103448</code></pre>
 </div>
 </div>
 <p>Figure 242442 below shows the selected hyperparameters.</p>
@@ -1805,37 +1760,37 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>RF_model__max_depth</td>
-<td>29</td>
+<td>22</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>RF_model__max_features</td>
-<td>sqrt</td>
+<td>log2</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>RF_model__min_samples_leaf</td>
-<td>2</td>
+<td>7</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>RF_model__min_samples_split</td>
-<td>7</td>
+<td>6</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>RF_model__n_estimators</td>
-<td>130</td>
+<td>52</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
 <td>aqi_transformer__categories__max_categories</td>
-<td>27</td>
+<td>18</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
 <td>aqi_transformer__categories__min_frequency</td>
-<td>10</td>
+<td>11</td>
 </tr>
 </tbody>
 </table>
@@ -1846,14 +1801,14 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
 <div id="predict-x_test" class="cell" data-execution_count="28">
 <div class="cell-output cell-output-stdout">
-<pre><code>Cohen Kappa Score:  0.5391980773460079
-Accuracy:  0.6467065868263473</code></pre>
+<pre><code>Cohen Kappa Score:  0.5042417383307836
+Accuracy:  0.623298856831791</code></pre>
 </div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption>AirQuality Confusion Matrix</figcaption>
+<figcaption>AirQuality Confusion Matrix 2</figcaption>
 </figure>
 </div>
 <p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>

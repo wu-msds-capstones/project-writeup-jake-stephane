@@ -1,0 +1,851 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Results Machine Learning Scikit-Learn\n",
+        "Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm. \n"
+      ],
+      "id": "2c5f6b08"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: import-packages\n",
+        "#| echo: false\n",
+        "import numpy as np\n",
+        "import pandas as pd\n",
+        "import seaborn as sns\n",
+        "import matplotlib.pyplot as plt\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "from sklearn.linear_model import LogisticRegression\n",
+        "from sklearn.naive_bayes import GaussianNB\n",
+        "from sklearn.neighbors import KNeighborsClassifier\n",
+        "from sklearn import tree\n",
+        "from sklearn.metrics import cohen_kappa_score\n",
+        "from sklearn.metrics import ConfusionMatrixDisplay\n",
+        "from sklearn.metrics import confusion_matrix\n",
+        "from sklearn.preprocessing import OneHotEncoder\n",
+        "from sklearn.compose import ColumnTransformer\n",
+        "from sklearn.preprocessing import StandardScaler\n",
+        "from sklearn.feature_selection import SelectKBest\n",
+        "from sklearn.pipeline import Pipeline\n",
+        "from sklearn.model_selection import RandomizedSearchCV\n",
+        "from scipy.stats import randint"
+      ],
+      "id": "import-packages",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped. \n"
+      ],
+      "id": "39286a9c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: read-csv\n",
+        "df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')\n",
+        "len(df)"
+      ],
+      "id": "read-csv",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: check-isna\n",
+        "#| echo: false\n",
+        "df.isna().sum()"
+      ],
+      "id": "check-isna",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: met-dataframe\n",
+        "#| echo: false\n",
+        "met = df[[\n",
+        "    'date',\n",
+        "    'state',\n",
+        "    'county',\n",
+        "    'city',\n",
+        "    'population',\n",
+        "    'density',\n",
+        "    'aqi',\n",
+        "    'category',\n",
+        "    'mean_temperature_fahrenheit',\n",
+        "    'mean_pressure_millibars',\n",
+        "    'mean_humidity_percent_relative_humidity',\n",
+        "    'mean_wind_knots',\n",
+        "    'mean_co_ppm',\n",
+        "    'mean_no2_ppb',\n",
+        "    'mean_ozone_ppm',\n",
+        "    'mean_so2_ppb',\n",
+        "    'mean_pm100_micrograms_per_cubic_meter',\n",
+        "    'mean_pm25_micrograms_per_cubic_meter',\n",
+        "    'mean_lead_micrograms_per_cubic_meter',\n",
+        "    'num_busses',\n",
+        "    'revenue',\n",
+        "    'operating_expense',\n",
+        "    'passenger_trips',\n",
+        "    'operating_hours',\n",
+        "    'passenger_miles',\n",
+        "    'operating_miles'\n",
+        "    ]]\n",
+        "\n",
+        "met = met.rename(columns={'mean_temperature_fahrenheit': 'temp', \n",
+        "                          'mean_pressure_millibars': 'pressure', \n",
+        "                          'mean_humidity_percent_relative_humidity': 'humidity',\n",
+        "                          'mean_wind_knots': 'wind_speed', \n",
+        "                          'mean_co_ppm': 'co', \n",
+        "                          'mean_no2_ppb': 'no2',\n",
+        "                          'mean_ozone_ppm': 'o3', \n",
+        "                          'mean_so2_ppb': 'so2', \n",
+        "                          'mean_pm100_micrograms_per_cubic_meter': 'pm100',\n",
+        "                          'mean_pm25_micrograms_per_cubic_meter': 'pm25', \n",
+        "                          'mean_lead_micrograms_per_cubic_meter': 'lead'})"
+      ],
+      "id": "met-dataframe",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: check-NaN\n",
+        "met.isna().sum()"
+      ],
+      "id": "check-NaN",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: set-index-ts\n",
+        "met['date'] = pd.to_datetime(met['date'])\n",
+        "met.set_index('date', inplace=True)\n",
+        "#group by week, drop lead for too much missing data\n",
+        "met = met.groupby([pd.Grouper(freq='W'), 'state', 'county', 'city']).agg({\n",
+        "    'population': 'first',\n",
+        "    'density': 'first',\n",
+        "    'aqi': 'mean',\n",
+        "    'temp': 'mean',\n",
+        "    'pressure': 'mean',\n",
+        "    'humidity': 'mean',\n",
+        "    'wind_speed': 'mean',\n",
+        "    'co': 'mean',\n",
+        "    'no2': 'mean',\n",
+        "    'o3': 'mean',\n",
+        "    'so2': 'mean',\n",
+        "    'pm100': 'mean',\n",
+        "    'pm25': 'mean',\n",
+        "    'num_busses': 'mean',\n",
+        "    'revenue': 'mean',\n",
+        "    'operating_expense': 'mean',\n",
+        "    'passenger_trips': 'mean',\n",
+        "    'operating_hours': 'mean',\n",
+        "    'passenger_miles': 'mean',\n",
+        "    'operating_miles': 'mean'\n",
+        "}).reset_index()"
+      ],
+      "id": "set-index-ts",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.\n"
+      ],
+      "id": "a65b5174"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: drop-missNaN-col\n",
+        "met = met[met['city'] != 'Virginia Beach']"
+      ],
+      "id": "drop-missNaN-col",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: drop-null-aqi\n",
+        "met = met.dropna(subset=['aqi'])"
+      ],
+      "id": "drop-null-aqi",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: check-NaN-again\n",
+        "met.isna().sum()"
+      ],
+      "id": "check-NaN-again",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "The data collected has separate information for the city of New York City. NYC is divided into five boroughs, each within its own county. These values are grouped and averaged out to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York boroughs but not others. Likewise, Kansas City spans two states and two counties, so those values are grouped together.\n"
+      ],
+      "id": "c762cdf7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: group-nyc-1-city\n",
+        "nyc = met[met['city'] == 'New York']\n",
+        "columns = ['date', 'aqi', 'temp', 'pressure','humidity',\n",
+        "           'wind_speed','co','no2','o3',\n",
+        "           'so2','pm100','pm25', 'num_busses',\n",
+        "           'revenue', 'operating_expense', \n",
+        "           'passenger_trips', 'operating_hours', \n",
+        "           'passenger_miles', 'operating_miles']\n",
+        "\n",
+        "nyc = nyc[columns].groupby('date').mean().reset_index()\n",
+        "#Add data that was dropped\n",
+        "nyc['state'] = 'New York'\n",
+        "nyc['county'] = 'Multiple'\n",
+        "nyc['city'] = 'New York City'\n",
+        "nyc['population'] = 18908608\n",
+        "nyc['density'] = 11080.3\n",
+        "\n",
+        "nyc = nyc[['date', 'state', 'county', 'city', 'population', \n",
+        "     'density', 'aqi', 'temp', 'pressure','humidity',\n",
+        "     'wind_speed','co','no2','o3', 'so2','pm100',\n",
+        "     'pm25', 'num_busses', 'revenue', 'operating_expense', \n",
+        "     'passenger_trips', 'operating_hours', \n",
+        "     'passenger_miles', 'operating_miles']]\n",
+        "\n",
+        "print(nyc)"
+      ],
+      "id": "group-nyc-1-city",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: replace-nyc-in-met\n",
+        "met = met[met['city'] != 'New York']\n",
+        "met = pd.concat([met, nyc], ignore_index=True)"
+      ],
+      "id": "replace-nyc-in-met",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: dataframe-Kansas-City\n",
+        "#Do same with Kansas City\n",
+        "kc = met[met['city'] == 'Kansas City']\n",
+        "columns = ['date', 'aqi', 'temp', 'pressure','humidity',\n",
+        "           'wind_speed','co','no2','o3',\n",
+        "           'so2','pm100','pm25', 'num_busses',\n",
+        "           'revenue', 'operating_expense', \n",
+        "           'passenger_trips', 'operating_hours', \n",
+        "           'passenger_miles', 'operating_miles']\n",
+        "\n",
+        "kc = kc[columns].groupby('date').mean().reset_index()\n",
+        "\n",
+        "columns = ['temp', 'pressure','humidity',\n",
+        "           'wind_speed','co','no2','o3',\n",
+        "           'so2','pm100','pm25', 'num_busses',\n",
+        "           'revenue', 'operating_expense', \n",
+        "           'passenger_trips', 'operating_hours', \n",
+        "           'passenger_miles', 'operating_miles']\n",
+        "met[columns] = met[columns].fillna(met.groupby('city')[columns].transform('mean'))\n",
+        "\n",
+        "kc['state'] = 'Missouri'\n",
+        "kc['county'] = 'Multiple'\n",
+        "kc['city'] = 'Kansas City'\n",
+        "kc['population'] = 1689556\n",
+        "kc['density'] = 620.7\n",
+        "\n",
+        "kc = kc[['date', 'state', 'county', 'city', 'population', \n",
+        "     'density', 'aqi', 'temp', 'pressure','humidity',\n",
+        "     'wind_speed','co','no2','o3', 'so2','pm100',\n",
+        "     'pm25', 'num_busses', 'revenue', 'operating_expense', \n",
+        "     'passenger_trips', 'operating_hours', \n",
+        "     'passenger_miles', 'operating_miles']]\n",
+        "\n",
+        "met = met[met['city'] != 'Kansas City']\n",
+        "met = pd.concat([met, kc], ignore_index=True)"
+      ],
+      "id": "dataframe-Kansas-City",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "After this data cleaning, we are left with a total of eighteen cities across the country with a total metropolitan area population of greater than one million. The table below (figure 24324) shows all eighteen cities being used in the prediction algorithm and their respective row counts.\n"
+      ],
+      "id": "d6599ced"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: count-cities\n",
+        "ds = met.dropna()\n",
+        "\n",
+        "ds.groupby('city').size().reset_index(name='count')"
+      ],
+      "id": "count-cities",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are: \n",
+        "\n",
+        "- 0-30\n",
+        "- 31-40\n",
+        "- 41-50 \n",
+        "- 51-60\n",
+        "- 61-70\n",
+        "- 71-80\n",
+        "- 81-90\n",
+        "- 91-100\n",
+        "- 101-150\n",
+        "- 151+\n"
+      ],
+      "id": "79d96c39"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: AQI-bin-ML\n",
+        "bins = [0, 30, 40, 50, 60, 70, 80, 90, 100, 150, 500]\n",
+        "\n",
+        "labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
+        "ds.loc[:,'aqi_discrete'] = pd.cut(ds['aqi'], bins=bins, labels=labels, right=True)\n",
+        "\n",
+        "ds.head()"
+      ],
+      "id": "AQI-bin-ML",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: label-bin\n",
+        "labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
+        "ds.loc[:,'aqi_discrete'] = pd.cut(ds['aqi'], bins=bins, labels=labels, right=True)\n",
+        "\n",
+        "ds.head()"
+      ],
+      "id": "label-bin",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: convert-year-month-datetime\n",
+        "ds.loc[:,'year'] = pd.to_datetime(ds['date']).dt.year\n",
+        "ds.loc[:,'month'] = pd.to_datetime(ds['date']).dt.month"
+      ],
+      "id": "convert-year-month-datetime",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "A feature selector is run on the set of all variables. This chooses the best predictors of the dependent variable AQI.\n"
+      ],
+      "id": "bd1a89b5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: aqi-X-y\n",
+        "#dependent variable aqi, all others (except aqi category) as independent variables\n",
+        "y = ds['aqi_discrete']\n",
+        "X = ds[['city',\n",
+        "        'population',\n",
+        "        'density',\n",
+        "        'temp',\n",
+        "        'pressure',\n",
+        "        'humidity',\n",
+        "        'wind_speed',\n",
+        "        'co',\n",
+        "        'no2',\n",
+        "        'o3',\n",
+        "        'so2',\n",
+        "        'pm100',\n",
+        "        'pm25',\n",
+        "        'num_busses', \n",
+        "        'revenue', \n",
+        "        'operating_expense', \n",
+        "        'passenger_trips', \n",
+        "        'operating_hours', \n",
+        "        'passenger_miles', \n",
+        "        'operating_miles',\n",
+        "        'year',\n",
+        "        'month'\n",
+        "        ]]"
+      ],
+      "id": "aqi-X-y",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "The following tools are used:\n",
+        "\n",
+        "- Train Test Split\n",
+        "- One Hot Encoder\n",
+        "- Transformer\n",
+        "- Pipeline\n",
+        "- Standard Scaler \n"
+      ],
+      "id": "202ab2c0"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: split-train\n",
+        "#Split into train and test datasets, define model and encoder\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)\n",
+        "encoder = OneHotEncoder(sparse_output=False, min_frequency=5, handle_unknown='infrequent_if_exist')"
+      ],
+      "id": "split-train",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: def-transformer\n",
+        "#define transformer with encoder and standardscaler\n",
+        "\n",
+        "transformer = ColumnTransformer(\n",
+        "        [\n",
+        "            ('categories', encoder, ['city','year','month']),\n",
+        "            ('scaled_air_quality', StandardScaler(), [\n",
+        "                'population',\n",
+        "                'density',\n",
+        "                'temp',\n",
+        "                'pressure',\n",
+        "                'humidity',\n",
+        "                'wind_speed',\n",
+        "                'co',\n",
+        "                'no2',\n",
+        "                'o3',\n",
+        "                'so2',\n",
+        "                'pm100',\n",
+        "                'pm25',\n",
+        "                'num_busses', \n",
+        "                'revenue', \n",
+        "                'operating_expense', \n",
+        "                'passenger_trips', \n",
+        "                'operating_hours', \n",
+        "                'passenger_miles', \n",
+        "                'operating_miles'\n",
+        "                ]\n",
+        "            )\n",
+        "        ],\n",
+        "        remainder='drop', verbose_feature_names_out=False)\n",
+        "#fit transformer\n",
+        "transformer.fit(X_train, y_train)"
+      ],
+      "id": "def-transformer",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Feature selection is done on the data. From this we are given the following variables: \n",
+        "\n",
+        "- City\n",
+        "- Temperature\n",
+        "- Humidity\n",
+        "- Carbon Monoxide\n",
+        "- Nitrogen Dioxide\n",
+        "- Ozone\n",
+        "- PM10\n",
+        "- PM2.5\n",
+        "\n",
+        "These features are used in the final model.\n"
+      ],
+      "id": "63eae696"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| #| label: feature-select\n",
+        "#feature selection\n",
+        "feature_selector = SelectKBest(k=10)\n",
+        "X_train_trans = transformer.transform(X_train)\n",
+        "X_train_trans_df = pd.DataFrame(\n",
+        "    X_train_trans, \n",
+        "    columns = transformer.get_feature_names_out(),\n",
+        "    index = X_train.index)\n",
+        "feature_selector.fit(X_train_trans_df, y_train)\n",
+        "feature_selector.get_support()\n",
+        "feature_selector.scores_[feature_selector.get_support()]\n",
+        "X_train_trans_df.columns[feature_selector.get_support()]"
+      ],
+      "id": "ceb9617b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| #| label: use-features\n",
+        "#Use selected features\n",
+        "y = ds['aqi_discrete']\n",
+        "X = ds[[\n",
+        "    'city', 'temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25'\n",
+        "    ]]\n",
+        "#Create train/test data with selected features\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)\n",
+        "X_train_enc = pd.DataFrame(encoder.fit_transform(X_train[['city']]),\n",
+        "                           columns = encoder.get_feature_names_out(), index = X_train.index)\n",
+        "X_train_trans = X_train[[\n",
+        "    'temp', 'humidity', 'co', 'no2','o3', 'pm100', 'pm25'\n",
+        "    ]].merge(X_train_enc, left_index = True, right_index = True)\n",
+        "X_test_enc = pd.DataFrame(encoder.fit_transform(X_test[['city']]),\n",
+        "                           columns = encoder.get_feature_names_out(), index = X_test.index)\n",
+        "X_test_trans = X_test[[\n",
+        "    'temp', 'humidity', 'co', 'no2','o3', 'pm100', 'pm25'\n",
+        "    ]].merge(X_test_enc, left_index = True, right_index = True)"
+      ],
+      "id": "17ea3208",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "With these features, we test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models tested are: \n",
+        "\n",
+        "- K nearest neighbors\n",
+        "- Tree model \n",
+        "- Random Forest model\n",
+        "- Logistic Regression \n",
+        "- Naive Bayes \n",
+        "\n",
+        "Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.\n"
+      ],
+      "id": "d9784e97"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| output: false\n",
+        "#| label: model-select\n",
+        "model1 = KNeighborsClassifier(n_neighbors=5)\n",
+        "model2 = tree.DecisionTreeClassifier()\n",
+        "model3 = RandomForestClassifier(n_estimators=10, random_state=12)\n",
+        "model4 = LogisticRegression()\n",
+        "model5 = GaussianNB()\n",
+        "\n",
+        "results = []\n",
+        "\n",
+        "for model, label in zip([model1, model2, model3, model4, model5], ['KNN', 'Tree', 'Random Forest', 'Logistic', 'naive Bayes']):\n",
+        "    model.fit(X_train_trans, y_train)\n",
+        "    y_pred = model.predict(X_test_trans)\n",
+        "    model = label\n",
+        "    cohen_kappa = cohen_kappa_score(y_test, y_pred)\n",
+        "    accuracy = sum(y_test == y_pred)/len(y_test)\n",
+        "    \n",
+        "    results.append({\n",
+        "        'Model': label,\n",
+        "        'Cohen Kappa Score': cohen_kappa,\n",
+        "        'Accuracy': accuracy\n",
+        "    })\n",
+        "\n",
+        "#display(pd.DataFrame(results))"
+      ],
+      "id": "model-select",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "![AirQuality Confusion Matrix 1](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init.png?raw=true)\n"
+      ],
+      "id": "14dbab38"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| #| label: def-best-model\n",
+        "#Create model from most accurate, RandomForest\n",
+        "model = RandomForestClassifier(n_estimators=10)\n",
+        "model.fit(X_train_trans, y_train)\n",
+        "\n",
+        "#predict on test data\n",
+        "y_pred = model.predict(X_test_trans)\n",
+        "\n",
+        "#Print results\n",
+        "print(\"cohen kappa score: \", cohen_kappa_score(y_test, y_pred))\n",
+        "print(\"accuracy: \", sum(y_test == y_pred)/len(y_test))\n",
+        "ConfusionMatrixDisplay(\n",
+        "    confusion_matrix = confusion_matrix(\n",
+        "        y_test, y_pred, \n",
+        "        labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
+        "        ), \n",
+        "        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
+        "        ).plot(xticks_rotation='vertical')"
+      ],
+      "id": "fe328dd2",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: improve-transformer\n",
+        "#redefined transformer\n",
+        "transformer = ColumnTransformer(\n",
+        "        [\n",
+        "            ('categories', encoder, ['city']),\n",
+        "            ('scaled_air_quality', StandardScaler(), [\n",
+        "                'temp',\n",
+        "                'humidity',\n",
+        "                'co',\n",
+        "                'no2',\n",
+        "                'o3',\n",
+        "                'pm100',\n",
+        "                'pm25'\n",
+        "                ]\n",
+        "            )\n",
+        "        ],\n",
+        "        remainder='drop', verbose_feature_names_out=False)\n",
+        "#Pipeline for simplification\n",
+        "\n",
+        "classification_pipeline = Pipeline([('aqi_transformer', transformer),\n",
+        "                                    ('RF_model', RandomForestClassifier())\n",
+        "                                    ])\n",
+        "classification_pipeline.fit(X_train, y_train)"
+      ],
+      "id": "improve-transformer",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Hyperparameter optimization will be done to further improve the model. A randomized search is run with 100 iterations. The following hyperparameters are optimized:\n",
+        "\n",
+        "- Max Categories\n",
+        "- Min Frequency\n",
+        "- Max Depth\n",
+        "- Max Features\n",
+        "- Min Samples Leaf\n",
+        "- Min Samples Split\n",
+        "- Num Estimators\n",
+        "- Bootstrap\n"
+      ],
+      "id": "66ea1b1a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: hyper-parameters-optim\n",
+        "#hyperparameter optimization\n",
+        "classification_pipeline.get_params()"
+      ],
+      "id": "hyper-parameters-optim",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: def-parameters\n",
+        "parameters = {\n",
+        "    'aqi_transformer__categories__max_categories': randint(3,30),\n",
+        "    'aqi_transformer__categories__min_frequency': randint(2,20),\n",
+        "    'RF_model__max_depth': randint(3, 30),\n",
+        "    'RF_model__max_features': [None, 'sqrt', 'log2'],\n",
+        "    'RF_model__min_samples_leaf': randint(2, 10),\n",
+        "    'RF_model__min_samples_split': randint(2, 10),\n",
+        "    'RF_model__n_estimators': randint(50, 200),\n",
+        "    'RF_model__bootstrap': [True, False]\n",
+        "}\n",
+        "n_iter_search = 10\n",
+        "random_search = RandomizedSearchCV(classification_pipeline, param_distributions=parameters,\n",
+        "                                   n_iter=n_iter_search, n_jobs=-1, cv=5)\n",
+        "random_search.fit(X_train, y_train)\n",
+        "print(random_search.best_score_)"
+      ],
+      "id": "def-parameters",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Figure 242442 below shows the selected hyperparameters.\n"
+      ],
+      "id": "5226cb09"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| label: randsearch-get-params\n",
+        "random_search.best_params_\n",
+        "#random_search.best_estimator_.get_params()\n",
+        "params_df = pd.DataFrame(list(random_search.best_params_.items()), columns=['Parameter', 'Value'])\n",
+        "\n",
+        "# Print the DataFrame\n",
+        "display(params_df)"
+      ],
+      "id": "randsearch-get-params",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Using these hyperparameters, we reach an accuracy of about 63%.\n"
+      ],
+      "id": "fd6ccf70"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| warning: false\n",
+        "#| label: predict-X_test\n",
+        "y_pred=random_search.predict(X_test)\n",
+        "print(\"Cohen Kappa Score: \", cohen_kappa_score(y_test, y_pred))\n",
+        "print(\"Accuracy: \", sum(y_pred == y_test)/len(y_test))"
+      ],
+      "id": "predict-X_test",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| output: false\n",
+        "ConfusionMatrixDisplay(\n",
+        "    confusion_matrix = confusion_matrix(\n",
+        "        y_test, y_pred, \n",
+        "        labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
+        "        ), \n",
+        "        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
+        "        ).plot(xticks_rotation='vertical')"
+      ],
+      "id": "6e7264c3",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "![AirQuality Confusion Matrix 2](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true)\n",
+        "\n",
+        "We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase."
+      ],
+      "id": "c2f470bf"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\Steve\\AppData\\Local\\Programs\\Python\\Python312\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
