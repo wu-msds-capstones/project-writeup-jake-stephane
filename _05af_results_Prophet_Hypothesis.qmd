@@ -1,12 +1,18 @@
 ---
 jupyter: ir
+execute:
+  echo: false
+  warning: false
 ---
-# Prophet AQI Trend Forecasting and Hypothesis Testing
+
 ```{r setup, include=FALSE}
-#knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
+# Prophet AQI Trend Forecasting and Hypothesis Testing
 
 ```{r}
+#| echo: false
+#| warning: false
 library(dbplyr)
 library(tidyverse)
 library(lubridate)
@@ -19,6 +25,7 @@ To gain an understanding of how Portland's AQI differs from other large cities, 
 
 ```{r}
 #| echo: false
+#| warning: false
 large_metro_data = read.csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 
 portland_data = large_metro_data %>%
@@ -41,6 +48,7 @@ Initially we can run a two sample t-test to show that Portland's AQI average is 
 
 ```{r}
 #| echo: false
+#| warning: false
 pdx_aqi = portland_data$aqi
 pdx_aqi_sample <- sample(pdx_aqi, size = as.integer(length(pdx_aqi)/10), replace = FALSE)
 lmaqi = large_metro_data$aqi
@@ -73,6 +81,7 @@ The partial violations of the assumptions in the t test in our analysis suggest 
 
 ```{r}
 #| echo: false
+#| warning: false
 t.test(pdx_aqi_sample, lmaqi_sample, alternative = "less", var.equal = FALSE)
 ```
 
@@ -88,7 +97,8 @@ Prophet by Meta is used as time series prediction to estimate and map trends bas
 
 To use the package, data must be in the format of a two column graph, with the first column being the date data, and the second being the variable being mapped and predicted. In this case, this predicted variable is AQI. 
 ```{r}
-#| include: false
+#| echo: false
+#| warning: false
 pdx = portland_data %>%
   select(c(date, aqi)) %>%
   rename(
@@ -101,7 +111,8 @@ head(pdx)
 
 
 ```{r}
-#| include: false
+#| echo: false
+#| warning: false
 
 #We begin the prophet forecast by transforming the dataframe into the prophet object.
 pdxprophet = prophet(pdx) 
@@ -116,7 +127,8 @@ tail(future)
 ```
 
 ```{r}
-#| include: false
+#| echo: false
+#| warning: false
 #We predict future values based on the existing data and the future period. This will return the actual data and predictions, with an error range shown with the upper and lower bounds.
 forecast <- predict(pdxprophet, future)
 tail(forecast[c('ds', 'yhat', 'yhat_lower', 'yhat_upper')])
@@ -125,6 +137,7 @@ The graph below (figure 4324), shows the supplied data with the future predictio
 
 ```{r}
 #| echo: false
+#| warning: false
 #To visualize this we can plot it. The black dots represent the actual values. The dark blue line represents the prediction made by the algorithm. The light blue transparent area represents the upper and lower bounds of the prediction. Right away, we can see the yearly increase in aqi every year during the late summer. The large spike in 2020 will be something to take a closer look at. This corresponds with the large forest fire in the Columbia Gorge. At the end, we can see forecasted data for the year 2023.
 plot(pdxprophet, forecast, xlab="Date", ylab="AQI")
 
@@ -149,6 +162,7 @@ To understand, we will conduct a two sample t-test to see whether or not this mo
 
 ```{r}
 #| echo: false
+#| warning: false
 
 # data
 pdx_data = large_metro_data %>%
@@ -182,7 +196,6 @@ hist(pdx_data_sample, breaks = 20, main = "Entire Time Period AQI", xlab = "AQI"
 
 # Reset to default layout
 par(mfrow = c(1, 1))
-
 ```
 
 From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. They have long tails to the right, and the September 2020 dataset is oddly shaped due to lack of data.
@@ -193,6 +206,7 @@ The partial violations of the assumptions in the t test in our analysis suggest 
 
 ```{r}
 #| echo: false
+#| warning: false
 t.test(pdx_sep_20_aqi, pdx_data_sample, alternative = "greater", var.equal = FALSE)
 ```
 
@@ -204,6 +218,7 @@ Based on the low p value, we reject the null. We conclude that the September AQI
 Prophet's plot component function allows us to see specific trends including the total (entire eight years), weekly, and yearly trends in figure 21111. This allows us to see how AQI changes by day. In the top full time span graph, it shows the potential spread of data for the predicted period with the transparent blue area. We can also see that day of the week tends to have very little impact on the trend(it may look significant but it is only moving up and down less than 1.5 AQI between days). Finally, from the yearly graph we cab see the consistent increase during the late summer to mid fall each year. 
 ```{r}
 #| echo: false
+#| warning: false
 prophet_plot_components(pdxprophet, forecast)
 ```
 
@@ -223,7 +238,8 @@ pdx_cv <- cross_validation(pdxprophet, initial = 730, period = 180, horizon = 36
 ```
 
 ```{r}
-#| include: false
+#| echo: false
+#| warning: false
 #This chart shows the mean squared error (MSE), root mean squared error (RMSE), mean absolute error (MAE), mean absolute percent error (MAPE), median absolute percent error (MDAPE) and coverage of the yhat_lower and yhat_upper estimates. As the horizon increases, the errors tend to increase, but overall they are not too large.
 pdx_perf <- performance_metrics(pdx_cv)
 
@@ -231,6 +247,7 @@ pdx_perf <- performance_metrics(pdx_cv)
 
 ```{r}
 #| echo: false
+#| warning: false
 #mean absolute percent error
 plot_cross_validation_metric(pdx_cv, metric = 'mape')
 ```
@@ -260,6 +277,7 @@ We have standardized rates by passenger miles ridden per person. This is the tot
 
 ```{r}
 #| echo: false
+#| warning: false
 
 # data
 pdx_transit = large_metro_data %>%
@@ -296,7 +314,6 @@ hist(large_metro_transit_sample, breaks = 20, main = "Large Cities Transit", xla
 
 # Reset to default layout
 par(mfrow = c(1, 1))
-
 ```
 
 From the QQ plots and histograms, we can see both datasets are clearly not normally distributed. The Portland data has so few datapoints that it is hard to tell if it has a normal distribution or not. The large city transit data seems normal with the exception of one datapoint. 
@@ -307,6 +324,7 @@ The partial violations of the assumptions in the t test in our analysis suggest 
 
 ```{r}
 #| echo: false
+#| warning: false
 t.test(pdx_transit$pass_miles_per_person, large_metro_transit_sample, alternative = 'greater', var.equal = FALSE)
 ```
 

@@ -1,6 +1,9 @@
-# Results
-
-## Sci-Kit Learn Machine Learning
+---
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+---
 Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm. 
 
 ```{python}

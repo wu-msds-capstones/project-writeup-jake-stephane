@@ -2,13 +2,32 @@
 title-block-banner: true
 title: "Unveiling the Drivers of Clean Air"
 subtitle: "Analysis of Portland Air Quality (AQI)"
-date: "2024-07-30"
+date: "2024-08-01"
+author:
+  - name: Stéphane Berhault
+    orcid: 0009-0003-5357-629X
+    email: sgberhault@willamette.edu
+    affiliation: 
+      - name: Willamette University
+        city: Portland
+        state: OR
+        url: https://willamette.edu
+  - name: Jake Warmflash
+    email: jwarmflash@willamette.edu
+    affiliation: 
+      - name: Willamette University
+        city: Portland
+        state: OR
+        url: https://willamette.edu
+    
 execute:
   echo: false
   warning: false
 jupyter: python3
 format:
   html:
+    fig-width: 8
+    fig-height: 6
     code-fold: true
     code-tools:
       source: repo
@@ -32,6 +51,7 @@ format:
 {{< include _02_background.qmd >}}
 {{< include _03_methods.qmd >}}
 {{< include _04_data.qmd >}}
+{{< include _05f_results_Machine_Learning_ScikitLearn.qmd >}}
 {{< include _05c_results_Machine_Learning_SARIMAX.qmd >}}
 {{< include _06_conclusions.qmd >}}
 {{< include _07_bibliography.qmd >}}

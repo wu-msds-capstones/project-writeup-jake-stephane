@@ -1,3 +1,9 @@
+---
+jupyter: python3
+execute:
+  echo: false
+  warning: false
+---
 # ML Time Series with SARIMAX Model
 
 ```{python}
@@ -67,7 +73,6 @@ We need to find the right p,d and q parameters to correctly forecast and predict
 We use a tuning technique called `grid search method` that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.
 ```{python}
 #| label: grid-search
-#| cache: true
 import itertools
 
 # Define the p, d, q parameters to take any value between 0 to 1
@@ -123,7 +128,7 @@ print(f"The AIC value is: {aic_value}")
 #results.plot_diagnostics(figsize=(10, 8))
 ```
 
-![Plot Diag](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/plot-diag.png?raw=true))
+![Plot Diag](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/plot-diag.png?raw=true)
 
 # Train and Test
 Rigorous validation is paramount to establishing the model's reliability and practical application. To ensure the model's generalizability, we will employ a train-test split. This approach safeguards against overfitting by exposing the model to unseen data, allowing for a more accurate assessment of its predictive capabilities.

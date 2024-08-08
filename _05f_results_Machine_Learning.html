@@ -46,27 +46,9 @@ ul.task-list li input[type="checkbox"] {
 
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Results</h1>
-</div>
 
 
 
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="sci-kit-learn-machine-learning" class="level2">
-<h2 class="anchored" data-anchor-id="sci-kit-learn-machine-learning">Sci-Kit Learn Machine Learning</h2>
 <p>Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm.</p>
 <p>First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped.</p>
 <p>Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.</p>
@@ -249,8 +231,8 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>Tree</td>
-<td>0.386391</td>
-<td>0.517692</td>
+<td>0.389911</td>
+<td>0.522047</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
@@ -305,7 +287,7 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>RF_model__bootstrap</td>
-<td>False</td>
+<td>True</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
@@ -315,27 +297,27 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>RF_model__max_features</td>
-<td>sqrt</td>
+<td>None</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>RF_model__min_samples_leaf</td>
-<td>4</td>
+<td>2</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>RF_model__min_samples_split</td>
-<td>4</td>
+<td>9</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>RF_model__n_estimators</td>
-<td>82</td>
+<td>158</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
 <td>aqi_transformer__categories__max_categories</td>
-<td>20</td>
+<td>28</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
@@ -351,8 +333,8 @@ ul.task-list li input[type="checkbox"] {
 <p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
 <div id="predict-x_test" class="cell" data-execution_count="28">
 <div class="cell-output cell-output-stdout">
-<pre><code>Cohen Kappa Score:  0.5273951712416474
-Accuracy:  0.6390854654327708</code></pre>
+<pre><code>Cohen Kappa Score:  0.5097135594689055
+Accuracy:  0.6227544910179641</code></pre>
 </div>
 </div>
 <div class="quarto-figure quarto-figure-center">
@@ -362,7 +344,6 @@ Accuracy:  0.6390854654327708</code></pre>
 </figure>
 </div>
 <p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>
-</section>
 
 </main>
 <!-- /main column -->
