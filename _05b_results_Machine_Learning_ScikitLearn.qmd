@@ -1,14 +1,9 @@
----
-jupyter: python3
-execute:
-  echo: false
-  warning: false
----
+# Results Machine Learning Scikit-Learn
 Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm. 
 
 ```{python}
 #| label: import-packages
-#| include: false
+#| echo: false
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -34,21 +29,21 @@ from scipy.stats import randint
 First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped. 
 
 ```{python}
-#| include: false 
-#| #| label: read-csv
+#| echo: false 
+#| label: read-csv
 df = pd.read_csv('https://raw.githubusercontent.com/wu-msds-capstones/Air-Quality-Index/main/data/metro_1mil.csv')
 len(df)
 ```
 
 ```{python}
 #| label: check-isna
-#| include: false
+#| echo: false
 df.isna().sum()
 ```
 
 ```{python}
 #| label: met-dataframe
-#| include: false
+#| echo: false
 met = df[[
     'date',
     'state',
@@ -93,13 +88,13 @@ met = met.rename(columns={'mean_temperature_fahrenheit': 'temp',
 
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: check-NaN
 met.isna().sum()
 ```
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: set-index-ts
 met['date'] = pd.to_datetime(met['date'])
 met.set_index('date', inplace=True)
@@ -131,19 +126,19 @@ met = met.groupby([pd.Grouper(freq='W'), 'state', 'county', 'city']).agg({
 Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: drop-missNaN-col
 met = met[met['city'] != 'Virginia Beach']
 ```
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: drop-null-aqi
 met = met.dropna(subset=['aqi'])
 ```
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: check-NaN-again
 met.isna().sum()
 ```
@@ -151,7 +146,7 @@ met.isna().sum()
 The data collected has separate information for the city of New York City. NYC is divided into five boroughs, each within its own county. These values are grouped and averaged out to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York boroughs but not others. Likewise, Kansas City spans two states and two counties, so those values are grouped together.
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: group-nyc-1-city
 nyc = met[met['city'] == 'New York']
 columns = ['date', 'aqi', 'temp', 'pressure','humidity',
@@ -180,14 +175,14 @@ print(nyc)
 ```
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: replace-nyc-in-met
 met = met[met['city'] != 'New York']
 met = pd.concat([met, nyc], ignore_index=True)
 ```
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: dataframe-Kansas-City
 #Do same with Kansas City
 kc = met[met['city'] == 'Kansas City']
@@ -249,7 +244,7 @@ To perform a ML prediction algorithm, the predicted variable (AQI) must be discr
 - 151+
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: AQI-bin-ML
 bins = [0, 30, 40, 50, 60, 70, 80, 90, 100, 150, 500]
 
@@ -260,8 +255,8 @@ ds.head()
 ```
 
 ```{python}
-#| include: false
-#| #| label: label-bin
+#| echo: false
+#| label: label-bin
 labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
 ds.loc[:,'aqi_discrete'] = pd.cut(ds['aqi'], bins=bins, labels=labels, right=True)
 
@@ -269,8 +264,8 @@ ds.head()
 ```
 
 ```{python}
-#| include: false
-#| #| label: convert-year-month-datetime
+#| echo: false
+#| label: convert-year-month-datetime
 ds.loc[:,'year'] = pd.to_datetime(ds['date']).dt.year
 ds.loc[:,'month'] = pd.to_datetime(ds['date']).dt.month
 ```
@@ -278,8 +273,8 @@ ds.loc[:,'month'] = pd.to_datetime(ds['date']).dt.month
 A feature selector is run on the set of all variables. This chooses the best predictors of the dependent variable AQI.
 
 ```{python}
-#| include: false
-#| #| label: aqi-X-y
+#| echo: false
+#| label: aqi-X-y
 #dependent variable aqi, all others (except aqi category) as independent variables
 y = ds['aqi_discrete']
 X = ds[['city',
@@ -317,16 +312,16 @@ The following tools are used:
 - Standard Scaler 
 
 ```{python}
-#| include: false
-#| #| label: split-train
+#| echo: false
+#| label: split-train
 #Split into train and test datasets, define model and encoder
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 encoder = OneHotEncoder(sparse_output=False, min_frequency=5, handle_unknown='infrequent_if_exist')
 ```
 
 ```{python}
-#| include: false
-#| #| label: def-transformer
+#| echo: false
+#| label: def-transformer
 #define transformer with encoder and standardscaler
 
 transformer = ColumnTransformer(
@@ -374,7 +369,7 @@ Feature selection is done on the data. From this we are given the following vari
 These features are used in the final model.
 
 ```{python}
-#| include: false
+#| echo: false
 #| #| label: feature-select
 #feature selection
 feature_selector = SelectKBest(k=10)
@@ -392,7 +387,7 @@ X_train_trans_df.columns[feature_selector.get_support()]
 
 
 ```{python}
-#| include: false
+#| echo: false
 #| #| label: use-features
 #Use selected features
 y = ds['aqi_discrete']
@@ -452,7 +447,7 @@ display(pd.DataFrame(results))
 ```
 
 ```{python}
-#| include: false
+#| echo: false
 #| #| label: def-best-model
 #Create model from most accurate, RandomForest
 model = RandomForestClassifier(n_estimators=10)
@@ -474,7 +469,7 @@ ConfusionMatrixDisplay(
 ```
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: improve-transformer
 #redefined transformer
 transformer = ColumnTransformer(
@@ -512,7 +507,7 @@ Hyperparameter optimization will be done to further improve the model. A randomi
 - Bootstrap
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: hyper-parameters-optim
 #hyperparameter optimization
 classification_pipeline.get_params()
@@ -521,7 +516,7 @@ classification_pipeline.get_params()
 
 
 ```{python}
-#| include: false
+#| echo: false
 #| label: def-parameters
 parameters = {
     'aqi_transformer__categories__max_categories': randint(3,30),
@@ -565,7 +560,8 @@ print("Accuracy: ", sum(y_pred == y_test)/len(y_test))
 ```
 
 ```{python}
-#| include: false
+#| echo: false
+#| output: false
 ConfusionMatrixDisplay(
     confusion_matrix = confusion_matrix(
         y_test, y_pred, 
@@ -574,7 +570,6 @@ ConfusionMatrixDisplay(
         display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
         ).plot(xticks_rotation='vertical')
 ```
-
 
 ![AirQuality Confusion Matrix](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true)
 
