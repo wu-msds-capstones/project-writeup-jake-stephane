@@ -162,7 +162,8 @@ window.Quarto = {
   <li><a href="#sweetviz-data-report" id="toc-sweetviz-data-report" class="nav-link" data-scroll-target="#sweetviz-data-report">Sweetviz Data Report</a></li>
   <li><a href="#advanced-exploratory-data-analysis" id="toc-advanced-exploratory-data-analysis" class="nav-link" data-scroll-target="#advanced-exploratory-data-analysis">Advanced Exploratory Data Analysis</a></li>
   <li><a href="#time-series-visualization-co-pollutant-wind-and-aqi" id="toc-time-series-visualization-co-pollutant-wind-and-aqi" class="nav-link" data-scroll-target="#time-series-visualization-co-pollutant-wind-and-aqi">Time Series Visualization: CO Pollutant, Wind and AQI</a></li>
-  <li><a href="#time-series-visualization-so2-no2-and-ozone" id="toc-time-series-visualization-so2-no2-and-ozone" class="nav-link" data-scroll-target="#time-series-visualization-so2-no2-and-ozone">Time Series Visualization: SO2, NO2 and Ozone</a>
+  <li><a href="#time-series-visualization-so2-no2-and-ozone" id="toc-time-series-visualization-so2-no2-and-ozone" class="nav-link" data-scroll-target="#time-series-visualization-so2-no2-and-ozone">Time Series Visualization: SO2, NO2 and Ozone</a></li>
+  <li><a href="#results-machine-learning-scikit-learn" id="toc-results-machine-learning-scikit-learn" class="nav-link" data-scroll-target="#results-machine-learning-scikit-learn">Results Machine Learning Scikit-Learn</a>
   <ul class="collapse">
   <li><a href="#forecasting-future-values" id="toc-forecasting-future-values" class="nav-link" data-scroll-target="#forecasting-future-values">Forecasting Future Values</a></li>
   <li><a href="#visualizing-our-results-the-culmination-of-our-analysis" id="toc-visualizing-our-results-the-culmination-of-our-analysis" class="nav-link" data-scroll-target="#visualizing-our-results-the-culmination-of-our-analysis">Visualizing Our Results: The Culmination of Our Analysis</a>
@@ -409,7 +410,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="capstone_files/figure-html/plot-aqi-output-1.png" id="plot-aqi" width="832" height="529" class="figure-img"></p>
+<p><img src="capstone_files/figure-html/plot-aqi-output-1.png" id="plot-aqi" width="829" height="523" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -465,7 +466,7 @@ window.Quarto = {
 <div id="cell-sweetvis-report" class="cell" data-execution_count="9">
 <div id="sweetvis-report" class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"8901e54ff15e41b8a3680e3df3eca6da","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"21b09332d16a47c08ebf432bded11812","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -549,6 +550,1771 @@ For recognized time series features: - Histograms are replaced with line plots -
 </div>
 </div>
 <p>We finally completed the exploratory data analysis.</p>
+</section>
+<section id="results-machine-learning-scikit-learn" class="level1">
+<h1>Results Machine Learning Scikit-Learn</h1>
+<p>Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm.</p>
+<p>First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped.</p>
+<div id="cell-read-csv" class="cell" data-execution_count="17">
+<div id="read-csv" class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>147039</code></pre>
+</div>
+</div>
+<div id="cell-check-isna" class="cell" data-execution_count="18">
+<div id="check-isna" class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>yearly_transit_id                            5114
+category_id                                  3068
+location_id                                     0
+date_id                                         0
+id                                              0
+aqi                                          3068
+mean_temperature_fahrenheit                 61895
+max_temperature_fahrenheit                  61895
+mean_pressure_millibars                     91859
+max_pressure_millibars                      91859
+mean_humidity_percent_relative_humidity     76818
+max_humidity_percent_relative_humidity      76818
+mean_wind_knots                             58488
+max_wind_knots                              58488
+mean_co_ppm                                 32615
+max_co_ppm                                  32615
+mean_no2_ppb                                27747
+max_no2_ppb                                 27747
+mean_ozone_ppm                              33163
+max_ozone_ppm                               33163
+mean_so2_ppb                                49291
+max_so2_ppb                                 49291
+mean_pm100_micrograms_per_cubic_meter       77281
+max_pm100_micrograms_per_cubic_meter        77281
+mean_pm25_micrograms_per_cubic_meter        37443
+max_pm25_micrograms_per_cubic_meter         37443
+mean_lead_micrograms_per_cubic_meter       138816
+max_lead_micrograms_per_cubic_meter        138816
+date                                            0
+state                                           0
+st_abbv                                         0
+county                                          0
+city                                            0
+population                                      0
+density                                         0
+category                                     3068
+aqi_range                                    3068
+num_busses                                   5114
+revenue                                      5844
+operating_expense                            5114
+passenger_trips                              5114
+operating_hours                              5114
+passenger_miles                              5114
+operating_miles                              5114
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="cell-check-NaN" class="cell" data-execution_count="20">
+<div id="check-nan" class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>date                      0
+state                     0
+county                    0
+city                      0
+population                0
+density                   0
+aqi                    3068
+category               3068
+temp                  61895
+pressure              91859
+humidity              76818
+wind_speed            58488
+co                    32615
+no2                   27747
+o3                    33163
+so2                   49291
+pm100                 77281
+pm25                  37443
+lead                 138816
+num_busses             5114
+revenue                5844
+operating_expense      5114
+passenger_trips        5114
+operating_hours        5114
+passenger_miles        5114
+operating_miles        5114
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.</p>
+<div id="cell-check-NaN-again" class="cell" data-execution_count="24">
+<div id="check-nan-again" class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>date                     0
+state                    0
+county                   0
+city                     0
+population               0
+density                  0
+aqi                      0
+temp                  8199
+pressure             12387
+humidity             10318
+wind_speed            7679
+co                    3900
+no2                   3250
+o3                    3964
+so2                   6315
+pm100                 4835
+pm25                  2055
+num_busses             312
+revenue                416
+operating_expense      312
+passenger_trips        312
+operating_hours        312
+passenger_miles        312
+operating_miles        312
+dtype: int64</code></pre>
+</div>
+</div>
+<p>The data collected has separate information for the city of New York City. NYC is divided into five boroughs, each within its own county. These values are grouped and averaged out to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York boroughs but not others. Likewise, Kansas City spans two states and two counties, so those values are grouped together.</p>
+<div id="group-nyc-1-city" class="cell" data-execution_count="25">
+<div class="cell-output cell-output-stdout">
+<pre><code>          date     state    county           city  population  density  \
+0   2015-01-04  New York  Multiple  New York City    18908608  11080.3   
+1   2015-01-11  New York  Multiple  New York City    18908608  11080.3   
+2   2015-01-18  New York  Multiple  New York City    18908608  11080.3   
+3   2015-01-25  New York  Multiple  New York City    18908608  11080.3   
+4   2015-02-01  New York  Multiple  New York City    18908608  11080.3   
+..         ...       ...       ...            ...         ...      ...   
+413 2022-12-04  New York  Multiple  New York City    18908608  11080.3   
+414 2022-12-11  New York  Multiple  New York City    18908608  11080.3   
+415 2022-12-18  New York  Multiple  New York City    18908608  11080.3   
+416 2022-12-25  New York  Multiple  New York City    18908608  11080.3   
+417 2023-01-01  New York  Multiple  New York City    18908608  11080.3   
+
+           aqi       temp     pressure   humidity  ...       so2      pm100  \
+0    49.450000  38.984375  1015.694425  63.076739  ...  2.011285        NaN   
+1    47.514286  23.241072  1019.509891  50.699404  ...  3.337455        NaN   
+2    56.000000  29.508929  1017.454363  65.954221  ...  3.034949        NaN   
+3    49.800000  34.836310  1008.855166  60.536141  ...  2.267468        NaN   
+4    44.342857  25.562500  1010.873006  63.099378  ...  2.640521        NaN   
+..         ...        ...          ...        ...  ...       ...        ...   
+413  29.657143        NaN          NaN        NaN  ...  0.437256   5.333334   
+414  34.742857        NaN          NaN        NaN  ...  0.517050  11.666667   
+415  27.600000        NaN          NaN        NaN  ...  0.507095   9.333333   
+416  38.000000        NaN          NaN        NaN  ...  0.837313   8.000000   
+417  59.566667        NaN          NaN        NaN  ...  1.217373  22.666666   
+
+          pm25  num_busses       revenue  operating_expense  passenger_trips  \
+0     7.781642     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
+1     8.393517     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
+2    13.683131     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
+3    10.417719     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
+4     7.102983     22195.0  5.427129e+09       1.656689e+10     4.350768e+09   
+..         ...         ...           ...                ...              ...   
+413   4.959028      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
+414   7.456925      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
+415   4.837290      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
+416   7.295255      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
+417  17.720097      5735.0  8.183201e+08       3.981827e+09     5.032214e+08   
+
+     operating_hours  passenger_miles  operating_miles  
+0         77805045.0     9.676463e+09      577333420.0  
+1         77805045.0     9.676463e+09      577333420.0  
+2         77805045.0     9.676463e+09      577333420.0  
+3         77805045.0     9.676463e+09      577333420.0  
+4         77805045.0     9.676463e+09      577333420.0  
+..               ...              ...              ...  
+413       16852360.0     1.446845e+09      130602200.0  
+414       16852360.0     1.446845e+09      130602200.0  
+415       16852360.0     1.446845e+09      130602200.0  
+416       16852360.0     1.446845e+09      130602200.0  
+417       16852360.0     1.446845e+09      130602200.0  
+
+[418 rows x 24 columns]</code></pre>
+</div>
+</div>
+<p>After this data cleaning, we are left with a total of eighteen cities across the country with a total metropolitan area population of greater than one million. The table below (figure 24324) shows all eighteen cities being used in the prediction algorithm and their respective row counts.</p>
+<div id="cell-count-cities" class="cell" data-execution_count="28">
+<div id="count-cities" class="cell-output cell-output-display" data-execution_count="28">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Boston</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Charlotte</td>
+<td>418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Cincinnati</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Cleveland</td>
+<td>418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Dallas</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Detroit</td>
+<td>418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Houston</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Kansas City</td>
+<td>241</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Los Angeles</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Memphis</td>
+<td>418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>New York City</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Phoenix</td>
+<td>418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Pittsburgh</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Portland</td>
+<td>418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>Raleigh</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>Seattle</td>
+<td>418</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>St. Louis</td>
+<td>418</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Washington</td>
+<td>418</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>To perform a ML prediction algorithm, the predicted variable (AQI) must be discrete. To achieve this, we bin AQI data into discrete groups. Initially, we thought to bin them based on the existing AQI categories, but found that most of the data is grouped in the sub 100 range. Therefore, we expanded the bins, focusing the prediction on outcomes in the double digits. The bins chosen are:</p>
+<ul>
+<li>0-30</li>
+<li>31-40</li>
+<li>41-50</li>
+<li>51-60</li>
+<li>61-70</li>
+<li>71-80</li>
+<li>81-90</li>
+<li>91-100</li>
+<li>101-150</li>
+<li>151+</li>
+</ul>
+<div id="cell-AQI-bin-ML" class="cell" data-execution_count="29">
+<div id="aqi-bin-ml" class="cell-output cell-output-display" data-execution_count="29">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">population</th>
+<th data-quarto-table-cell-role="th">density</th>
+<th data-quarto-table-cell-role="th">aqi</th>
+<th data-quarto-table-cell-role="th">temp</th>
+<th data-quarto-table-cell-role="th">pressure</th>
+<th data-quarto-table-cell-role="th">humidity</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">pm100</th>
+<th data-quarto-table-cell-role="th">pm25</th>
+<th data-quarto-table-cell-role="th">num_busses</th>
+<th data-quarto-table-cell-role="th">revenue</th>
+<th data-quarto-table-cell-role="th">operating_expense</th>
+<th data-quarto-table-cell-role="th">passenger_trips</th>
+<th data-quarto-table-cell-role="th">operating_hours</th>
+<th data-quarto-table-cell-role="th">passenger_miles</th>
+<th data-quarto-table-cell-role="th">operating_miles</th>
+<th data-quarto-table-cell-role="th">aqi_discrete</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2015-01-04</td>
+<td>Arizona</td>
+<td>Maricopa</td>
+<td>Phoenix</td>
+<td>4064275</td>
+<td>1198.9</td>
+<td>86.50</td>
+<td>41.458333</td>
+<td>972.860814</td>
+<td>60.739583</td>
+<td>...</td>
+<td>20.709822</td>
+<td>20.505426</td>
+<td>729.0</td>
+<td>47024975.0</td>
+<td>2.256208e+08</td>
+<td>55497019.0</td>
+<td>2228182.0</td>
+<td>2.190928e+08</td>
+<td>28371107.0</td>
+<td>81-90</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2015-01-04</td>
+<td>California</td>
+<td>Los Angeles</td>
+<td>Los Angeles</td>
+<td>11922389</td>
+<td>3184.7</td>
+<td>118.50</td>
+<td>50.281250</td>
+<td>1010.666650</td>
+<td>58.177084</td>
+<td>...</td>
+<td>24.954331</td>
+<td>21.400000</td>
+<td>2259.0</td>
+<td>273158938.0</td>
+<td>1.056348e+09</td>
+<td>367104774.0</td>
+<td>7938548.0</td>
+<td>1.448619e+09</td>
+<td>84041668.0</td>
+<td>101-150</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2015-01-04</td>
+<td>District Of Columbia</td>
+<td>District of Columbia</td>
+<td>Washington</td>
+<td>5116378</td>
+<td>4235.7</td>
+<td>45.25</td>
+<td>41.149479</td>
+<td>1015.388525</td>
+<td>61.075000</td>
+<td>...</td>
+<td>13.750000</td>
+<td>11.088055</td>
+<td>1394.0</td>
+<td>149657899.0</td>
+<td>6.453259e+08</td>
+<td>139353079.0</td>
+<td>4115200.0</td>
+<td>4.293390e+08</td>
+<td>39643319.0</td>
+<td>41-50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2015-01-04</td>
+<td>Massachusetts</td>
+<td>Suffolk</td>
+<td>Boston</td>
+<td>4328315</td>
+<td>5319.0</td>
+<td>42.75</td>
+<td>33.458332</td>
+<td>1018.536500</td>
+<td>58.234375</td>
+<td>...</td>
+<td>6.000000</td>
+<td>7.244791</td>
+<td>800.0</td>
+<td>96572664.0</td>
+<td>4.080501e+08</td>
+<td>122496729.0</td>
+<td>2231562.0</td>
+<td>3.162285e+08</td>
+<td>22115804.0</td>
+<td>41-50</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2015-01-04</td>
+<td>Michigan</td>
+<td>Wayne</td>
+<td>Detroit</td>
+<td>3725908</td>
+<td>1772.2</td>
+<td>49.25</td>
+<td>30.203125</td>
+<td>994.260400</td>
+<td>72.671876</td>
+<td>...</td>
+<td>18.250000</td>
+<td>9.394618</td>
+<td>432.0</td>
+<td>31303313.0</td>
+<td>1.729056e+08</td>
+<td>33078462.0</td>
+<td>1225079.0</td>
+<td>1.696881e+08</td>
+<td>17705665.0</td>
+<td>41-50</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 25 columns</p>
+</div>
+</div>
+</div>
+<div id="cell-label-bin" class="cell" data-execution_count="30">
+<div id="label-bin" class="cell-output cell-output-display" data-execution_count="30">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">county</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">population</th>
+<th data-quarto-table-cell-role="th">density</th>
+<th data-quarto-table-cell-role="th">aqi</th>
+<th data-quarto-table-cell-role="th">temp</th>
+<th data-quarto-table-cell-role="th">pressure</th>
+<th data-quarto-table-cell-role="th">humidity</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">pm100</th>
+<th data-quarto-table-cell-role="th">pm25</th>
+<th data-quarto-table-cell-role="th">num_busses</th>
+<th data-quarto-table-cell-role="th">revenue</th>
+<th data-quarto-table-cell-role="th">operating_expense</th>
+<th data-quarto-table-cell-role="th">passenger_trips</th>
+<th data-quarto-table-cell-role="th">operating_hours</th>
+<th data-quarto-table-cell-role="th">passenger_miles</th>
+<th data-quarto-table-cell-role="th">operating_miles</th>
+<th data-quarto-table-cell-role="th">aqi_discrete</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2015-01-04</td>
+<td>Arizona</td>
+<td>Maricopa</td>
+<td>Phoenix</td>
+<td>4064275</td>
+<td>1198.9</td>
+<td>86.50</td>
+<td>41.458333</td>
+<td>972.860814</td>
+<td>60.739583</td>
+<td>...</td>
+<td>20.709822</td>
+<td>20.505426</td>
+<td>729.0</td>
+<td>47024975.0</td>
+<td>2.256208e+08</td>
+<td>55497019.0</td>
+<td>2228182.0</td>
+<td>2.190928e+08</td>
+<td>28371107.0</td>
+<td>81-90</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2015-01-04</td>
+<td>California</td>
+<td>Los Angeles</td>
+<td>Los Angeles</td>
+<td>11922389</td>
+<td>3184.7</td>
+<td>118.50</td>
+<td>50.281250</td>
+<td>1010.666650</td>
+<td>58.177084</td>
+<td>...</td>
+<td>24.954331</td>
+<td>21.400000</td>
+<td>2259.0</td>
+<td>273158938.0</td>
+<td>1.056348e+09</td>
+<td>367104774.0</td>
+<td>7938548.0</td>
+<td>1.448619e+09</td>
+<td>84041668.0</td>
+<td>101-150</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>2015-01-04</td>
+<td>District Of Columbia</td>
+<td>District of Columbia</td>
+<td>Washington</td>
+<td>5116378</td>
+<td>4235.7</td>
+<td>45.25</td>
+<td>41.149479</td>
+<td>1015.388525</td>
+<td>61.075000</td>
+<td>...</td>
+<td>13.750000</td>
+<td>11.088055</td>
+<td>1394.0</td>
+<td>149657899.0</td>
+<td>6.453259e+08</td>
+<td>139353079.0</td>
+<td>4115200.0</td>
+<td>4.293390e+08</td>
+<td>39643319.0</td>
+<td>41-50</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>2015-01-04</td>
+<td>Massachusetts</td>
+<td>Suffolk</td>
+<td>Boston</td>
+<td>4328315</td>
+<td>5319.0</td>
+<td>42.75</td>
+<td>33.458332</td>
+<td>1018.536500</td>
+<td>58.234375</td>
+<td>...</td>
+<td>6.000000</td>
+<td>7.244791</td>
+<td>800.0</td>
+<td>96572664.0</td>
+<td>4.080501e+08</td>
+<td>122496729.0</td>
+<td>2231562.0</td>
+<td>3.162285e+08</td>
+<td>22115804.0</td>
+<td>41-50</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>2015-01-04</td>
+<td>Michigan</td>
+<td>Wayne</td>
+<td>Detroit</td>
+<td>3725908</td>
+<td>1772.2</td>
+<td>49.25</td>
+<td>30.203125</td>
+<td>994.260400</td>
+<td>72.671876</td>
+<td>...</td>
+<td>18.250000</td>
+<td>9.394618</td>
+<td>432.0</td>
+<td>31303313.0</td>
+<td>1.729056e+08</td>
+<td>33078462.0</td>
+<td>1225079.0</td>
+<td>1.696881e+08</td>
+<td>17705665.0</td>
+<td>41-50</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 25 columns</p>
+</div>
+</div>
+</div>
+<p>A feature selector is run on the set of all variables. This chooses the best predictors of the dependent variable AQI.</p>
+<p>The following tools are used:</p>
+<ul>
+<li>Train Test Split</li>
+<li>One Hot Encoder</li>
+<li>Transformer</li>
+<li>Pipeline</li>
+<li>Standard Scaler</li>
+</ul>
+<div id="cell-def-transformer" class="cell" data-execution_count="34">
+<div id="def-transformer" class="cell-output cell-output-display theorem definition" data-execution_count="34">
+<p><span class="theorem-title"><strong>Definition 1</strong></span> &nbsp;</p>
+<style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>ColumnTransformer(transformers=[('categories',
+                                 OneHotEncoder(handle_unknown='infrequent_if_exist',
+                                               min_frequency=5,
+                                               sparse_output=False),
+                                 ['city', 'year', 'month']),
+                                ('scaled_air_quality', StandardScaler(),
+                                 ['population', 'density', 'temp', 'pressure',
+                                  'humidity', 'wind_speed', 'co', 'no2', 'o3',
+                                  'so2', 'pm100', 'pm25', 'num_busses',
+                                  'revenue', 'operating_expense',
+                                  'passenger_trips', 'operating_hours',
+                                  'passenger_miles', 'operating_miles'])],
+                  verbose_feature_names_out=False)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox"><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for ColumnTransformer</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
+                                 OneHotEncoder(handle_unknown='infrequent_if_exist',
+                                               min_frequency=5,
+                                               sparse_output=False),
+                                 ['city', 'year', 'month']),
+                                ('scaled_air_quality', StandardScaler(),
+                                 ['population', 'density', 'temp', 'pressure',
+                                  'humidity', 'wind_speed', 'co', 'no2', 'o3',
+                                  'so2', 'pm100', 'pm25', 'num_busses',
+                                  'revenue', 'operating_expense',
+                                  'passenger_trips', 'operating_hours',
+                                  'passenger_miles', 'operating_miles'])],
+                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox"><label for="sk-estimator-id-2" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city', 'year', 'month']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox"><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
+              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox"><label for="sk-estimator-id-4" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['population', 'density', 'temp', 'pressure', 'humidity', 'wind_speed', 'co', 'no2', 'o3', 'so2', 'pm100', 'pm25', 'num_busses', 'revenue', 'operating_expense', 'passenger_trips', 'operating_hours', 'passenger_miles', 'operating_miles']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox"><label for="sk-estimator-id-5" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>Feature selection is done on the data. From this we are given the following variables:</p>
+<ul>
+<li>City</li>
+<li>Temperature</li>
+<li>Humidity</li>
+<li>Carbon Monoxide</li>
+<li>Nitrogen Dioxide</li>
+<li>Ozone</li>
+<li>PM10</li>
+<li>PM2.5</li>
+</ul>
+<p>These features are used in the final model.</p>
+<div id="3acf73cd" class="cell" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>Index(['city_Los Angeles', 'city_Phoenix', 'city_Portland', 'temp', 'humidity',
+       'co', 'no2', 'o3', 'pm100', 'pm25'],
+      dtype='object')</code></pre>
+</div>
+</div>
+<p>With these features, we test various models with default parameters to see which is the most accurate at predicting AQI from this dataset. The five models tested are:</p>
+<ul>
+<li>K nearest neighbors</li>
+<li>Tree model</li>
+<li>Random Forest model</li>
+<li>Logistic Regression</li>
+<li>Naive Bayes</li>
+</ul>
+<p>Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.</p>
+<div id="cell-model-select" class="cell" data-execution_count="37">
+<div id="model-select" class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Model</th>
+<th data-quarto-table-cell-role="th">Cohen Kappa Score</th>
+<th data-quarto-table-cell-role="th">Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>KNN</td>
+<td>0.279682</td>
+<td>0.451824</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Tree</td>
+<td>0.390058</td>
+<td>0.522047</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Random Forest</td>
+<td>0.481175</td>
+<td>0.602069</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Logistic</td>
+<td>0.312286</td>
+<td>0.485574</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>naive Bayes</td>
+<td>0.003825</td>
+<td>0.048993</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="0493a429" class="cell" data-execution_count="38">
+<div class="cell-output cell-output-stdout">
+<pre><code>cohen kappa score:  0.47546783683116634
+accuracy:  0.5960805661404464</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="capstone_files/figure-html/cell-39-output-2.png" width="665" height="572" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="cell-improve-transformer" class="cell" data-execution_count="39">
+<div id="improve-transformer" class="cell-output cell-output-display" data-execution_count="39">
+<style>#sk-container-id-2 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-2 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-2 pre {
+  padding: 0;
+}
+
+#sk-container-id-2 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-2 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-2 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-2 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-2 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-2 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-2 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-2 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-2 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-2 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label label.sk-toggleable__label,
+#sk-container-id-2 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-2 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-2 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-2 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-2 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-2 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-2 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[('aqi_transformer',
+                 ColumnTransformer(transformers=[('categories',
+                                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
+                                                                min_frequency=5,
+                                                                sparse_output=False),
+                                                  ['city']),
+                                                 ('scaled_air_quality',
+                                                  StandardScaler(),
+                                                  ['temp', 'humidity', 'co',
+                                                   'no2', 'o3', 'pm100',
+                                                   'pm25'])],
+                                   verbose_feature_names_out=False)),
+                ('RF_model', RandomForestClassifier())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox"><label for="sk-estimator-id-6" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>Pipeline(steps=[('aqi_transformer',
+                 ColumnTransformer(transformers=[('categories',
+                                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
+                                                                min_frequency=5,
+                                                                sparse_output=False),
+                                                  ['city']),
+                                                 ('scaled_air_quality',
+                                                  StandardScaler(),
+                                                  ['temp', 'humidity', 'co',
+                                                   'no2', 'o3', 'pm100',
+                                                   'pm25'])],
+                                   verbose_feature_names_out=False)),
+                ('RF_model', RandomForestClassifier())])</pre></div> </div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox"><label for="sk-estimator-id-7" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;aqi_transformer: ColumnTransformer<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.compose.ColumnTransformer.html">?<span>Documentation for aqi_transformer: ColumnTransformer</span></a></label><div class="sk-toggleable__content fitted"><pre>ColumnTransformer(transformers=[('categories',
+                                 OneHotEncoder(handle_unknown='infrequent_if_exist',
+                                               min_frequency=5,
+                                               sparse_output=False),
+                                 ['city']),
+                                ('scaled_air_quality', StandardScaler(),
+                                 ['temp', 'humidity', 'co', 'no2', 'o3',
+                                  'pm100', 'pm25'])],
+                  verbose_feature_names_out=False)</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-8" type="checkbox"><label for="sk-estimator-id-8" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">categories</label><div class="sk-toggleable__content fitted"><pre>['city']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-9" type="checkbox"><label for="sk-estimator-id-9" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content fitted"><pre>OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
+              sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-10" type="checkbox"><label for="sk-estimator-id-10" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">scaled_air_quality</label><div class="sk-toggleable__content fitted"><pre>['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25']</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-11" type="checkbox"><label for="sk-estimator-id-11" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;StandardScaler<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.preprocessing.StandardScaler.html">?<span>Documentation for StandardScaler</span></a></label><div class="sk-toggleable__content fitted"><pre>StandardScaler()</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-12" type="checkbox"><label for="sk-estimator-id-12" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;RandomForestClassifier<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.4/modules/generated/sklearn.ensemble.RandomForestClassifier.html">?<span>Documentation for RandomForestClassifier</span></a></label><div class="sk-toggleable__content fitted"><pre>RandomForestClassifier()</pre></div> </div></div></div></div></div></div>
+</div>
+</div>
+<p>Hyperparameter optimization will be done to further improve the model. A randomized search is run with 100 iterations. The following hyperparameters are optimized:</p>
+<ul>
+<li>Max Categories</li>
+<li>Min Frequency</li>
+<li>Max Depth</li>
+<li>Max Features</li>
+<li>Min Samples Leaf</li>
+<li>Min Samples Split</li>
+<li>Num Estimators</li>
+<li>Bootstrap</li>
+</ul>
+<div id="cell-hyper-parameters-optim" class="cell" data-execution_count="40">
+<div id="hyper-parameters-optim" class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>{'memory': None,
+ 'steps': [('aqi_transformer',
+   ColumnTransformer(transformers=[('categories',
+                                    OneHotEncoder(handle_unknown='infrequent_if_exist',
+                                                  min_frequency=5,
+                                                  sparse_output=False),
+                                    ['city']),
+                                   ('scaled_air_quality', StandardScaler(),
+                                    ['temp', 'humidity', 'co', 'no2', 'o3',
+                                     'pm100', 'pm25'])],
+                     verbose_feature_names_out=False)),
+  ('RF_model', RandomForestClassifier())],
+ 'verbose': False,
+ 'aqi_transformer': ColumnTransformer(transformers=[('categories',
+                                  OneHotEncoder(handle_unknown='infrequent_if_exist',
+                                                min_frequency=5,
+                                                sparse_output=False),
+                                  ['city']),
+                                 ('scaled_air_quality', StandardScaler(),
+                                  ['temp', 'humidity', 'co', 'no2', 'o3',
+                                   'pm100', 'pm25'])],
+                   verbose_feature_names_out=False),
+ 'RF_model': RandomForestClassifier(),
+ 'aqi_transformer__n_jobs': None,
+ 'aqi_transformer__remainder': 'drop',
+ 'aqi_transformer__sparse_threshold': 0.3,
+ 'aqi_transformer__transformer_weights': None,
+ 'aqi_transformer__transformers': [('categories',
+   OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
+                 sparse_output=False),
+   ['city']),
+  ('scaled_air_quality',
+   StandardScaler(),
+   ['temp', 'humidity', 'co', 'no2', 'o3', 'pm100', 'pm25'])],
+ 'aqi_transformer__verbose': False,
+ 'aqi_transformer__verbose_feature_names_out': False,
+ 'aqi_transformer__categories': OneHotEncoder(handle_unknown='infrequent_if_exist', min_frequency=5,
+               sparse_output=False),
+ 'aqi_transformer__scaled_air_quality': StandardScaler(),
+ 'aqi_transformer__categories__categories': 'auto',
+ 'aqi_transformer__categories__drop': None,
+ 'aqi_transformer__categories__dtype': numpy.float64,
+ 'aqi_transformer__categories__feature_name_combiner': 'concat',
+ 'aqi_transformer__categories__handle_unknown': 'infrequent_if_exist',
+ 'aqi_transformer__categories__max_categories': None,
+ 'aqi_transformer__categories__min_frequency': 5,
+ 'aqi_transformer__categories__sparse_output': False,
+ 'aqi_transformer__scaled_air_quality__copy': True,
+ 'aqi_transformer__scaled_air_quality__with_mean': True,
+ 'aqi_transformer__scaled_air_quality__with_std': True,
+ 'RF_model__bootstrap': True,
+ 'RF_model__ccp_alpha': 0.0,
+ 'RF_model__class_weight': None,
+ 'RF_model__criterion': 'gini',
+ 'RF_model__max_depth': None,
+ 'RF_model__max_features': 'sqrt',
+ 'RF_model__max_leaf_nodes': None,
+ 'RF_model__max_samples': None,
+ 'RF_model__min_impurity_decrease': 0.0,
+ 'RF_model__min_samples_leaf': 1,
+ 'RF_model__min_samples_split': 2,
+ 'RF_model__min_weight_fraction_leaf': 0.0,
+ 'RF_model__monotonic_cst': None,
+ 'RF_model__n_estimators': 100,
+ 'RF_model__n_jobs': None,
+ 'RF_model__oob_score': False,
+ 'RF_model__random_state': None,
+ 'RF_model__verbose': 0,
+ 'RF_model__warm_start': False}</code></pre>
+</div>
+</div>
+<div id="def-parameters" class="cell theorem definition" data-execution_count="41">
+<p><span class="theorem-title"><strong>Definition 2</strong></span> &nbsp;</p>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.6252268602540835</code></pre>
+</div>
+</div>
+<p>Figure 242442 below shows the selected hyperparameters.</p>
+<div id="cell-randsearch-get-params" class="cell" data-execution_count="42">
+<div id="randsearch-get-params" class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Parameter</th>
+<th data-quarto-table-cell-role="th">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>RF_model__bootstrap</td>
+<td>True</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>RF_model__max_depth</td>
+<td>25</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>RF_model__max_features</td>
+<td>sqrt</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>RF_model__min_samples_leaf</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>RF_model__min_samples_split</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>RF_model__n_estimators</td>
+<td>190</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>aqi_transformer__categories__max_categories</td>
+<td>29</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>aqi_transformer__categories__min_frequency</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
+<div id="predict-x_test" class="cell" data-execution_count="43">
+<div class="cell-output cell-output-stdout">
+<pre><code>Cohen Kappa Score:  0.5208382256873135
+Accuracy:  0.6341861731083288</code></pre>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true" class="img-fluid figure-img"></p>
+<figcaption>AirQuality Confusion Matrix</figcaption>
+</figure>
+</div>
+<p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>
 <hr>
 <p>jupyter: python3 execute: echo: false warning: false</p>
 <table class="caption-top table">
@@ -572,7 +2338,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 <td># Decomposing the Time Series With Additive Method</td>
 </tr>
 <tr class="even">
-<td>::: {#cell-additive-decomp .cell execution_count=19}</td>
+<td>::: {#cell-additive-decomp .cell execution_count=48}</td>
 </tr>
 <tr class="odd">
 <td>::: {.cell-output .cell-output-display} <img src="capstone_files/figure-html/additive-decomp-output-1.png" id="additive-decomp" width="784" height="584"> ::: :::</td>
@@ -599,7 +2365,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 <td>We use a tuning technique called <code>grid search method</code> that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.</td>
 </tr>
 <tr class="odd">
-<td>::: {#grid-search .cell execution_count=20}</td>
+<td>::: {#grid-search .cell execution_count=49}</td>
 </tr>
 <tr class="even">
 <td>::: {.cell-output .cell-output-stdout}</td>
@@ -611,7 +2377,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 <td># Summary of SARIMAX ## Print the summary which includes AIC</td>
 </tr>
 <tr class="odd">
-<td>::: {#mod-fit .cell execution_count=21}</td>
+<td>::: {#mod-fit .cell execution_count=50}</td>
 </tr>
 <tr class="even">
 <td>::: {.cell-output .cell-output-stdout} ``` ============================================================================== coef std err z P&gt;|z| [0.025 0.975]</td>
@@ -626,7 +2392,7 @@ For recognized time series features: - Histograms are replaced with line plots -
 # How Fit the SARIMAX model
 ## Plot Diagnostics
 
-::: {#extract-aic-value-plot .cell execution_count=22}
+::: {#extract-aic-value-plot .cell execution_count=51}
 
 ::: {.cell-output .cell-output-stdout}</code></pre>
 <p>The AIC value is: 561.5301944999834</p>
@@ -663,7 +2429,7 @@ Once the model is created, predicted values are generated using the .get_predict
 
 The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model's performance.
 
-::: {#cell-plot-prediction .cell execution_count=27}
+::: {#cell-plot-prediction .cell execution_count=56}
 
 ::: {.cell-output .cell-output-display}
 ![](capstone_files/figure-html/plot-prediction-output-1.png){#plot-prediction width=1181 height=607}
@@ -678,7 +2444,7 @@ Mean Error Estimation will be used for analysis.
 
 To evaluate model performance, we calculate the MSE
 
-::: {#calculate-mse .cell execution_count=29}
+::: {#calculate-mse .cell execution_count=58}
 
 ::: {.cell-output .cell-output-stdout}</code></pre>
 <p>The Mean Squared Error of our forecasts is 1.41 ``` ::: :::</p>
@@ -718,7 +2484,7 @@ To evaluate model performance, we calculate the MSE
 </ul></li>
 </ol>
 <p>This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.</p>
-<div id="cell-plot-forecast" class="cell" data-execution_count="31">
+<div id="cell-plot-forecast" class="cell" data-execution_count="60">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -791,7 +2557,7 @@ To evaluate model performance, we calculate the MSE
 </main>
 <!-- /main column -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"18537ebf28914300b48aecc3cb9e3fae":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_efcafbee3a31425b815b1de385e3c051","placeholder":"​","style":"IPY_MODEL_3614ef90f3b4484a8b483a864083a364","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"3614ef90f3b4484a8b483a864083a364":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"3d402343ef1946248b02e79573597fcf":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"49e5c80c6dda4f1fb98753abdaf88c9c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5e7043c850e64acb90866cf688867b46":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_fbb7cf2f08da4a38a53b29bd229fdb9a","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_c7a2bdaa3d0c4357a7843f86b35e37fc","tabbable":null,"tooltip":null,"value":1}},"6afba8055e2c49dfa81f9986a1ab6a39":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_49e5c80c6dda4f1fb98753abdaf88c9c","placeholder":"​","style":"IPY_MODEL_6e85fd0e65f64930873b68faa0e7628f","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"6e85fd0e65f64930873b68faa0e7628f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"73c09213e00b4e5abc4863283079ef35":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"8901e54ff15e41b8a3680e3df3eca6da":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_bad918223a2541219c4c22c0f4918d2e","IPY_MODEL_5e7043c850e64acb90866cf688867b46","IPY_MODEL_18537ebf28914300b48aecc3cb9e3fae"],"layout":"IPY_MODEL_f72a974df25a44458357859bf0d035a1","tabbable":null,"tooltip":null}},"a4cab3757a1148aab60cd29c5a2a5e2b":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"a71c74b10b3942759b6e5cd9469dc76b":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"bad918223a2541219c4c22c0f4918d2e":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_a4cab3757a1148aab60cd29c5a2a5e2b","placeholder":"​","style":"IPY_MODEL_73c09213e00b4e5abc4863283079ef35","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"bde4598d8fd740a2b90c04fa6d36bd38":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"c7a2bdaa3d0c4357a7843f86b35e37fc":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"cbb401fbfc174bd89c12504bb56e243c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d2e7591a9e434319a386733c6dd4a66c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_cbb401fbfc174bd89c12504bb56e243c","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_3d402343ef1946248b02e79573597fcf","tabbable":null,"tooltip":null,"value":1}},"eb07d584512044c796829f265903a0bd":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"ec99ad466fbc4343861522b5c9270a0a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_6afba8055e2c49dfa81f9986a1ab6a39","IPY_MODEL_d2e7591a9e434319a386733c6dd4a66c","IPY_MODEL_fb09c1acca504dc09da0a9fcaa9c09aa"],"layout":"IPY_MODEL_eb07d584512044c796829f265903a0bd","tabbable":null,"tooltip":null}},"efcafbee3a31425b815b1de385e3c051":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"f72a974df25a44458357859bf0d035a1":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"fb09c1acca504dc09da0a9fcaa9c09aa":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_a71c74b10b3942759b6e5cd9469dc76b","placeholder":"​","style":"IPY_MODEL_bde4598d8fd740a2b90c04fa6d36bd38","tabbable":null,"tooltip":null,"value":" [100%]   00:02 -&gt; (00:00 left)"}},"fbb7cf2f08da4a38a53b29bd229fdb9a":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
+{"state":{"21b09332d16a47c08ebf432bded11812":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_d743dbf3269e4765969434d491b0da89","IPY_MODEL_250276a5be104569a29ec00692355cfa","IPY_MODEL_4283665cf3d34036b15e86a1a44d4fe5"],"layout":"IPY_MODEL_74e8fa0d134a4d8abb2cc138e5e79e9c","tabbable":null,"tooltip":null}},"250276a5be104569a29ec00692355cfa":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_4f0e9130bedf4da0b85f23cdf5d1afbe","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_5ec5162c18cd4275943ba46531a34d99","tabbable":null,"tooltip":null,"value":1}},"4283665cf3d34036b15e86a1a44d4fe5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_ca8839d720b94f4dae9e4295d98006d4","placeholder":"​","style":"IPY_MODEL_54c9b55ff18642e7841600081aea2704","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"4eafb1a2b661492194c055898a07d8a3":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"4f0e9130bedf4da0b85f23cdf5d1afbe":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"54c9b55ff18642e7841600081aea2704":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"5ec5162c18cd4275943ba46531a34d99":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"74e8fa0d134a4d8abb2cc138e5e79e9c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"ca8839d720b94f4dae9e4295d98006d4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d36708016dfe4dba9a19529f90362a8c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"d743dbf3269e4765969434d491b0da89":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_4eafb1a2b661492194c055898a07d8a3","placeholder":"​","style":"IPY_MODEL_d36708016dfe4dba9a19529f90362a8c","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
