@@ -19,13 +19,19 @@ author:
         city: Portland
         state: OR
         url: https://willamette.edu
-    
+keywords:
+  - AQI
+  - Time Series
+  - Prophet
+  - SARIMAX
+  - Scikit-Learn
 execute:
   echo: false
   warning: false
 jupyter: python3
 format:
   html:
+    theme: cerulean
     fig-width: 8
     fig-height: 6
     code-fold: true

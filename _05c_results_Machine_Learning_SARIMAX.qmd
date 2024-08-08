@@ -1,10 +1,4 @@
----
-jupyter: python3
-execute:
-  echo: false
-  warning: false
----
-# ML Time Series with SARIMAX Model
+# Results Machine Learning SARIMAX
 
 ```{python}
 #| label: import-lib
@@ -22,7 +16,7 @@ df = pd.read_pickle('/data/df.pkl')
 ```
 
 ```{python}
-#| label: define-df_aqi
+#| label: define-df-aqi
 sns.set_theme(style="darkgrid")
 df_aqi = df[['date','aqi']]
 df_aqi = df_aqi.set_index('date')
@@ -148,12 +142,12 @@ To split the data, we follow the recommended `70:30` ratio, 70% of the data is t
 ```{python}
 #| label: check-min-date
 # Check the minimum date in the 'date' column
-#print(f"Start date of the data:", df_aqi.index.min())
+print(f"Start date of the data:", df_aqi.index.min())
 ```
 
 ```{python}
 #| label: check-max-date
-#print(f"End date of the data:", df_aqi.index.max())
+print(f"End date of the data:", df_aqi.index.max())
 ```
 
 Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input
@@ -204,14 +198,69 @@ As we conclude our modeling process, we generate predictions for the next 7 data
 
 3. **Prediction Generation**: This method analyzes observed patterns in our data to project future values.
 
-4. **Output**: We obtain forecasts for the next 7 time points, representing predicted air quality levels.
+4. **Output**: We obtain forecasts for the next 30 time points, representing predicted air quality levels.
 
 This step transforms our analytical work into actionable insights for air quality management.
 ```{python}
 #| label: recheck-forecast
-pred_uc = results.get_forecast(steps=7)
+pred_uc = results.get_forecast(steps=30)
 pred_ci = pred_uc.conf_int()
 ```
+
+### Forecasted Values with Dates
+```{python}
+#| label: show tab-pred
+# Get the forecasted values
+forecasted_values = pred_uc.predicted_mean
+
+# Get the forecasted dates
+forecasted_dates = forecasted_values.index
+
+# Create a DataFrame with the dates and forecasted values
+forecast_df = pd.DataFrame({
+    'Date': forecasted_dates,
+    'Forecasted Value': forecasted_values
+})
+
+# Print the DataFrame as a table
+#print(forecast_df.head(30).to_markdown(index=False))
+```
+
+
+| Date                |   Forecasted Value |
+|---------------------|--------------------|
+| 2023-01-31 00:00:00 |            35.2645 |
+| 2023-02-28 00:00:00 |            37.048  |
+| 2023-03-31 00:00:00 |            39.0529 |
+| 2023-04-30 00:00:00 |            38.849  |
+| 2023-05-31 00:00:00 |            37.3658 |
+| 2023-06-30 00:00:00 |            35.3366 |
+| 2023-07-31 00:00:00 |            36.5473 |
+| 2023-08-31 00:00:00 |            45.1318 |
+| 2023-09-30 00:00:00 |            48.3407 |
+| 2023-10-31 00:00:00 |            43.7852 |
+| 2023-11-30 00:00:00 |            43.4657 |
+| 2023-12-31 00:00:00 |            40.0066 |
+| 2024-01-31 00:00:00 |            35.8992 |
+| 2024-02-29 00:00:00 |            37.5526 |
+| 2024-03-31 00:00:00 |            39.5511 |
+| 2024-04-30 00:00:00 |            39.3469 |
+| 2024-05-31 00:00:00 |            37.8637 |
+| 2024-06-30 00:00:00 |            35.8346 |
+| 2024-07-31 00:00:00 |            37.0452 |
+| 2024-08-31 00:00:00 |            45.6298 |
+| 2024-09-30 00:00:00 |            48.8386 |
+| 2024-10-31 00:00:00 |            44.2831 |
+| 2024-11-30 00:00:00 |            43.9637 |
+| 2024-12-31 00:00:00 |            40.5046 |
+| 2025-01-31 00:00:00 |            36.3972 |
+| 2025-02-28 00:00:00 |            38.0505 |
+| 2025-03-31 00:00:00 |            40.0491 |
+| 2025-04-30 00:00:00 |            39.8449 |
+| 2025-05-31 00:00:00 |            38.3616 |
+| 2025-06-30 00:00:00 |            36.3325 |
+
+: Forecasted Values {.striped .hover}
 
 ## Visualizing Our Results: The Culmination of Our Analysis
 

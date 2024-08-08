@@ -239,7 +239,7 @@ df_aqi = df[['date', 'aqi']]
 df_aqi = df_aqi.set_index('date')
 ```
 
-# Time Series Visualization: CO Pollutant, Wind and AQI
+# Time Series Visualization: CO, Wind and AQI
 CO pollutant refers to carbon monoxide, which is a colorless, odorless, and tasteless gas that can be harmful to human health and the environment. Here's some key information about CO as a pollutant:
 
 Primarily produced by incomplete combustion of carbon-containing fuels

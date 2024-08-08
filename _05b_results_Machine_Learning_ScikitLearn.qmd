@@ -581,6 +581,6 @@ ConfusionMatrixDisplay(
         ).plot(xticks_rotation='vertical')
 ```
 
-![AirQuality Confusion Matrix 2](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix2.png?raw=true)
+![AirQuality Confusion Matrix 2](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init2.png?raw=true)
 
 We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.
