@@ -9,6 +9,7 @@
 <meta name="author" content="Stéphane Berhault">
 <meta name="author" content="Jake Warmflash">
 <meta name="dcterms.date" content="2024-08-01">
+<meta name="keywords" content="AQI, Time Series, Prophet, SARIMAX, Scikit-Learn">
 
 <title>Unveiling the Drivers of Clean Air</title>
 <style>
@@ -124,6 +125,13 @@ window.Quarto = {
       
     </div>
     
+
+  <div>
+    <div class="keywords">
+      <div class="block-title">Keywords</div>
+      <p>AQI, Time Series, Prophet, SARIMAX, Scikit-Learn</p>
+    </div>
+  </div>
   
   </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -466,7 +474,7 @@ window.Quarto = {
 <div id="cell-sweetvis-report" class="cell" data-execution_count="9">
 <div id="sweetvis-report" class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"21b09332d16a47c08ebf432bded11812","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"6575ac55b5c7456cbdcfe851b0cd4ebd","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -1628,8 +1636,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li>PM2.5</li>
 </ul>
 <p>These features are used in the final model.</p>
-<div id="3acf73cd" class="cell" data-execution_count="35">
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div id="cell-feature-select" class="cell" data-execution_count="35">
+<div id="feature-select" class="cell-output cell-output-display" data-execution_count="35">
 <pre><code>Index(['city_Los Angeles', 'city_Phoenix', 'city_Portland', 'temp', 'humidity',
        'co', 'no2', 'o3', 'pm100', 'pm25'],
       dtype='object')</code></pre>
@@ -1644,72 +1652,21 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li>Naive Bayes</li>
 </ul>
 <p>Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.</p>
-<div id="cell-model-select" class="cell" data-execution_count="37">
-<div id="model-select" class="cell-output cell-output-display">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Model</th>
-<th data-quarto-table-cell-role="th">Cohen Kappa Score</th>
-<th data-quarto-table-cell-role="th">Accuracy</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>KNN</td>
-<td>0.279682</td>
-<td>0.451824</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Tree</td>
-<td>0.390058</td>
-<td>0.522047</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>Random Forest</td>
-<td>0.481175</td>
-<td>0.602069</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>Logistic</td>
-<td>0.312286</td>
-<td>0.485574</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>naive Bayes</td>
-<td>0.003825</td>
-<td>0.048993</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<div id="0493a429" class="cell" data-execution_count="38">
+<div id="def-best-model" class="cell theorem definition" data-execution_count="38">
+<p><span class="theorem-title"><strong>Definition 2</strong></span> &nbsp;</p>
 <div class="cell-output cell-output-stdout">
-<pre><code>cohen kappa score:  0.47546783683116634
-accuracy:  0.5960805661404464</code></pre>
+<pre><code>cohen kappa score:  0.46913503932201406
+accuracy:  0.592814371257485</code></pre>
 </div>
-<div class="cell-output cell-output-display">
-<div>
+</div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="capstone_files/figure-html/cell-39-output-2.png" width="665" height="572" class="figure-img"></p>
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init1.png?raw=true" class="img-fluid figure-img"></p>
+<figcaption>AirQuality Confusion Matrix 1</figcaption>
 </figure>
 </div>
-</div>
-</div>
-<div id="cell-improve-transformer" class="cell" data-execution_count="39">
-<div id="improve-transformer" class="cell-output cell-output-display" data-execution_count="39">
+<div id="cell-improve-transformer" class="cell" data-execution_count="40">
+<div id="improve-transformer" class="cell-output cell-output-display" data-execution_count="40">
 <style>#sk-container-id-2 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: black;
@@ -2161,8 +2118,8 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <li>Num Estimators</li>
 <li>Bootstrap</li>
 </ul>
-<div id="cell-hyper-parameters-optim" class="cell" data-execution_count="40">
-<div id="hyper-parameters-optim" class="cell-output cell-output-display" data-execution_count="40">
+<div id="cell-hyper-parameters-optim" class="cell" data-execution_count="41">
+<div id="hyper-parameters-optim" class="cell-output cell-output-display" data-execution_count="41">
 <pre><code>{'memory': None,
  'steps': [('aqi_transformer',
    ColumnTransformer(transformers=[('categories',
@@ -2234,14 +2191,14 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
  'RF_model__warm_start': False}</code></pre>
 </div>
 </div>
-<div id="def-parameters" class="cell theorem definition" data-execution_count="41">
-<p><span class="theorem-title"><strong>Definition 2</strong></span> &nbsp;</p>
+<div id="def-parameters" class="cell theorem definition" data-execution_count="42">
+<p><span class="theorem-title"><strong>Definition 3</strong></span> &nbsp;</p>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.6252268602540835</code></pre>
+<pre><code>0.635934664246824</code></pre>
 </div>
 </div>
 <p>Figure 242442 below shows the selected hyperparameters.</p>
-<div id="cell-randsearch-get-params" class="cell" data-execution_count="42">
+<div id="cell-randsearch-get-params" class="cell" data-execution_count="43">
 <div id="randsearch-get-params" class="cell-output cell-output-display">
 <div>
 
@@ -2258,12 +2215,12 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>RF_model__bootstrap</td>
-<td>True</td>
+<td>False</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>RF_model__max_depth</td>
-<td>25</td>
+<td>19</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
@@ -2273,27 +2230,27 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>RF_model__min_samples_leaf</td>
-<td>3</td>
+<td>2</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>RF_model__min_samples_split</td>
-<td>8</td>
+<td>6</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>RF_model__n_estimators</td>
-<td>190</td>
+<td>176</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">6</td>
 <td>aqi_transformer__categories__max_categories</td>
-<td>29</td>
+<td>24</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">7</td>
 <td>aqi_transformer__categories__min_frequency</td>
-<td>14</td>
+<td>9</td>
 </tr>
 </tbody>
 </table>
@@ -2302,16 +2259,16 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </div>
 </div>
 <p>Using these hyperparameters, we reach an accuracy of about 63%.</p>
-<div id="predict-x_test" class="cell" data-execution_count="43">
+<div id="predict-x_test" class="cell" data-execution_count="44">
 <div class="cell-output cell-output-stdout">
-<pre><code>Cohen Kappa Score:  0.5208382256873135
-Accuracy:  0.6341861731083288</code></pre>
+<pre><code>Cohen Kappa Score:  0.5293638710275751
+Accuracy:  0.6390854654327708</code></pre>
 </div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true" class="img-fluid figure-img"></p>
-<figcaption>AirQuality Confusion Matrix</figcaption>
+<p><img src="https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init2.png?raw=true" class="img-fluid figure-img"></p>
+<figcaption>AirQuality Confusion Matrix 2</figcaption>
 </figure>
 </div>
 <p>We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.</p>
@@ -2338,7 +2295,7 @@ Accuracy:  0.6341861731083288</code></pre>
 <td># Decomposing the Time Series With Additive Method</td>
 </tr>
 <tr class="even">
-<td>::: {#cell-additive-decomp .cell execution_count=48}</td>
+<td>::: {#cell-additive-decomp .cell execution_count=49}</td>
 </tr>
 <tr class="odd">
 <td>::: {.cell-output .cell-output-display} <img src="capstone_files/figure-html/additive-decomp-output-1.png" id="additive-decomp" width="784" height="584"> ::: :::</td>
@@ -2365,7 +2322,7 @@ Accuracy:  0.6341861731083288</code></pre>
 <td>We use a tuning technique called <code>grid search method</code> that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.</td>
 </tr>
 <tr class="odd">
-<td>::: {#grid-search .cell execution_count=49}</td>
+<td>::: {#grid-search .cell execution_count=50}</td>
 </tr>
 <tr class="even">
 <td>::: {.cell-output .cell-output-stdout}</td>
@@ -2377,7 +2334,7 @@ Accuracy:  0.6341861731083288</code></pre>
 <td># Summary of SARIMAX ## Print the summary which includes AIC</td>
 </tr>
 <tr class="odd">
-<td>::: {#mod-fit .cell execution_count=50}</td>
+<td>::: {#mod-fit .cell execution_count=51}</td>
 </tr>
 <tr class="even">
 <td>::: {.cell-output .cell-output-stdout} ``` ============================================================================== coef std err z P&gt;|z| [0.025 0.975]</td>
@@ -2392,7 +2349,7 @@ Accuracy:  0.6341861731083288</code></pre>
 # How Fit the SARIMAX model
 ## Plot Diagnostics
 
-::: {#extract-aic-value-plot .cell execution_count=51}
+::: {#extract-aic-value-plot .cell execution_count=52}
 
 ::: {.cell-output .cell-output-stdout}</code></pre>
 <p>The AIC value is: 561.5301944999834</p>
@@ -2429,7 +2386,7 @@ Once the model is created, predicted values are generated using the .get_predict
 
 The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model's performance.
 
-::: {#cell-plot-prediction .cell execution_count=56}
+::: {#cell-plot-prediction .cell execution_count=57}
 
 ::: {.cell-output .cell-output-display}
 ![](capstone_files/figure-html/plot-prediction-output-1.png){#plot-prediction width=1181 height=607}
@@ -2444,7 +2401,7 @@ Mean Error Estimation will be used for analysis.
 
 To evaluate model performance, we calculate the MSE
 
-::: {#calculate-mse .cell execution_count=58}
+::: {#calculate-mse .cell execution_count=59}
 
 ::: {.cell-output .cell-output-stdout}</code></pre>
 <p>The Mean Squared Error of our forecasts is 1.41 ``` ::: :::</p>
@@ -2484,7 +2441,7 @@ To evaluate model performance, we calculate the MSE
 </ul></li>
 </ol>
 <p>This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.</p>
-<div id="cell-plot-forecast" class="cell" data-execution_count="60">
+<div id="cell-plot-forecast" class="cell" data-execution_count="61">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -2557,7 +2514,7 @@ To evaluate model performance, we calculate the MSE
 </main>
 <!-- /main column -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"21b09332d16a47c08ebf432bded11812":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_d743dbf3269e4765969434d491b0da89","IPY_MODEL_250276a5be104569a29ec00692355cfa","IPY_MODEL_4283665cf3d34036b15e86a1a44d4fe5"],"layout":"IPY_MODEL_74e8fa0d134a4d8abb2cc138e5e79e9c","tabbable":null,"tooltip":null}},"250276a5be104569a29ec00692355cfa":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_4f0e9130bedf4da0b85f23cdf5d1afbe","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_5ec5162c18cd4275943ba46531a34d99","tabbable":null,"tooltip":null,"value":1}},"4283665cf3d34036b15e86a1a44d4fe5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_ca8839d720b94f4dae9e4295d98006d4","placeholder":"​","style":"IPY_MODEL_54c9b55ff18642e7841600081aea2704","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"4eafb1a2b661492194c055898a07d8a3":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"4f0e9130bedf4da0b85f23cdf5d1afbe":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"54c9b55ff18642e7841600081aea2704":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"5ec5162c18cd4275943ba46531a34d99":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"74e8fa0d134a4d8abb2cc138e5e79e9c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}},"ca8839d720b94f4dae9e4295d98006d4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d36708016dfe4dba9a19529f90362a8c":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"d743dbf3269e4765969434d491b0da89":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_4eafb1a2b661492194c055898a07d8a3","placeholder":"​","style":"IPY_MODEL_d36708016dfe4dba9a19529f90362a8c","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}}},"version_major":2,"version_minor":0}
+{"state":{"323f79c9b3974712a74c24b79352f068":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"347f7ae71a0a4c8bb2cddd9cd53210f5":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"4320c3d748df4dbcb15188a709f1c33f":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"FloatProgressModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"FloatProgressModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"ProgressView","bar_style":"success","description":"","description_allow_html":false,"layout":"IPY_MODEL_c4c48c0a18694b6ebe060d809876b479","max":1,"min":0,"orientation":"horizontal","style":"IPY_MODEL_48418daa72f245e7b01669ea3777d86b","tabbable":null,"tooltip":null,"value":1}},"48418daa72f245e7b01669ea3777d86b":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"ProgressStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"ProgressStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","bar_color":null,"description_width":""}},"6575ac55b5c7456cbdcfe851b0cd4ebd":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HBoxModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HBoxModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HBoxView","box_style":"","children":["IPY_MODEL_75e8dde83570442ab26fb4e8c77bb041","IPY_MODEL_4320c3d748df4dbcb15188a709f1c33f","IPY_MODEL_a4e299fdc80d4aa999ba890ae26e2e58"],"layout":"IPY_MODEL_fbc8434bd91042da9b6ed2e38c9845eb","tabbable":null,"tooltip":null}},"75e8dde83570442ab26fb4e8c77bb041":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_d0d84aeb53614c5fa3b787b6c2e8f25f","placeholder":"​","style":"IPY_MODEL_ce53371582d74ee7a7334737e24a5f0a","tabbable":null,"tooltip":null,"value":"Done! Use &#x27;show&#x27; commands to display/save.   "}},"a4e299fdc80d4aa999ba890ae26e2e58":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLModel","_view_count":null,"_view_module":"@jupyter-widgets/controls","_view_module_version":"2.0.0","_view_name":"HTMLView","description":"","description_allow_html":false,"layout":"IPY_MODEL_323f79c9b3974712a74c24b79352f068","placeholder":"​","style":"IPY_MODEL_347f7ae71a0a4c8bb2cddd9cd53210f5","tabbable":null,"tooltip":null,"value":" [100%]   00:01 -&gt; (00:00 left)"}},"c4c48c0a18694b6ebe060d809876b479":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":"2","flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"ce53371582d74ee7a7334737e24a5f0a":{"model_module":"@jupyter-widgets/controls","model_module_version":"2.0.0","model_name":"HTMLStyleModel","state":{"_model_module":"@jupyter-widgets/controls","_model_module_version":"2.0.0","_model_name":"HTMLStyleModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"StyleView","background":null,"description_width":"","font_size":null,"text_color":null}},"d0d84aeb53614c5fa3b787b6c2e8f25f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"fbc8434bd91042da9b6ed2e38c9845eb":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":"inline-flex","flex":null,"flex_flow":"row wrap","grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":"100%"}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
