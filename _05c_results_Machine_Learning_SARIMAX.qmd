@@ -1,0 +1,297 @@
+# Results Machine Learning SARIMAX
+
+```{python}
+#| label: import-lib
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import pandas as pd
+```
+
+```{python}
+#| label: read-data2
+import pandas as pd
+df = pd.read_pickle('/data/df.pkl')
+```
+
+```{python}
+#| label: define-df-aqi
+sns.set_theme(style="darkgrid")
+df_aqi = df[['date','aqi']]
+df_aqi = df_aqi.set_index('date')
+
+df_aqi = df_aqi.resample('ME').mean()
+df_aqi.ffill(inplace=True)
+#df_aqi.plot(figsize=(15,8))
+```
+Any time series is decomposed of two things:
+
+- Seasonality
+- Trends
+
+By the help of `statsmodel` package we can break the time series into its seasonal pattern and trends.
+This will helps us to understand the data clearly and will help us to make more sense of the data.
+
+# Decomposing the Time Series With Additive Method
+```{python}
+#| label: additive-decomp
+sns.set_theme(style="darkgrid")
+decomposition = sm.tsa.seasonal_decompose(df_aqi, model='additive')
+fig = decomposition.plot()
+plt.show()
+```
+
+There are three components to a time series: 
+
+1. `Trend`: Trend tells you how things are overall changing  
+2. `Seasonality`: Seasonality shows you how things change within a given period (e.g. year,month, week, day)  
+3. `Residual`: The Error/residual/irregular activity are the anomalies whitch cannot be explained by the trend or the seasonal value  
+
+In a additive time series, the components add together to make the time series. If you have an increasing trend, you still
+see roughly the same size peaks and troughs throughout the time series. This is often seen in indexed time series where the
+absolute value is growing but changes stay relative.
+
+
+## Time Series Prediction
+For this project, we have used an extended version of *ARIMA* model knows as *SARIMAX* model as we have explained in the methods section.
+The *SARIMAX* model is used when the data sets have seasonal cycles. In our dataset concerning air quality/AQI there is a seasonal pattern
+which we can see in the above visualization.
+
+We need to find the right p,d and q parameters to correctly forecast and predict the AQI value.
+
+- *p* is the auto-regressive part of the model. It allows us to incorporate the effect of past values into our model.
+- *d* is the integrated part of the model. This includes terms in the model that incorporate the amount of diferencing (the number of past time points to subtract from the current value) to apply the time series.
+- *q* is the moving average part of the model. This allows us to set the error of our model as a linear combination of the error values observed at previous time points in the past.  
+
+We use a tuning technique called `grid search method` that attempts to compute the optimum values of hyperparameters. We are trying to find the right p,d,q values that would be given as an input to the SARIMAX time series model.
+```{python}
+#| label: grid-search
+import itertools
+
+# Define the p, d, q parameters to take any value between 0 to 1
+p = d = q = range(0, 2)
+pdq = list(itertools.product(p, d, q)) # generate all possible combinations of p,d,q
+
+# This creates combinations of seasonal parameters with a seasonality period of 12 (e.g., monthly data).
+seasonal_pdq = [(x[0], x[1], x[2], 12) for x in pdq] 
+
+# Outer Loop: Iterates over all combinations of pdq.
+# Inner Loop: Iterates over all combinations of seasonal_pdq.
+#  Try Block:
+#  Creates a SARIMAX model with the current combination of parameters.
+#  Fits the model to the data.
+#  Prints the AIC (Akaike Information Criterion) for the model, which is a measure of model quality.
+# Except Block:
+#  Catches and prints any errors that occur during model fitting, allowing the loop to continue with the next set of parameters.
+for param in pdq:
+    for param_seasonal in seasonal_pdq:
+        try:
+            mod = sm.tsa.statespace.SARIMAX(df_aqi,
+                                            order=param,
+                                            seasonal_order=param_seasonal,
+                                            enforce_stationarity=False,
+                                            enforce_invertibility=False)
+            results = mod.fit()
+            print('ARIMA{}x{} - AIC:{}'.format(param, param_seasonal, results.aic))
+        except Exception as e:
+            print(f"Error with parameters {param} and {param_seasonal}: {e}")
+            continue
+```
+
+We have to find the lowest AIC values which would have the best corresponding p,d,q values to have the best forecast of AQI values.  
+
+# Summary of SARIMAX
+## Print the summary which includes AIC 
+```{python}
+#| label: mod-fit
+mod = sm.tsa.statespace.SARIMAX(df_aqi,order=(1, 1, 1),seasonal_order=(0,1, 1, 12),enforce_stationarity=False,enforce_invertibility=False)
+results = mod.fit()
+print(results.summary().tables[1])
+```
+
+# How Fit the SARIMAX model
+## Plot Diagnostics
+```{python}
+#| label: Extract-AIC-value-plot
+aic_value = results.aic
+print(f"The AIC value is: {aic_value}")
+```
+
+```{python}
+#results.plot_diagnostics(figsize=(10, 8))
+```
+
+![Plot Diag](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/plot-diag.png?raw=true)
+
+# Train and Test
+Rigorous validation is paramount to establishing the model's reliability and practical application. To ensure the model's generalizability, we will employ a train-test split. This approach safeguards against overfitting by exposing the model to unseen data, allowing for a more accurate assessment of its predictive capabilities.
+
+By partitioning the dataset, we can:
+
+- Evaluate performance: Measure the model's accuracy on unseen data.
+- Detect overfitting: Identify discrepancies between training and testing performance.
+- Assess generalization: Determine the model's ability to handle new data.
+- Quantify reliability: Calculate confidence intervals for prediction accuracy.
+- Iteratively improve: Use insights to refine the model.
+
+This rigorous process underpins the credibility and utility of our research findings.
+
+To split the data, we follow the recommended `70:30` ratio, 70% of the data is the training data, and 30% of the data is the testing data.
+
+```{python}
+#| label: check-min-date
+# Check the minimum date in the 'date' column
+print(f"Start date of the data:", df_aqi.index.min())
+```
+
+```{python}
+#| label: check-max-date
+print(f"End date of the data:", df_aqi.index.max())
+```
+
+Once the model is created, predicted values are generated using the .get_prediction() method, with datetime as input
+```{python}
+#| label: check-prediction
+pred = results.get_prediction(start=pd.to_datetime('2023-01-01 00:00:00'), dynamic=False)
+pred_ci = pred.conf_int()
+```
+
+The graph indicates overlapping patterns in the testing and training data, suggesting strong potential for the forecasting model's performance.
+```{python}
+#| label: plot-prediction
+ax = df_aqi['2015-01-31 00:00:00':].plot(label='Observed') # plot the observed data 
+pred.predicted_mean.plot(ax=ax, label='One-step ahead Forecast', alpha=.7, figsize=(14, 7))
+
+ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.2)
+
+ax.set_xlabel('Days')
+ax.set_ylabel('AQI index')
+plt.legend()
+plt.show()
+```
+
+To facilitate comparison of true and predicted test values, we will create a separate DataFrame. 
+Mean Error Estimation will be used for analysis.
+```{python}
+#| label: define-forecast-truth
+y_forecasted = pred.predicted_mean
+y_truth = df_aqi['2022-12-31 00:00:00':]
+```
+
+To evaluate model performance, we calculate the MSE
+```{python}
+#| label: calculate-mse
+import numpy as np
+from sklearn.metrics import mean_squared_error
+mse = np.sqrt(mean_squared_error(y_truth, y_forecasted))   
+print('The Mean Squared Error of our forecasts is {}'.format(round(mse, 2)))
+```
+
+## Forecasting Future Values
+
+As we conclude our modeling process, we generate predictions for the next 7 data points:
+
+1. **Model Information**: The `result` variable contains our fitted model's details.
+
+2. **Forecasting Method**: We use the `.get_forecast()` method on our model results.
+
+3. **Prediction Generation**: This method analyzes observed patterns in our data to project future values.
+
+4. **Output**: We obtain forecasts for the next 30 time points, representing predicted air quality levels.
+
+This step transforms our analytical work into actionable insights for air quality management.
+```{python}
+#| label: recheck-forecast
+pred_uc = results.get_forecast(steps=30)
+pred_ci = pred_uc.conf_int()
+```
+
+### Forecasted Values with Dates
+```{python}
+#| label: show tab-pred
+# Get the forecasted values
+forecasted_values = pred_uc.predicted_mean
+
+# Get the forecasted dates
+forecasted_dates = forecasted_values.index
+
+# Create a DataFrame with the dates and forecasted values
+forecast_df = pd.DataFrame({
+    'Date': forecasted_dates,
+    'Forecasted Value': forecasted_values
+})
+
+# Print the DataFrame as a table
+#print(forecast_df.head(30).to_markdown(index=False))
+```
+
+
+| Date                |   Forecasted Value |
+|---------------------|--------------------|
+| 2023-01-31 00:00:00 |            35.2645 |
+| 2023-02-28 00:00:00 |            37.048  |
+| 2023-03-31 00:00:00 |            39.0529 |
+| 2023-04-30 00:00:00 |            38.849  |
+| 2023-05-31 00:00:00 |            37.3658 |
+| 2023-06-30 00:00:00 |            35.3366 |
+| 2023-07-31 00:00:00 |            36.5473 |
+| 2023-08-31 00:00:00 |            45.1318 |
+| 2023-09-30 00:00:00 |            48.3407 |
+| 2023-10-31 00:00:00 |            43.7852 |
+| 2023-11-30 00:00:00 |            43.4657 |
+| 2023-12-31 00:00:00 |            40.0066 |
+| 2024-01-31 00:00:00 |            35.8992 |
+| 2024-02-29 00:00:00 |            37.5526 |
+| 2024-03-31 00:00:00 |            39.5511 |
+| 2024-04-30 00:00:00 |            39.3469 |
+| 2024-05-31 00:00:00 |            37.8637 |
+| 2024-06-30 00:00:00 |            35.8346 |
+| 2024-07-31 00:00:00 |            37.0452 |
+| 2024-08-31 00:00:00 |            45.6298 |
+| 2024-09-30 00:00:00 |            48.8386 |
+| 2024-10-31 00:00:00 |            44.2831 |
+| 2024-11-30 00:00:00 |            43.9637 |
+| 2024-12-31 00:00:00 |            40.5046 |
+| 2025-01-31 00:00:00 |            36.3972 |
+| 2025-02-28 00:00:00 |            38.0505 |
+| 2025-03-31 00:00:00 |            40.0491 |
+| 2025-04-30 00:00:00 |            39.8449 |
+| 2025-05-31 00:00:00 |            38.3616 |
+| 2025-06-30 00:00:00 |            36.3325 |
+
+: Forecasted Values {.striped .hover}
+
+## Visualizing Our Results: The Culmination of Our Analysis
+
+The final and crucial step of our project is the creation of a comprehensive plot that encapsulates our complex analysis. This visualization serves as the key to understanding and interpreting our findings.
+
+### Interpreting the Forecast Plot
+
+Our plot consists of several key elements:
+
+1. **Observed Values (Blue Line)**
+   - Represents the actual, historical air quality measurements
+   - Provides a baseline for comparing our predictions
+
+2. **Forecasted Values (Orange Line)**
+   - Depicts the future air quality levels predicted by our SARIMAX Time Series Model
+   - Allows us to visualize potential trends and patterns in air quality
+
+3. **Confidence Interval (Shaded Region)**
+   - The shaded area around the forecast line represents the 95% Confidence Interval (CI)
+   - Indicates the range within which we can be 95% confident that the true future values will fall
+   - Wider intervals suggest greater uncertainty in the prediction
+
+This visual representation not only summarizes our extensive data analysis but also provides a powerful tool for understanding potential future air quality trends. It bridges the gap between complex statistical models and actionable insights, making our findings accessible and meaningful to a broader audience.
+
+```{python}
+#| label: plot-forecast
+ax = df_aqi.plot(label='Observed', figsize=(14, 7))
+pred_uc.predicted_mean.plot(ax=ax, label='Forecast')
+ax.fill_between(pred_ci.index,pred_ci.iloc[:, 0],pred_ci.iloc[:, 1], color='k', alpha=.25)
+ax.set_xlabel('Days')
+ax.set_ylabel('AQI index')
+plt.legend()
+plt.show()
+```

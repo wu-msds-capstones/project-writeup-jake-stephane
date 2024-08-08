@@ -1,20 +1,63 @@
 ---
-title: "Capstone Project"
-subtitle: Subtitle
-authors:
-  - Bob
-  - Jane
 title-block-banner: true
-format: 
+title: "Unveiling the Drivers of Clean Air"
+subtitle: "Analysis of Portland Air Quality (AQI)"
+date: "2024-08-01"
+author:
+  - name: Stéphane Berhault
+    orcid: 0009-0003-5357-629X
+    email: sgberhault@willamette.edu
+    affiliation: 
+      - name: Willamette University
+        city: Portland
+        state: OR
+        url: https://willamette.edu
+  - name: Jake Warmflash
+    email: jwarmflash@willamette.edu
+    affiliation: 
+      - name: Willamette University
+        city: Portland
+        state: OR
+        url: https://willamette.edu
+keywords:
+  - AQI
+  - Time Series
+  - Prophet
+  - SARIMAX
+  - Scikit-Learn
+execute:
+  echo: false
+  warning: false
+jupyter: python3
+format:
   html:
-    theme:
-      light: lightly
-      dark: darkly
+    theme: cerulean
+    fig-width: 8
+    fig-height: 6
+    code-fold: true
+    code-tools:
+      source: repo
+      toggle: true
+      caption: none
+    smooth-scroll: true
+    toc: true
+    toc-title: Contents
+    number-sections: false
+    other-links:
+      - text: Airnow Open Data
+        href: https://www.airnow.gov
+    code-links:
+      - text: Sweetviz Analysis Report
+        icon: file-code
+        href: SWEETVIZ_REPORT.html
+    html-math-method: mathjax
+    css: styles.css
 ---
-
 {{< include _01_intro.qmd >}}
 {{< include _02_background.qmd >}}
 {{< include _03_methods.qmd >}}
 {{< include _04_data.qmd >}}
-{{< include _05_results.qmd >}}
+{{< include _05b_results_Machine_Learning_ScikitLearn.qmd >}}
+{{< include _05c_results_Machine_Learning_SARIMAX.qmd >}}
 {{< include _06_conclusions.qmd >}}
+{{< include _07_bibliography.qmd >}}

@@ -1,1 +1,77 @@
 # Methods
+
+## Tools Deployed
+Python will be the primary programming language used to conduct this analysis. We will also use R language in statistical applications where necessary.
+
+To perform our analysis, we will employ NumPy and Pandas for data manipulation. Matplotlib and Seaborn for visualization, and Time Series forecasting algorithms such as Prophet and SARIMAX.
+
+We will address data inconsistencies, missing values and ensure that data is in a tidy format.
+
+We may need to normalize or standardize data if necessary and create new features through aggregation to enhance the model’s performance.
+
+## What is Prophet?
+
+Prophet is an open-source forecasting tool developed by Meta, designed for forecasting time series data. It is suited for datasets with strong seasonal, monthly, weekly, or daily patterns, and it handles missing data and outliers well. We utilized prophet to gain a quick understanding of our AQI patterns, seeking to understand basic trends before conducting a more thorough analysis.
+
+Key features of Prophet include seasonality detection and holiday incorporation, while providing easy use and understanding for users. 
+We can use this software to get complex understanding from simple applications.
+
+To conduct this analysis, we prepare data into a two column table, date and AQI. Prophet uses the trends of past data to highlight similarities over days of the year, weeks, months, and seasons. From this, prophet is able to generate its predictions, cross validate, and give performance metrics such as mean absolute percentage error to quantify the accuracy of the results.
+
+## What is SARIMAX algorithm?​​​​​​​​​​​​​​​
+The most common method used in time series forecasting is known as the ARIMA model. We will use an extended version called SARIMAX (*Seasonal Auto Regressive Integrated Moving Averages with exogenous factor*)
+
+- The SARIMAX model is used when the data sets have seasonal cycles. 
+- In the dataset concerning the air quality/AQI there is a seasonal pattern which we have explained in the above section.
+- SARIMAX is a model that can be fitted to time series data in order to better understand or predict future points in the time series
+- SARIMAX is particularly useful for forecasting time series data that exhibits both trends and seasonality.
+
+Here's a breakdown of its components:
+
+There are three distinct integers (p,d,q) that are used to parametrize SARIMAX models. Because of that, ARIMA models are denoted with the notation SARIMAX(p,d,q).
+
+Together these three parameters account for seasonality, trend, and noise in datasets:
+
+1. *Seasonality (S)*: Accounts for recurring patterns or cycles in the data.
+2. *AutoRegressive (AR)*: Uses past values to predict future values.
+3. *Integrated (I)*: Applies differencing to make the time series stationary.
+4. *Moving Average (MA)*: Uses past forecast errors in the prediction.
+5. *eXogenous factors (X)*: Incorporates external variables that may influence the forecast.
+
+We are trying to find the right p, d, q hyperparameters to correctly forecast and predict the AQI values.
+
+# Metrics to Evaluate Machine Model Performance
+
+| Technique/Metric | Description | Purpose/Formula | Scenario: Cancer prediction |
+|------------------|-------------|-----------------|-------------------|
+| 1. Train-Test Split | Split the dataset into training and testing subsets | Assess model performance on unseen data to detect overfitting and ensure generalizability | Always used; crucial for unbiased evaluation of model performance |
+| 2. Cross-Validation | Divide data into k subsets and train the model k times, using a different subset as test set each time | Provides robust estimate of model performance by averaging results over multiple splits | Useful for smaller datasets or when data collection is expensive (e.g., rare cancer types) |
+| 3. Confusion Matrix | Table comparing predicted and actual values in classification | Metrics: True Positives (TP), True Negatives (TN), False Positives (FP), False Negatives (FN) | Fundamental for understanding model performance in classification tasks, like cancer detection |
+| 4. Accuracy | Ratio of correctly predicted instances to total instances | $\frac{TP + TN}{TP + TN + FP + FN}$ | Used when classes are balanced; less suitable for rare cancer detection due to class imbalance |
+| 5a. Precision | Ratio of correctly predicted positive observations to total predicted positives | $\frac{TP}{TP + FP}$ | Important when false positives are costly (e.g., unnecessary biopsies or treatments) |
+| 5b. Recall (Sensitivity) | Ratio of correctly predicted positive observations to all actual positive observations | $\frac{TP}{TP + FN}$ | Critical in cancer detection to minimize false negatives (missed cancer cases) |
+| 5c. F1-Score | Harmonic mean of Precision and Recall | $2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$ | Balances precision and recall; useful when seeking a compromise between false positives and false negatives |
+| 6. ROC Curve and AUC | ROC: Graph of true positive rate vs false positive rate at various thresholds. AUC: Area under ROC curve | Higher AUC indicates better model performance | Useful for comparing models and choosing optimal threshold, especially in diagnostic tests |
+| 7. Mean Absolute Error (MAE) | Average of absolute differences between predicted and actual values | $\frac{1}{n} \sum_{i=1}^{n} \|y_i - \hat{y}_i\|$ | Used in regression tasks, e.g., predicting survival time; less sensitive to outliers than MSE |
+| 8a. Mean Squared Error (MSE) | Average of squared differences between predicted and actual values | $\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$ | Used in regression; penalizes large errors more, suitable when large errors are particularly undesirable |
+| 8b. Root Mean Squared Error (RMSE) | Square root of MSE | $\sqrt{\text{MSE}}$ | Same as MSE, but in the original unit of the target variable, making it more interpretable |
+| 9. R-squared | Proportion of variance in dependent variable predictable from independent variables | $1 - \frac{\sum_{i=1}^{n} (y_i - \hat{y}_i)^2}{\sum_{i=1}^{n} (y_i - \bar{y})^2}$ | Used in regression to assess overall fit; indicates how well the model explains the variance in the data |
+| 10a. Akaike Information Criterion (AIC) | Measures relative quality of statistical model for given data | $2k - 2\ln(L)$ where $k$ is number of parameters and $L$ is likelihood | Used for model selection; helps prevent overfitting by penalizing complex models |
+| 10b. Bayesian Information Criterion (BIC) | Similar to AIC but with stronger penalty term for number of parameters | $k\ln(n) - 2\ln(L)$ where $n$ is number of observations | Also used for model selection; tends to favor simpler models compared to AIC |
+
+# Machine Learning AQI Time Series
+## How can we use Akaike Information Criteria (AIC)?
+Used to measure of a statistical model, it quantifies:
+
+- The goodness of fit
+- The simplicity of the model into a single statistic
+- When comparing two models, the one with the lower AIC is generally "better"
+
+The Akaike Information Criterion (AIC) is a measure used to compare different statistical models. It helps in model selection by balancing the goodness of fit and the complexity of the model. Here's how to interpret the AIC value:
+
+- *Lower AIC is Better*: A lower AIC value indicates a better-fitting model. It means the model has a good balance between accuracy and complexity.
+- *Comparative Measure*: AIC is most useful when comparing multiple models. The model with the lowest AIC among a set of candidate models is generally preferred.
+- *Penalty for Complexity*: AIC includes a penalty for the number of parameters in the model. This discourages overfitting by penalizing models that use more parameters without a corresponding improvement in fit.
+
+
+

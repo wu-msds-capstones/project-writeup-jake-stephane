@@ -1,0 +1,41 @@
+# Bibliography
+
+American Lung Association, https://www.lung.org/research/sota/key-findings  
+
+Airly, https://airly.org/en/how-does-humidity-affect-air-quality-all-you-need-to-know/  
+
+Airnow.gov, https://www.airnow.gov/aqi/aqi-basics/using-air-quality-index  
+
+California Air Resources Board, https://ww2.arb.ca.gov/resources/carbon-monoxide-and-health  
+
+Centers for Disease Control and Prevention, Agency for Toxic Substances and Disease Registry, https://wwwn.cdc.gov/TSP/ToxFAQs/ToxFAQsDetails.aspx?faqid=396&toxid=69  
+
+Centers for Disease Control and Prevention, Agency for Toxic Substances and Disease Registry, https://wwwn.cdc.gov/TSP/MMG/MMGDetails.aspx?mmgid=249&toxid=46 
+
+Congressional Budget Office, https://www.cbo.gov/publication/60030
+
+Environmental Protection Agency, https://www.epa.gov/pm-pollution/particulate-matter-pm-basics 
+
+Environmental Protection Agency, https://www.epa.gov/ground-level-ozone-pollution/health-effects-ozone-pollution 
+
+Environmental Protection Agency, https://www.epa.gov/clean-air-act-overview/evolution-clean-air-act 
+
+Federal Transit Administration, https://www.apta.com/research-technical-resources/transit-statistics/ntd-data-tables/  
+
+Fuller, Landrigan, Balakrishnan, et al., https://www.thelancet.com/journals/lanplh/article/PIIS2542-5196(22)00090-0/fulltext 
+
+Jacobs, Burgess, Abbott, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5922205/  
+
+Manisalidis, Stavropoulou, Stavropoulos, Bezirtzoglou, https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7044178/ 
+
+National Oceanic and Atmospheric Administration, https://oceanservice.noaa.gov/facts/nautical-mile-knot.html  
+
+National Weather Service, https://www.weather.gov/source/zhu/ZHU_Training_Page/winds/pressure_winds/Pressure.htm 
+
+Oregon Wildfire Response and Recovery, https://wildfire.oregon.gov/prevention 
+
+World Health Organization, https://www.who.int/news-room/fact-sheets/detail/lead-poisoning-and-health 
+
+Zhang Et. Al. https://acp.copernicus.org/articles/18/15003/2018/  
+
+World Health Organization, https://www.who.int/news/item/25-03-2014-7-million-premature-deaths-annually-linked-to-air-pollution
