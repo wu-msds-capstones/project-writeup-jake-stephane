@@ -370,7 +370,7 @@ These features are used in the final model.
 
 ```{python}
 #| echo: false
-#| #| label: feature-select
+#| label: feature-select
 #feature selection
 feature_selector = SelectKBest(k=10)
 X_train_trans = transformer.transform(X_train)
@@ -388,7 +388,7 @@ X_train_trans_df.columns[feature_selector.get_support()]
 
 ```{python}
 #| echo: false
-#| #| label: use-features
+#| label: use-features
 #Use selected features
 y = ds['aqi_discrete']
 X = ds[[
@@ -420,7 +420,6 @@ Running the models gives the output in figure 234324. Random Forest model is the
 
 ```{python}
 #| echo: false
-#| output: false
 #| label: model-select
 model1 = KNeighborsClassifier(n_neighbors=5)
 model2 = tree.DecisionTreeClassifier()
@@ -446,11 +445,11 @@ for model, label in zip([model1, model2, model3, model4, model5], ['KNN', 'Tree'
 #display(pd.DataFrame(results))
 ```
 
-![AirQuality Confusion Matrix 1](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init.png?raw=true)
+
 
 ```{python}
 #| echo: false
-#| #| label: def-best-model
+#| label: def-best-model
 #Create model from most accurate, RandomForest
 model = RandomForestClassifier(n_estimators=10)
 model.fit(X_train_trans, y_train)
@@ -461,6 +460,12 @@ y_pred = model.predict(X_test_trans)
 #Print results
 print("cohen kappa score: ", cohen_kappa_score(y_test, y_pred))
 print("accuracy: ", sum(y_test == y_pred)/len(y_test))
+```
+
+```{python}
+#| label: confus-matrix1
+#| echo: false
+#| output: false
 ConfusionMatrixDisplay(
     confusion_matrix = confusion_matrix(
         y_test, y_pred, 
@@ -469,6 +474,8 @@ ConfusionMatrixDisplay(
         display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']
         ).plot(xticks_rotation='vertical')
 ```
+
+![AirQuality Confusion Matrix 1](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init1.png?raw=true)
 
 ```{python}
 #| echo: false
@@ -530,7 +537,7 @@ parameters = {
     'RF_model__n_estimators': randint(50, 200),
     'RF_model__bootstrap': [True, False]
 }
-n_iter_search = 10
+n_iter_search = 100
 random_search = RandomizedSearchCV(classification_pipeline, param_distributions=parameters,
                                    n_iter=n_iter_search, n_jobs=-1, cv=5)
 random_search.fit(X_train, y_train)
@@ -564,6 +571,7 @@ print("Accuracy: ", sum(y_pred == y_test)/len(y_test))
 ```{python}
 #| echo: false
 #| output: false
+#| label: conf-matrix-final
 ConfusionMatrixDisplay(
     confusion_matrix = confusion_matrix(
         y_test, y_pred, 
@@ -573,6 +581,6 @@ ConfusionMatrixDisplay(
         ).plot(xticks_rotation='vertical')
 ```
 
-![AirQuality Confusion Matrix 2](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix.png?raw=true)
+![AirQuality Confusion Matrix 2](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix2.png?raw=true)
 
 We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase.

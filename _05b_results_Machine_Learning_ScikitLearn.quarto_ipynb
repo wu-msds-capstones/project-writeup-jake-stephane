@@ -7,7 +7,7 @@
         "# Results Machine Learning Scikit-Learn\n",
         "Ultimately, we want to see which variables have the greatest impact on AQI. To do this we must perform a machine learning analysis and create a prediction algorithm. \n"
       ],
-      "id": "2c5f6b08"
+      "id": "f7e9efbd"
     },
     {
       "cell_type": "code",
@@ -46,7 +46,7 @@
       "source": [
         "First, missing data must be addressed. This can be done in a variety of ways, but for this we replace NA values with the mean for the respective city and group by week. If there is no data to take a mean of, that row will be dropped. \n"
       ],
-      "id": "39286a9c"
+      "id": "8896b887"
     },
     {
       "cell_type": "code",
@@ -178,7 +178,7 @@
       "source": [
         "Since AQI is the dependent variable being measured, all rows without AQI data are dropped. Certain cities have very little data and will be dropped out of necessity.\n"
       ],
-      "id": "a65b5174"
+      "id": "899e5ffa"
     },
     {
       "cell_type": "code",
@@ -222,7 +222,7 @@
       "source": [
         "The data collected has separate information for the city of New York City. NYC is divided into five boroughs, each within its own county. These values are grouped and averaged out to make NYC have the same amount of datapoints as every other city. This will also address data present in some New York boroughs but not others. Likewise, Kansas City spans two states and two counties, so those values are grouped together.\n"
       ],
-      "id": "c762cdf7"
+      "id": "20e6aa54"
     },
     {
       "cell_type": "code",
@@ -323,7 +323,7 @@
       "source": [
         "After this data cleaning, we are left with a total of eighteen cities across the country with a total metropolitan area population of greater than one million. The table below (figure 24324) shows all eighteen cities being used in the prediction algorithm and their respective row counts.\n"
       ],
-      "id": "d6599ced"
+      "id": "3c6d8d3b"
     },
     {
       "cell_type": "code",
@@ -356,7 +356,7 @@
         "- 101-150\n",
         "- 151+\n"
       ],
-      "id": "79d96c39"
+      "id": "7189d506"
     },
     {
       "cell_type": "code",
@@ -409,7 +409,7 @@
       "source": [
         "A feature selector is run on the set of all variables. This chooses the best predictors of the dependent variable AQI.\n"
       ],
-      "id": "bd1a89b5"
+      "id": "a8324ea8"
     },
     {
       "cell_type": "code",
@@ -459,7 +459,7 @@
         "- Pipeline\n",
         "- Standard Scaler \n"
       ],
-      "id": "202ab2c0"
+      "id": "33e5dd44"
     },
     {
       "cell_type": "code",
@@ -534,14 +534,14 @@
         "\n",
         "These features are used in the final model.\n"
       ],
-      "id": "63eae696"
+      "id": "3635e572"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
         "#| echo: false\n",
-        "#| #| label: feature-select\n",
+        "#| label: feature-select\n",
         "#feature selection\n",
         "feature_selector = SelectKBest(k=10)\n",
         "X_train_trans = transformer.transform(X_train)\n",
@@ -554,7 +554,7 @@
         "feature_selector.scores_[feature_selector.get_support()]\n",
         "X_train_trans_df.columns[feature_selector.get_support()]"
       ],
-      "id": "ceb9617b",
+      "id": "feature-select",
       "execution_count": null,
       "outputs": []
     },
@@ -563,7 +563,7 @@
       "metadata": {},
       "source": [
         "#| echo: false\n",
-        "#| #| label: use-features\n",
+        "#| label: use-features\n",
         "#Use selected features\n",
         "y = ds['aqi_discrete']\n",
         "X = ds[[\n",
@@ -582,7 +582,7 @@
         "    'temp', 'humidity', 'co', 'no2','o3', 'pm100', 'pm25'\n",
         "    ]].merge(X_test_enc, left_index = True, right_index = True)"
       ],
-      "id": "17ea3208",
+      "id": "use-features",
       "execution_count": null,
       "outputs": []
     },
@@ -600,14 +600,13 @@
         "\n",
         "Running the models gives the output in figure 234324. Random Forest model is the most accurate and will be used for the final model.\n"
       ],
-      "id": "d9784e97"
+      "id": "e04e61c3"
     },
     {
       "cell_type": "code",
       "metadata": {},
       "source": [
         "#| echo: false\n",
-        "#| output: false\n",
         "#| label: model-select\n",
         "model1 = KNeighborsClassifier(n_neighbors=5)\n",
         "model2 = tree.DecisionTreeClassifier()\n",
@@ -637,19 +636,11 @@
       "outputs": []
     },
     {
-      "cell_type": "markdown",
-      "metadata": {},
-      "source": [
-        "![AirQuality Confusion Matrix 1](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init.png?raw=true)\n"
-      ],
-      "id": "14dbab38"
-    },
-    {
       "cell_type": "code",
       "metadata": {},
       "source": [
         "#| echo: false\n",
-        "#| #| label: def-best-model\n",
+        "#| label: def-best-model\n",
         "#Create model from most accurate, RandomForest\n",
         "model = RandomForestClassifier(n_estimators=10)\n",
         "model.fit(X_train_trans, y_train)\n",
@@ -659,7 +650,19 @@
         "\n",
         "#Print results\n",
         "print(\"cohen kappa score: \", cohen_kappa_score(y_test, y_pred))\n",
-        "print(\"accuracy: \", sum(y_test == y_pred)/len(y_test))\n",
+        "print(\"accuracy: \", sum(y_test == y_pred)/len(y_test))"
+      ],
+      "id": "def-best-model",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: confus-matrix1\n",
+        "#| echo: false\n",
+        "#| output: true\n",
         "ConfusionMatrixDisplay(\n",
         "    confusion_matrix = confusion_matrix(\n",
         "        y_test, y_pred, \n",
@@ -668,9 +671,17 @@
         "        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
         "        ).plot(xticks_rotation='vertical')"
       ],
-      "id": "fe328dd2",
+      "id": "confus-matrix1",
       "execution_count": null,
       "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "![AirQuality Confusion Matrix 1](https://github.com/wu-msds-capstones/Air-Quality-Index/blob/main/images/AirQuality-ConfusionMatrix_init.png?raw=true)\n"
+      ],
+      "id": "a8b3d3e5"
     },
     {
       "cell_type": "code",
@@ -720,7 +731,7 @@
         "- Num Estimators\n",
         "- Bootstrap\n"
       ],
-      "id": "66ea1b1a"
+      "id": "38c693a2"
     },
     {
       "cell_type": "code",
@@ -751,7 +762,7 @@
         "    'RF_model__n_estimators': randint(50, 200),\n",
         "    'RF_model__bootstrap': [True, False]\n",
         "}\n",
-        "n_iter_search = 10\n",
+        "n_iter_search = 100\n",
         "random_search = RandomizedSearchCV(classification_pipeline, param_distributions=parameters,\n",
         "                                   n_iter=n_iter_search, n_jobs=-1, cv=5)\n",
         "random_search.fit(X_train, y_train)\n",
@@ -767,7 +778,7 @@
       "source": [
         "Figure 242442 below shows the selected hyperparameters.\n"
       ],
-      "id": "5226cb09"
+      "id": "c92b5734"
     },
     {
       "cell_type": "code",
@@ -792,7 +803,7 @@
       "source": [
         "Using these hyperparameters, we reach an accuracy of about 63%.\n"
       ],
-      "id": "fd6ccf70"
+      "id": "487da5ca"
     },
     {
       "cell_type": "code",
@@ -814,7 +825,8 @@
       "metadata": {},
       "source": [
         "#| echo: false\n",
-        "#| output: false\n",
+        "#| output: fa\n",
+        "#| label: conf-matrix-final\n",
         "ConfusionMatrixDisplay(\n",
         "    confusion_matrix = confusion_matrix(\n",
         "        y_test, y_pred, \n",
@@ -823,7 +835,7 @@
         "        display_labels = ['0-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-150', '151+']\n",
         "        ).plot(xticks_rotation='vertical')"
       ],
-      "id": "6e7264c3",
+      "id": "conf-matrix-final",
       "execution_count": null,
       "outputs": []
     },
@@ -835,7 +847,7 @@
         "\n",
         "We can use this model for the prediction of AQI, exploring the features that predict it, and use that to generate conclusions for what particles to reduce or systems to increase."
       ],
-      "id": "c2f470bf"
+      "id": "d3795778"
     }
   ],
   "metadata": {
